@@ -1,29 +1,147 @@
-# PROJETO FINAL 
-## MÓDULO INTERMEDIÁRIO - REACT
+# Capacita Store
 
-### Descrição
-O objetivo do projeto final é criar um aplicativo usando React para o gerenciamento de produtos de um site on-line. O sistema será a visualização do gerente ou administrador do sistema, onde será possível adicionar, editar e remover produtos. 
+Capacita Store é um projeto de eCommerce de experiências que oferece uma plataforma para usuários explorarem, reservarem e adquirirem experiências únicas e personalizadas. O foco está em conectar pessoas a atividades enriquecedoras, como workshops, passeios culturais, aulas específicas e muito mais. Este repositório contém o código-fonte e a documentação do projeto.
 
-Cada produto deve possuir alguns atributos como nome, descrição, preço, categoria, imagens, dentre outros que você julgar necessário. Ao lado de cada produto deve haver ícones para editar ou remover o produto. Veja uma descrição mais detalhada a seguir.
+## 🚀 Funcionalidades Principais
 
-Página inicial: deve listar todos os produtos e os principais atributos como descrição, valor e quantidade no estoque. Você também pode utilizar uma tabela ou uma visualização estilo cartões, deixando mais bonito. Extra: utilize cards para exibir os produtos que estão cadastrados e o material UI (https://mui.com/material-ui).
+- **Gerenciamento de Produtos**:
+  - Listagem de produtos com atributos como nome, descrição, preço, categoria e quantidade em estoque.
+  - Inclusão, edição e remoção de produtos através de componentes específicos.
+  - Exibição de produtos em uma visualização amigável usando cards e estilização com Material UI.
 
-Componente cadastrar produto: deve permitir a inclusão de novos produtos, possuindo atributos obrigatórios e opcionais, você deve julgar quais devem ser obrigatórios ao criar um novo produto.
+- **Sistema de Navegação**:
+  - Uso do `react-router-dom` para criar rotas distintas para as páginas principais da aplicação.
+  - Pelo menos uma rota configurada para receber parâmetros dinâmicos.
 
-Componente editar produto: deve permitir a edição de um produto já criado, ou seja, alteração dos atributos como nome, categoria, preço, etc. Por exemplo, o ID do produto pode ser passado como parâmetro na requisição da URL : http://www.meusite.com/produtos/2, editando o produto com ID 2.
+- **Responsividade**:
+  - Interface responsiva testada em diferentes dispositivos e tamanhos de tela (smartphones, tablets e desktops).
+  - Testes de responsividade realizados utilizando o DevTools do Google Chrome.
 
-Você deve testar a página em diferentes dispositivos e tamanhos de tela como smartphones, computadores e tablets. O teste pode ser simulado utilizando a ferramenta nativa do Google Chrome, o devtools.
+- **Documentação de Equipe e Processos**:
+  - Gerenciamento do progresso e tarefas utilizando um quadro Kanban.
+  - Divisão de atividades igualitária entre os membros da equipe, documentada no repositório.
 
-Não se limite ao que foi pedido neste documento, crie coisas novas, melhore o que foi pedido, você tem total liberdade de fazer mais! Dado que o trabalho é em equipe, há espaço para fazer mais do que está sendo pedido. Use a imaginação!
+---
 
-O código da aplicação deve ser gerenciado com o Github, a entrega será feita somente com o link do Github. Se atente para fazer commits representativos de funcionalidades do sistema. Todos os integrantes devem fazer commits no repositório, de acordo com as atividades que foram definidas para cada membro.
+## 📊 Tecnologias Utilizadas
 
-O projeto será desenvolvido em equipe, o time deve ficar responsável por separar as atividades de cada membro e documentar isso em um quadro Kanban. Há diversas ferramentas online que podem ser utilizadas para isso, dentro do próprio Github há um quadro Kanban dentro do menu Projeto -> Criar Projeto -> Criar Kanban. A separação das atividades de forma igualitária entre os membros também vale pontuação.
+- **Frontend**:
+  - React.js
+  - Material UI (https://mui.com/material-ui)
+  - React Router DOM para gerenciamento de rotas
 
-Você deve fazer uso do ‘react-router-dom’ para criar rotas para a sua aplicação, pelo menos 3 rotas distintas com pelo menos 1 delas recebendo algum parâmetro.
+- **Controle de Versão**:
+  - Git e GitHub
 
-Divisão de Equipes
+---
 
-Os alunos devem se auto-gerenciar para formar as equipes, não havendo consenso, a equipe será definida pelo professor.
+## 🔧 Instalação e Configuração
 
-As equipes devem ser formadas por 3 ou 4 pessoas. Todos devem participar de todas as etapas do desenvolvimento, isso deve estar claro na divisão das tarefas no Quadro Kanban.
+Siga as instruções abaixo para configurar o projeto localmente:
+
+### Requisitos Prévios
+- Node.js (v16 ou superior)
+
+### Passos para Instalação
+
+1. **Clone o Repositório**:
+   ```bash
+   git clone https://github.com/J0aoPaulo/capacita-store.git
+   cd capacita-store
+   ```
+
+2. **Instale as Dependências**:
+   ```bash
+   npm install
+   ```
+
+3. **Inicie o Projeto**:
+   ```bash
+   npm start
+   ```
+
+4. **Acesse no Navegador**:
+   O frontend estará rodando em: `http://localhost:3000`
+
+---
+
+## 🛠️ Estrutura do Projeto
+
+```plaintext
+capacita-store/
+├── src/            # Código-fonte principal
+├── public/         # Arquivos estáticos
+├── README.md       # Documentação do projeto
+└── ...
+```
+
+---
+
+## 🎨 Requisitos do Projeto
+
+O objetivo do projeto é criar um aplicativo React para o gerenciamento de produtos de um site online. O sistema será a visualização do gerente ou administrador do sistema, permitindo as seguintes funcionalidades:
+
+- **Listagem de Produtos**:
+  - Deve exibir todos os produtos cadastrados com seus atributos principais, como nome, descrição, preço e quantidade em estoque.
+  - Utilize uma tabela ou visualização em estilo de cards para melhorar a experiência do usuário.
+  - Extra: estilize os cards utilizando Material UI.
+
+- **Cadastro de Produtos**:
+  - Deve permitir a inclusão de novos produtos com atributos obrigatórios e opcionais.
+  - Atributos obrigatórios incluem nome, descrição, preço e categoria.
+
+- **Edição de Produtos**:
+  - Deve permitir a edição de produtos já cadastrados.
+  - Exemplo de URL para edição: `http://www.meusite.com/produtos/:id`, onde `:id` é o identificador do produto.
+
+- **Remoção de Produtos**:
+  - Ao lado de cada produto, deve haver ícones para edição e remoção.
+
+- **Responsividade**:
+  - O sistema deve ser responsivo, ajustando-se bem a diferentes tamanhos de tela.
+  - Utilize o DevTools do Google Chrome para testar o comportamento em smartphones, tablets e desktops.
+
+- **Gerenciamento de Equipe**:
+  - Utilize um quadro Kanban para documentar a divisão de tarefas e o progresso do projeto.
+  - Todos os integrantes devem participar e realizar commits representativos no repositório GitHub.
+
+- **Navegação**:
+  - O aplicativo deve possuir pelo menos 3 rotas distintas, com pelo menos 1 delas recebendo parâmetros dinâmicos (ex.: ID do produto).
+
+---
+
+## 🎨 Contribuição
+
+Contribuições são bem-vindas! Siga os passos abaixo:
+
+1. Faça um fork do repositório.
+2. Crie uma branch com sua feature/bugfix:
+   ```bash
+   git checkout -b minha-feature
+   ```
+3. Faça commit das suas alterações:
+   ```bash
+   git commit -m "Adicionei uma nova feature"
+   ```
+4. Envie para o repositório remoto:
+   ```bash
+   git push origin minha-feature
+   ```
+5. Abra um Pull Request.
+
+---
+
+## 🛡️ Licença
+
+Este projeto está licenciado sob a [MIT License](LICENSE).
+
+---
+
+## 🔗 Links úteis
+
+- [Repositório no GitHub](https://github.com/J0aoPaulo/capacita-store)
+- [Material UI Documentation](https://mui.com/material-ui)
+
+---
+
+Se tiver dúvidas ou sugestões, entre em contato ou abra uma issue! 😊
