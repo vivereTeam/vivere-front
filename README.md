@@ -1,6 +1,6 @@
-# Capacita Store
+# Vivere+ Project
 
-Capacita Store é um projeto de eCommerce de experiências que oferece uma plataforma para usuários explorarem, reservarem e adquirirem experiências únicas e personalizadas. O foco está em conectar pessoas a atividades enriquecedoras, como workshops, passeios culturais, aulas específicas e muito mais. Este repositório contém o código-fonte e a documentação do projeto.
+Vivere+ é um projeto de eCommerce de experiências que oferece uma plataforma para usuários explorarem, reservarem e adquirirem experiências únicas e personalizadas. O foco está em conectar pessoas a atividades enriquecedoras, como workshops, passeios culturais, aulas específicas e muito mais. Este repositório contém o código-fonte e a documentação do projeto.
 
 ## 🚀 Funcionalidades Principais
 
