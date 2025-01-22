@@ -52,8 +52,8 @@ Siga as instruções abaixo para configurar o projeto localmente:
 1. **Clone o Repositório**:
 
    ```bash
-   git clone https://github.com/J0aoPaulo/capacita-store.git
-   cd capacita-store
+   git clone https://github.com/J0aoPaulo/vivere.git
+   cd vivere
    ```
 
 2. **Instale as Dependências**:
@@ -76,7 +76,7 @@ Siga as instruções abaixo para configurar o projeto localmente:
 ## 🛠️ Estrutura do Projeto
 
 ```plaintext
-capacita-store/
+vivere/
 ├── src/            # Código-fonte principal
 ├── public/         # Arquivos estáticos
 ├── README.md       # Documentação do projeto
@@ -153,7 +153,7 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 
 ## 🔗 Links úteis
 
-- [Repositório no GitHub](https://github.com/J0aoPaulo/capacita-store)
+- [Repositório no GitHub](https://github.com/J0aoPaulo/vivere)
 - [Material UI Documentation](https://mui.com/material-ui)
 
 ---
