@@ -5,15 +5,18 @@ Capacita Store é um projeto de eCommerce de experiências que oferece uma plata
 ## 🚀 Funcionalidades Principais
 
 - **Gerenciamento de Produtos**:
+
   - Listagem de produtos com atributos como nome, descrição, preço, categoria e quantidade em estoque.
   - Inclusão, edição e remoção de produtos através de componentes específicos.
   - Exibição de produtos em uma visualização amigável usando cards e estilização com Material UI.
 
 - **Sistema de Navegação**:
+
   - Uso do `react-router-dom` para criar rotas distintas para as páginas principais da aplicação.
   - Pelo menos uma rota configurada para receber parâmetros dinâmicos.
 
 - **Responsividade**:
+
   - Interface responsiva testada em diferentes dispositivos e tamanhos de tela (smartphones, tablets e desktops).
   - Testes de responsividade realizados utilizando o DevTools do Google Chrome.
 
@@ -26,6 +29,7 @@ Capacita Store é um projeto de eCommerce de experiências que oferece uma plata
 ## 📊 Tecnologias Utilizadas
 
 - **Frontend**:
+
   - React.js
   - Material UI (https://mui.com/material-ui)
   - React Router DOM para gerenciamento de rotas
@@ -40,22 +44,26 @@ Capacita Store é um projeto de eCommerce de experiências que oferece uma plata
 Siga as instruções abaixo para configurar o projeto localmente:
 
 ### Requisitos Prévios
+
 - Node.js (v16 ou superior)
 
 ### Passos para Instalação
 
 1. **Clone o Repositório**:
+
    ```bash
    git clone https://github.com/J0aoPaulo/capacita-store.git
    cd capacita-store
    ```
 
 2. **Instale as Dependências**:
+
    ```bash
    npm install
    ```
 
 3. **Inicie o Projeto**:
+
    ```bash
    npm start
    ```
@@ -82,26 +90,32 @@ capacita-store/
 O objetivo do projeto é criar um aplicativo React para o gerenciamento de produtos de um site online. O sistema será a visualização do gerente ou administrador do sistema, permitindo as seguintes funcionalidades:
 
 - **Listagem de Produtos**:
+
   - Deve exibir todos os produtos cadastrados com seus atributos principais, como nome, descrição, preço e quantidade em estoque.
   - Utilize uma tabela ou visualização em estilo de cards para melhorar a experiência do usuário.
   - Extra: estilize os cards utilizando Material UI.
 
 - **Cadastro de Produtos**:
+
   - Deve permitir a inclusão de novos produtos com atributos obrigatórios e opcionais.
   - Atributos obrigatórios incluem nome, descrição, preço e categoria.
 
 - **Edição de Produtos**:
+
   - Deve permitir a edição de produtos já cadastrados.
   - Exemplo de URL para edição: `http://www.meusite.com/produtos/:id`, onde `:id` é o identificador do produto.
 
 - **Remoção de Produtos**:
+
   - Ao lado de cada produto, deve haver ícones para edição e remoção.
 
 - **Responsividade**:
+
   - O sistema deve ser responsivo, ajustando-se bem a diferentes tamanhos de tela.
   - Utilize o DevTools do Google Chrome para testar o comportamento em smartphones, tablets e desktops.
 
 - **Gerenciamento de Equipe**:
+
   - Utilize um quadro Kanban para documentar a divisão de tarefas e o progresso do projeto.
   - Todos os integrantes devem participar e realizar commits representativos no repositório GitHub.
 
