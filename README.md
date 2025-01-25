@@ -84,4 +84,38 @@ Siga os passos abaixo para configurar o projeto localmente:
 
 ## Time do projeto
 <!-- readme: collaborators,contributors -start -->
+<table>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/J0aoPaulo">
+                    <img src="https://avatars.githubusercontent.com/u/98539735?v=4" width="100;" alt="J0aoPaulo"/>
+                    <br />
+                    <sub><b>João Paulo Almeida</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/Gabriel-Matias07">
+                    <img src="https://avatars.githubusercontent.com/u/124216130?v=4" width="100;" alt="Gabriel-Matias07"/>
+                    <br />
+                    <sub><b>Gabriel Matias</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/davyson-vasconcelos">
+                    <img src="https://avatars.githubusercontent.com/u/147925506?v=4" width="100;" alt="davyson-vasconcelos"/>
+                    <br />
+                    <sub><b>Davyson Vasconcelos</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/DavidEricson00">
+                    <img src="https://avatars.githubusercontent.com/u/169815129?v=4" width="100;" alt="DavidEricson00"/>
+                    <br />
+                    <sub><b>David Ericson</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
+</table>
 <!-- readme: collaborators,contributors -end -->
