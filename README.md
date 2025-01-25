@@ -1,147 +1,87 @@
-# Capacita Store
+# 🌟 Vivere+ Project
 
-Capacita Store é um projeto de eCommerce de experiências que oferece uma plataforma para usuários explorarem, reservarem e adquirirem experiências únicas e personalizadas. O foco está em conectar pessoas a atividades enriquecedoras, como workshops, passeios culturais, aulas específicas e muito mais. Este repositório contém o código-fonte e a documentação do projeto.
+**Vivere+** é uma plataforma de eCommerce de experiências que conecta usuários a atividades únicas e enriquecedoras, como workshops, passeios culturais, aulas especializadas e muito mais. Este repositório contém o código-fonte e a documentação do projeto, desenvolvido com React.js e Material UI.
+
+---
 
 ## 🚀 Funcionalidades Principais
 
-- **Gerenciamento de Produtos**:
-  - Listagem de produtos com atributos como nome, descrição, preço, categoria e quantidade em estoque.
-  - Inclusão, edição e remoção de produtos através de componentes específicos.
-  - Exibição de produtos em uma visualização amigável usando cards e estilização com Material UI.
+### **Gerenciamento de Produtos**
+- **Listagem de Produtos**: Exibe produtos com detalhes como nome, descrição, preço, categoria e estoque.
+- **Cadastro de Produtos**: Permite adicionar novos produtos com atributos obrigatórios e opcionais.
+- **Edição de Produtos**: Oferece a capacidade de atualizar informações de produtos existentes.
+- **Remoção de Produtos**: Permite excluir produtos diretamente da lista.
 
-- **Sistema de Navegação**:
-  - Uso do `react-router-dom` para criar rotas distintas para as páginas principais da aplicação.
-  - Pelo menos uma rota configurada para receber parâmetros dinâmicos.
+### **Sistema de Navegação**
+- **Rotas Dinâmicas**: Utiliza `react-router-dom` para criar rotas, incluindo parâmetros dinâmicos (ex.: `produtos/:id`).
+- **Navegação Intuitiva**: Interface amigável com navegação fluida entre páginas.
 
-- **Responsividade**:
-  - Interface responsiva testada em diferentes dispositivos e tamanhos de tela (smartphones, tablets e desktops).
-  - Testes de responsividade realizados utilizando o DevTools do Google Chrome.
+### **Responsividade**
+- **Design Adaptável**: Interface responsiva que se ajusta a smartphones, tablets e desktops.
+- **Testes de Responsividade**: Realizados com o DevTools do Google Chrome para garantir compatibilidade.
 
-- **Documentação de Equipe e Processos**:
-  - Gerenciamento do progresso e tarefas utilizando um quadro Kanban.
-  - Divisão de atividades igualitária entre os membros da equipe, documentada no repositório.
+### **Gerenciamento de Equipe**
+- **Quadro Kanban**: Utilizado para organizar tarefas e monitorar o progresso do projeto.
+- **Divisão de Tarefas**: Atividades distribuídas igualmente entre os membros da equipe, com commits documentados no GitHub.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### **Frontend**
+- **React.js**: Biblioteca JavaScript para construção da interface do usuário.
+- **Material UI**: Framework de design para estilização e componentes prontos.
+- **React Router DOM**: Gerenciamento de rotas e navegação.
+
+### **Controle de Versão**
+- **Git e GitHub**: Versionamento e colaboração no desenvolvimento.
 
 ---
 
-## 📊 Tecnologias Utilizadas
+## 📂 Estrutura do Projeto
 
-- **Frontend**:
-  - React.js
-  - Material UI (https://mui.com/material-ui)
-  - React Router DOM para gerenciamento de rotas
-
-- **Controle de Versão**:
-  - Git e GitHub
-
----
+```plaintext
+vivere/
+├── src/            # Código-fonte principal
+│   ├── components/ # Componentes reutilizáveis
+│   ├── pages/      # Páginas da aplicação
+│   ├── services/   # Lógica de integração com APIs
+│   └── App.jsx     # Ponto de entrada da aplicação
+├── public/         # Arquivos estáticos
+├── README.md       # Documentação do projeto
+└── package.json    # Dependências e scripts
+``` 
 
 ## 🔧 Instalação e Configuração
 
-Siga as instruções abaixo para configurar o projeto localmente:
+Siga os passos abaixo para configurar o projeto localmente:
 
-### Requisitos Prévios
+### **Requisitos Prévios**
 - Node.js (v16 ou superior)
 
-### Passos para Instalação
-
+### **Passos para Instalação**
 1. **Clone o Repositório**:
    ```bash
-   git clone https://github.com/J0aoPaulo/capacita-store.git
-   cd capacita-store
-   ```
-
-2. **Instale as Dependências**:
+   git clone https://github.com/J0aoPaulo/vivere.git
+   cd vivere
+2. **Instale as Dependências**
    ```bash
    npm install
-   ```
-
-3. **Inicie o Projeto**:
+3. **Execute o Projeto***:
    ```bash
-   npm start
-   ```
-
-4. **Acesse no Navegador**:
-   O frontend estará rodando em: `http://localhost:3000`
-
----
-
-## 🛠️ Estrutura do Projeto
-
-```plaintext
-capacita-store/
-├── src/            # Código-fonte principal
-├── public/         # Arquivos estáticos
-├── README.md       # Documentação do projeto
-└── ...
-```
-
----
-
-## 🎨 Requisitos do Projeto
-
-O objetivo do projeto é criar um aplicativo React para o gerenciamento de produtos de um site online. O sistema será a visualização do gerente ou administrador do sistema, permitindo as seguintes funcionalidades:
-
-- **Listagem de Produtos**:
-  - Deve exibir todos os produtos cadastrados com seus atributos principais, como nome, descrição, preço e quantidade em estoque.
-  - Utilize uma tabela ou visualização em estilo de cards para melhorar a experiência do usuário.
-  - Extra: estilize os cards utilizando Material UI.
-
-- **Cadastro de Produtos**:
-  - Deve permitir a inclusão de novos produtos com atributos obrigatórios e opcionais.
-  - Atributos obrigatórios incluem nome, descrição, preço e categoria.
-
-- **Edição de Produtos**:
-  - Deve permitir a edição de produtos já cadastrados.
-  - Exemplo de URL para edição: `http://www.meusite.com/produtos/:id`, onde `:id` é o identificador do produto.
-
-- **Remoção de Produtos**:
-  - Ao lado de cada produto, deve haver ícones para edição e remoção.
-
-- **Responsividade**:
-  - O sistema deve ser responsivo, ajustando-se bem a diferentes tamanhos de tela.
-  - Utilize o DevTools do Google Chrome para testar o comportamento em smartphones, tablets e desktops.
-
-- **Gerenciamento de Equipe**:
-  - Utilize um quadro Kanban para documentar a divisão de tarefas e o progresso do projeto.
-  - Todos os integrantes devem participar e realizar commits representativos no repositório GitHub.
-
-- **Navegação**:
-  - O aplicativo deve possuir pelo menos 3 rotas distintas, com pelo menos 1 delas recebendo parâmetros dinâmicos (ex.: ID do produto).
-
----
-
-## 🎨 Contribuição
-
-Contribuições são bem-vindas! Siga os passos abaixo:
-
-1. Faça um fork do repositório.
-2. Crie uma branch com sua feature/bugfix:
+   npm run dev
+4. **Acesse no Navegador**
    ```bash
-   git checkout -b minha-feature
-   ```
-3. Faça commit das suas alterações:
-   ```bash
-   git commit -m "Adicionei uma nova feature"
-   ```
-4. Envie para o repositório remoto:
-   ```bash
-   git push origin minha-feature
-   ```
-5. Abra um Pull Request.
+    http://localhost:3000.
 
----
+## 🤝 Contribuição
 
-## 🛡️ Licença
+1. Clone o projeto
+2. Cria a branch da sua feature (`git checkout -b feature/AmazingFeature`)
+3. Faça o commit das suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Realize o push para branch (`git push origin feature/AmazingFeature`)
+5. Abra um pull request
 
-Este projeto está licenciado sob a [MIT License](LICENSE).
-
----
-
-## 🔗 Links úteis
-
-- [Repositório no GitHub](https://github.com/J0aoPaulo/capacita-store)
-- [Material UI Documentation](https://mui.com/material-ui)
-
----
-
-Se tiver dúvidas ou sugestões, entre em contato ou abra uma issue! 😊
+## Time do projeto
+<!-- readme: contributors -start -->
+<!-- readme: contributors -end -->
