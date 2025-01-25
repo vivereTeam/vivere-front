@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 
 const ExperienceCard = ({ imageUrl, date, title, location, details }) => {
   return (
-    <Card sx={{ maxWidth: 345, borderRadius: 2, boxShadow: 3 }}>
+    <Card sx={{ maxWidth: 345, borderRadius: 5, boxShadow: 5 }}>
       {/* Imagem */}
       <CardMedia
         component="img"
         height="140"
         image={imageUrl}
         alt={title}
-        sx={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}
       />
 
       {/* Conteúdo */}
