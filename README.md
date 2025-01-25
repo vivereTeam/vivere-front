@@ -82,7 +82,7 @@ Siga os passos abaixo para configurar o projeto localmente:
 4. Realize o push para branch (`git push origin feature/AmazingFeature`)
 5. Abra um pull request
 
-## Equipe de desenvolvimento
+## 🌐 Equipe de Desenvolvimento
 <!-- readme: collaborators,contributors -start -->
 <table>
 	<tbody>
