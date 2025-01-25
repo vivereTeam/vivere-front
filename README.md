@@ -83,18 +83,5 @@ Siga os passos abaixo para configurar o projeto localmente:
 5. Abra um pull request
 
 ## Time do projeto
-<!-- readme: contributors -start -->
-<table>
-	<tbody>
-		<tr>
-            <td align="center">
-                <a href="https://github.com/J0aoPaulo">
-                    <img src="https://avatars.githubusercontent.com/u/98539735?v=4" width="100;" alt="J0aoPaulo"/>
-                    <br />
-                    <sub><b>João Paulo Almeida</b></sub>
-                </a>
-            </td>
-		</tr>
-	<tbody>
-</table>
-<!-- readme: contributors -end -->
+<!-- readme: collaborators,contributors -start -->
+<!-- readme: collaborators,contributors -end -->
