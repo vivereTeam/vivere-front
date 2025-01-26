@@ -1,25 +1,26 @@
 import PropTypes from "prop-types";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
-import CardTravelIcon from "@mui/icons-material/CardTravel";
-import WorkIcon from "@mui/icons-material/Work";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
+import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import SpaIcon from "@mui/icons-material/Spa";
+import ChildCareIcon from "@mui/icons-material/ChildCare";
+import StarIcon from "@mui/icons-material/Star";
 import SchoolIcon from "@mui/icons-material/School";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
-const poppinsFont = new FontFace(
-  "Poppins",
-  "url(https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap)"
-);
-
-poppinsFont.load().then(() => {
-  document.fonts.add(poppinsFont);
-});
-
 function ExperienceCategory({ category }) {
   const categoryIcons = {
-    Education: <SchoolIcon />,
-    Travel: <CardTravelIcon />,
-    Work: <WorkIcon />,
+    "Workshops e Aulas": <SchoolIcon />,
+    "Shows e Entretenimento": <TheaterComedyIcon />,
+    "Viagens e Turismo": <TravelExploreIcon />,
+    "Aventura e Adrenalina": <FitnessCenterIcon />,
+    "Relaxamento e Bem-Estar": <SpaIcon />,
+    "Gastronomia e Degustações": <RestaurantIcon />,
+    "Infantil e Familiar": <ChildCareIcon />,
+    "Experiências Personalizadas": <StarIcon />,
     Default: <HelpOutlineIcon />,
   };
 
@@ -40,12 +41,12 @@ function ExperienceCategory({ category }) {
       >
         {icon}
       </Avatar>
-
       <p
         style={{
+          textAlign: "center",
           margin: 0,
           fontFamily: "'Poppins', sans-serif",
-          color:"rgb(86, 86, 86)",
+          color: "rgb(86, 86, 86)",
         }}
       >
         {category}

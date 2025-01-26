@@ -1,7 +1,6 @@
 import ExperienceCategory from "../../components/ExperienceCategory.jsx";
 import { Typography } from "@mui/material";
 
-
 function CategoryListPage() {
     return (
         <>  
@@ -18,10 +17,14 @@ function CategoryListPage() {
                     padding: "20px",
                 }}
             >
-                <ExperienceCategory category="Work" />
-                <ExperienceCategory category="Education" />
-                <ExperienceCategory category="Travel" />
-                <ExperienceCategory category="Unknown" />
+                <ExperienceCategory category="Workshops e Aulas" />
+                <ExperienceCategory category="Shows e Entretenimento" />
+                <ExperienceCategory category="Viagens e Turismo" />
+                <ExperienceCategory category="Aventura e Adrenalina" />
+                <ExperienceCategory category="Relaxamento e Bem-Estar" />
+                <ExperienceCategory category="Gastronomia e Degustações" />
+                <ExperienceCategory category="Infantil e Familiar" />
+                <ExperienceCategory category="Experiências Personalizadas" />
             </div>
         </>
     );
