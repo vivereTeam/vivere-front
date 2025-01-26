@@ -20,7 +20,7 @@ function ExperienceCategory({ category }) {
       <Stack direction="column" alignItems="center">
         <Avatar
           sx={{
-            bgcolor: "",
+            bgcolor: "#FF5722",
             transition: "transform 0.3s ease",
             marginBottom: "7px",
             ":hover": {
