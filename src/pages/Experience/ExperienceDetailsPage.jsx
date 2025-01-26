@@ -63,7 +63,7 @@ import {
                           <Card sx={{ 
                               borderRadius: 3, 
                               overflow: 'hidden',
-                              boxShadow: 3,
+                              boxShadow: 5,
                               position: 'relative',
                               '&:after': {
                                   content: '""',

@@ -2,7 +2,9 @@ import ExpererienceDetailsPage from "./pages/Experience/ExperienceDetailsPage";
 
 function App() {
   return (
-    <ExpererienceDetailsPage/>
+    <div>
+      <ExpererienceDetailsPage/>
+    </div>
   );
 }
 
