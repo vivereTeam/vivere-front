@@ -29,11 +29,12 @@ function ExperienceCategory({ category }) {
     <Stack direction="column" alignItems="center">
       <Avatar
         sx={{
-          bgcolor: "#FF5722",
+          bgcolor: "rgb(154, 154, 154)",
           transition: "transform 0.3s ease",
           marginBottom: "7px",
           ":hover": {
             transform: "scale(1.2)",
+            bgcolor: "#FF5722",
           },
         }}
       >
