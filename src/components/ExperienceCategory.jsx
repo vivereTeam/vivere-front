@@ -10,6 +10,7 @@ import ChildCareIcon from "@mui/icons-material/ChildCare";
 import StarIcon from "@mui/icons-material/Star";
 import SchoolIcon from "@mui/icons-material/School";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { Link } from "react-router-dom";
 
 function ExperienceCategory({ category }) {
   const categoryIcons = {
@@ -25,33 +26,36 @@ function ExperienceCategory({ category }) {
   };
 
   const icon = categoryIcons[category] || categoryIcons.Default;
+  const linkPath = `/PaginaInicial/${encodeURIComponent(category)}`;
 
   return (
-    <Stack direction="column" alignItems="center">
-      <Avatar
-        sx={{
-          bgcolor: "rgb(154, 154, 154)",
-          transition: "transform 0.3s ease",
-          marginBottom: "7px",
-          ":hover": {
-            transform: "scale(1.2)",
-            bgcolor: "#FF5722",
-          },
-        }}
-      >
-        {icon}
-      </Avatar>
-      <p
-        style={{
-          textAlign: "center",
-          margin: 0,
-          fontFamily: "'Poppins', sans-serif",
-          color: "rgb(86, 86, 86)",
-        }}
-      >
-        {category}
-      </p>
-    </Stack>
+    <Link to={linkPath} style={{ textDecoration: "none" }}>
+      <Stack direction="column" alignItems="center" scale="4">
+        <Avatar
+          sx={{
+            bgcolor: "rgb(154, 154, 154)",
+            transition: "transform 0.3s ease",
+            marginBottom: "7px",
+            ":hover": {
+              transform: "scale(1.2)",
+              bgcolor: "#FF5722",
+            },
+          }}
+        >
+          {icon}
+        </Avatar>
+        <p
+          style={{
+            textAlign: "center",
+            margin: 0,
+            fontFamily: "'Poppins', sans-serif",
+            color: "rgb(86, 86, 86)",
+          }}
+        >
+          {category}
+        </p>
+      </Stack>
+    </Link>
   );
 }
 
