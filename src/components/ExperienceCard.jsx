@@ -1,10 +1,14 @@
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import PropTypes from 'prop-types';
+import { Navigate } from "react-router-dom";
 
-const ExperienceCard = ({ imageUrl, date, title, location, details }) => {
+const ExperienceCard = ({ id, imageUrl, date, title, location, details }) => {
   return (
-    <Card sx={{ maxWidth: 345, borderRadius: 5, boxShadow: 5 }}>
-      {/* Imagem */}
+    <Card 
+    sx={{ maxWidth: 345, borderRadius: 5, boxShadow: 5 }}
+    onclick={() => Navigate(`/event/${id}`)}
+    >
+
       <CardMedia
         component="img"
         height="140"
@@ -12,9 +16,7 @@ const ExperienceCard = ({ imageUrl, date, title, location, details }) => {
         alt={title}
       />
 
-      {/* Conteúdo */}
       <CardContent>
-        {/* Data e hora */}
         <Typography
           variant="subtitle2"
           color="primary"
@@ -22,8 +24,6 @@ const ExperienceCard = ({ imageUrl, date, title, location, details }) => {
         >
           {date}
         </Typography>
-
-        {/* Título */}
         <Typography
           variant="h6"
           component="div"
@@ -31,13 +31,9 @@ const ExperienceCard = ({ imageUrl, date, title, location, details }) => {
         >
           {title}
         </Typography>
-
-        {/* Localização */}
         <Typography variant="body2" color="text.secondary">
           {location}
         </Typography>
-
-        {/* Detalhes */}
         <Typography
           variant="body2"
           color="text.secondary"
@@ -51,6 +47,7 @@ const ExperienceCard = ({ imageUrl, date, title, location, details }) => {
 };
 
 ExperienceCard.propTypes = {
+    id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
     date: PropTypes.instanceOf(Date),
