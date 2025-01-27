@@ -46,6 +46,7 @@ function ExperienceCategory({ category }) {
           sx={{
             bgcolor: "rgb(154, 154, 154)",
             transition: "transform 0.3s ease",
+            boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.08)",
             marginBottom: "7px",
             width: 80,
             height: 80,
