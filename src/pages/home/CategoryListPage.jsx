@@ -33,6 +33,7 @@ function CategoryListPage() {
                                         gap: "60px",
                                         padding: "20px",
                                         margin: 0,
+                                        boxShadow: "0 5px 10px rgba(0, 0, 0, 0.1)",
                                     }}
                                 >
                                     <ExperienceCategory category="Workshops e Aulas" />
