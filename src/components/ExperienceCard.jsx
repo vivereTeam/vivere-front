@@ -8,14 +8,12 @@ const ExperienceCard = ({ id, imageUrl, date, title, location, details }) => {
     sx={{ maxWidth: 345, borderRadius: 5, boxShadow: 5 }}
     onclick={() => Navigate(`/event/${id}`)}
     >
-
       <CardMedia
         component="img"
         height="140"
         image={imageUrl}
         alt={title}
       />
-
       <CardContent>
         <Typography
           variant="subtitle2"

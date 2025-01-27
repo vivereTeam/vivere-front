@@ -1,9 +1,9 @@
-import ExpererienceDetailsPage from "./pages/Experience/ExperienceDetailsPage";
+import ExperienceDetailsPage from "./pages/Experience/ExperienceDetailsPage";
 
 function App() {
   return (
     <div>
-      <ExpererienceDetailsPage/>
+      <ExperienceDetailsPage/>
     </div>
   );
 }

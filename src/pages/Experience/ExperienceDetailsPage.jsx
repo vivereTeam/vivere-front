@@ -56,7 +56,7 @@ import {
                           <Share />
                       </IconButton>
                   </Box>
-  
+
                   <Grid2 container spacing={4}>
                       {/* Imagem Principal */}
                       <Grid2 xs={12} md={6}>
