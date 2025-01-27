@@ -1,9 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useParams } from "react-router-dom";
 import ExperienceCategory from "../../components/ExperienceCategory.jsx";
-import { Typography } from "@mui/material";
 
 function CategoryListPage() {
-    // Rota temporária, remover depois
     const TemporaryRouter = () => {
         function CategoriaPage() {
             const { category } = useParams();
@@ -16,6 +14,7 @@ function CategoryListPage() {
         }
 
         return (
+            // Começo da Rota
             <Router>
                 <Routes>
                     <Route
@@ -23,16 +22,17 @@ function CategoryListPage() {
                         element={
                             // Começo do componente original
                             <> 
-                                <Typography>
-                                    <h1 style={{ marginBottom: "20px" }}>Categorias</h1>
-                                </Typography>
+                                <h1 style={{padding:"20px", fontFamily:"'Poppins', sans-serif" }}>Categorias</h1>
+
                                 <div
                                     style={{
                                         backgroundColor: "hsl(0, 0.00%, 91.40%)",
                                         display: "grid",
-                                        gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-                                        gap: "20px",
+                                        gridTemplateColumns: "repeat(3, 1fr)",
+                                        justifyItems: "center",
+                                        gap: "60px",
                                         padding: "20px",
+                                        margin: 0,
                                     }}
                                 >
                                     <ExperienceCategory category="Workshops e Aulas" />
@@ -51,6 +51,7 @@ function CategoryListPage() {
                     <Route path="/PaginaInicial/:category" element={<CategoriaPage />} />
                 </Routes>
             </Router>
+            // Fim da Rota
         );
     };
 
