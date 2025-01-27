@@ -13,16 +13,18 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { Link } from "react-router-dom";
 
 function ExperienceCategory({ category }) {
+  const iconFontSize = 40;
+
   const categoryIcons = {
-    "Workshops e Aulas": <SchoolIcon />,
-    "Shows e Entretenimento": <TheaterComedyIcon />,
-    "Viagens e Turismo": <TravelExploreIcon />,
-    "Aventura e Adrenalina": <FitnessCenterIcon />,
-    "Relaxamento e Bem-Estar": <SpaIcon />,
-    "Gastronomia e Degustações": <RestaurantIcon />,
-    "Infantil e Familiar": <ChildCareIcon />,
-    "Experiências Personalizadas": <StarIcon />,
-    Default: <HelpOutlineIcon />,
+    "Workshops e Aulas": <SchoolIcon sx={{ fontSize: iconFontSize }} />,
+    "Shows e Entretenimento": <TheaterComedyIcon sx={{ fontSize: iconFontSize }} />,
+    "Viagens e Turismo": <TravelExploreIcon sx={{ fontSize: iconFontSize }} />,
+    "Aventura e Adrenalina": <FitnessCenterIcon sx={{ fontSize: iconFontSize }} />,
+    "Relaxamento e Bem-Estar": <SpaIcon sx={{ fontSize: iconFontSize }} />,
+    "Gastronomia e Degustações": <RestaurantIcon sx={{ fontSize: iconFontSize }} />,
+    "Infantil e Familiar": <ChildCareIcon sx={{ fontSize: iconFontSize }} />,
+    "Experiências Personalizadas": <StarIcon sx={{ fontSize: iconFontSize }} />,
+    Default: <HelpOutlineIcon sx={{ fontSize: iconFontSize }} />,
   };
 
   const icon = categoryIcons[category] || categoryIcons.Default;
@@ -30,14 +32,25 @@ function ExperienceCategory({ category }) {
 
   return (
     <Link to={linkPath} style={{ textDecoration: "none" }}>
-      <Stack direction="column" alignItems="center" scale="4">
+      <Stack
+        direction="column"
+        alignItems="center"
+        sx={{
+          transition: "transform 0.3s ease",
+          ":hover .avatar-container": {
+            transform: "scale(1.2)",
+          },
+        }}
+      >
         <Avatar
+          className="avatar-container"
           sx={{
             bgcolor: "rgb(154, 154, 154)",
             transition: "transform 0.3s ease",
             marginBottom: "7px",
+            width: 60,
+            height: 60,
             ":hover": {
-              transform: "scale(1.2)",
               bgcolor: "#FF5722",
             },
           }}
@@ -48,6 +61,7 @@ function ExperienceCategory({ category }) {
           style={{
             textAlign: "center",
             margin: 0,
+            fontSize: "14px",
             fontFamily: "'Poppins', sans-serif",
             color: "rgb(86, 86, 86)",
           }}
