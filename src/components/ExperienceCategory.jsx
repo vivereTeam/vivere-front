@@ -36,9 +36,8 @@ function ExperienceCategory({ category }) {
         direction="column"
         alignItems="center"
         sx={{
-          transition: "transform 0.3s ease",
           ":hover .avatar-container": {
-            transform: "scale(1.2)",
+            bgcolor: "#FF5722",
           },
         }}
       >
@@ -48,26 +47,27 @@ function ExperienceCategory({ category }) {
             bgcolor: "rgb(154, 154, 154)",
             transition: "transform 0.3s ease",
             marginBottom: "7px",
-            width: 60,
-            height: 60,
+            width: 80,
+            height: 80,
             ":hover": {
-              bgcolor: "#FF5722",
+              transform: "scale(1.2)",
             },
           }}
         >
           {icon}
         </Avatar>
         <p
-          style={{
-            textAlign: "center",
-            margin: 0,
-            fontSize: "14px",
-            fontFamily: "'Poppins', sans-serif",
-            color: "rgb(86, 86, 86)",
-          }}
+        style={{
+          textAlign: "center",
+          margin: 0,
+          fontSize: "15px",
+          fontFamily: "'Poppins', sans-serif",
+          color: "rgb(86, 86, 86)",
+          width: "100px",
+        }}
         >
-          {category}
-        </p>
+        {category}
+      </p>
       </Stack>
     </Link>
   );
