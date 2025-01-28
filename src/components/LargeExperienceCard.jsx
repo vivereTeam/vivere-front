@@ -21,7 +21,7 @@ const LargeExperienceCard = ({ event }) => {
         alt={event.title}
       />
       {/* Conteúdo textual */}
-      <CardContent sx={{ flex: "1", padding: "16px" }}>
+      <CardContent sx={{ flex: "1", padding: "20px" }}>
         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
           {event.date}
         </Typography>
@@ -31,7 +31,7 @@ const LargeExperienceCard = ({ event }) => {
         <Typography variant="body2" color="text.secondary" sx={{ marginBottom: "16px" }}>
           {event.location}
         </Typography>
-        <Typography variant="body1" color="text.primary" sx={{ marginBottom: "16px" }}>
+        <Typography variant="body1" color="text.primary" sx={{ marginBottom: "100px" }}>
           {event.description}
         </Typography>
         <Box mt="auto" display="flex" justifyContent="space-between">
