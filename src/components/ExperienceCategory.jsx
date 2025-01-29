@@ -28,7 +28,7 @@ function ExperienceCategory({ category }) {
   };
 
   const icon = categoryIcons[category] || categoryIcons.Default;
-  const linkPath = `/PaginaInicial/${encodeURIComponent(category)}`;
+  const linkPath = `/category-list/${encodeURIComponent(category.replace(/\s+/g, "-"))}`;
 
   return (
     <Link to={linkPath} style={{ textDecoration: "none" }}>
