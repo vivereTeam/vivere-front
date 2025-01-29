@@ -10,7 +10,7 @@ import {
   Star as StarIcon,
   School as SchoolIcon,
   HelpOutline as HelpOutlineIcon,
-  ArrowForward as ArrowForwardIcon, // Ícone de seta
+  ArrowForward as ArrowForwardIcon,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
@@ -23,7 +23,7 @@ const ICONS = {
   "Gastronomia e Degustações": RestaurantIcon,
   "Infantil e Familiar": ChildCareIcon,
   "Experiências Personalizadas": StarIcon,
-  "Lista de Categorias": ArrowForwardIcon, // Ícone de seta para a lista de categorias
+  "Lista de Categorias": ArrowForwardIcon,
   Default: HelpOutlineIcon,
 };
 
