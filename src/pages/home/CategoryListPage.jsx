@@ -2,8 +2,10 @@ import ExperienceCategory from "../../components/ExperienceCategory.jsx";
 
 function CategoryListPage() {
     return (
-        <>
-            <h1 style={{ padding: "20px", fontFamily: "'Poppins', sans-serif" }}>Lista de categorias</h1>
+        <>  
+            <div style={{boxShadow: "0 8px 20px rgba(0, 0, 0, 0.2)",}}>
+                <h1 style={{ padding: "20px", fontFamily: "'Poppins', sans-serif" }}>Lista de categorias</h1>
+            </div>
             <div
                 style={{
                     backgroundColor: "hsl(0, 0.00%, 91.40%)",
@@ -13,7 +15,6 @@ function CategoryListPage() {
                     gap: "60px",
                     padding: "20px",
                     margin: 0,
-                    boxShadow: "0 5px 10px rgba(0, 0, 0, 0.1)",
                 }}
             >
                 <ExperienceCategory category="Workshops e Aulas" />
