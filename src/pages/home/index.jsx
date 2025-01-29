@@ -1,16 +1,20 @@
 import ExperienceCategory from "../../components/ExperienceCategory.jsx";
+import { Box } from "@mui/material";
 
 function Home() {
     return (
-        <div
-            style={{
+        <Box
+            sx={{
                 fontFamily: "'Poppins', sans-serif",
                 display: "flex",
                 flexDirection: "column",
                 margin: "0 auto",
                 maxWidth: "1200px",
                 width: "100%",
-                gap: "16px",
+                gap: "30px",
+                "& h1": {
+                    marginBottom: "16px",
+                },
             }}
         >
             <div>
@@ -19,7 +23,8 @@ function Home() {
                     style={{
                         display: "flex",
                         flexWrap: "wrap",
-                        gap: "16px",
+                        alignItems: "center",
+                        justifyContent: "space-around",
                     }}
                 >
                     <ExperienceCategory category="Workshops e Aulas" />
@@ -40,7 +45,7 @@ function Home() {
             <div><h1>Gastronomia e Degustações</h1></div>
             <div><h1>Infantil e Familiar</h1></div>
             <div><h1>Experiências Personalizadas</h1></div>
-        </div>
+        </Box>
     );
 }
 
