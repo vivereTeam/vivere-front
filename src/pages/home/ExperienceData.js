@@ -50,7 +50,7 @@ const experienceData = {
     "Experiencia em Destaque": [
         {
           id: 10,
-          imageUrl: "https://via.placeholder.com/345x140",
+          imageUrl: "https://hotelmt.com.br/wp-content/uploads/2018/11/258705-confira-5-dicas-para-organizar-um-evento-beneficente.jpg",
           date: "1 Jul 2025",
           title: "Retiro de Yoga",
           location: "Paraty, RJ",

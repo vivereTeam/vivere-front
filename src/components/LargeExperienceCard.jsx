@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 import { Card, CardMedia, CardContent, Typography, Button, Box } from "@mui/material";
 
 const LargeExperienceCard = ({ event }) => {
@@ -7,21 +7,33 @@ const LargeExperienceCard = ({ event }) => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        maxWidth: "800px",
+        width: "100%",
+        height: "450px",
         margin: "20px auto",
         borderRadius: "16px",
         boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)",
       }}
     >
-      {/* Placeholder para imagem */}
+      {/* Imagem */}
       <CardMedia
         component="img"
-        sx={{ width: "300px", objectFit: "cover" }}
+        sx={{ 
+          width: "70%", 
+          objectFit: "cover" 
+        }}
         image={event.imageUrl}
         alt={event.title}
       />
+      
       {/* Conteúdo textual */}
-      <CardContent sx={{ flex: "1", padding: "20px" }}>
+      <CardContent 
+        sx={{ 
+          flex: "1", 
+          padding: "20px", 
+          display: "flex", 
+          flexDirection: "column" 
+        }}
+      >
         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
           {event.date}
         </Typography>
@@ -31,10 +43,16 @@ const LargeExperienceCard = ({ event }) => {
         <Typography variant="body2" color="text.secondary" sx={{ marginBottom: "16px" }}>
           {event.location}
         </Typography>
-        <Typography variant="body1" color="text.primary" sx={{ marginBottom: "100px" }}>
+        <Typography 
+          variant="body1" 
+          color="text.primary" 
+          sx={{ flexGrow: 1 }}
+        >
           {event.description}
         </Typography>
-        <Box mt="auto" display="flex" justifyContent="space-between">
+
+        {/* Botões sempre no final */}
+        <Box display="flex" justifyContent="space-between">
           <Button variant="outlined" size="small">
             Mais informações
           </Button>
@@ -45,6 +63,17 @@ const LargeExperienceCard = ({ event }) => {
       </CardContent>
     </Card>
   );
+};
+
+LargeExperienceCard.propTypes = {
+  event: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, 
+    imageUrl: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default LargeExperienceCard;
