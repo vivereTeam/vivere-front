@@ -39,6 +39,7 @@ function Home() {
           <ExperienceCategory category="Gastronomia e Degustações" />
           <ExperienceCategory category="Infantil e Familiar" />
           <ExperienceCategory category="Experiências Personalizadas" />
+          <ExperienceCategory category="Lista de Categorias" />
         </div>
       </div>
 

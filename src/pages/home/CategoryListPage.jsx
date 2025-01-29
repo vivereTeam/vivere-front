@@ -3,7 +3,7 @@ import ExperienceCategory from "../../components/ExperienceCategory.jsx";
 function CategoryListPage() {
     return (
         <>
-            <h1 style={{ padding: "20px", fontFamily: "'Poppins', sans-serif" }}>Categorias</h1>
+            <h1 style={{ padding: "20px", fontFamily: "'Poppins', sans-serif" }}>Lista de categorias</h1>
             <div
                 style={{
                     backgroundColor: "hsl(0, 0.00%, 91.40%)",
