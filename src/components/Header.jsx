@@ -1,6 +1,8 @@
 import { AppBar, Toolbar, TextField, Box, Button, Link, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
+
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,14 +23,16 @@ const Header = () => {
   return (
     <AppBar position="sticky" sx={{ backgroundColor: "#270c6b", padding: "0 20px" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "64px" }}>
-        
-        <Box sx={{ display: "flex", alignItems: "center", marginRight: "20px" }}>
-          <img 
-            src=""  
-            alt="Logo" 
-            style={{ height: "50px", width: "auto", borderRadius: "8px" }} 
-          />
-        </Box>
+        <a  href="/">
+          <Box sx={{ display: "flex", alignItems: "center", marginRight: "20px", href: "/"}}>
+            <img 
+              src=""  
+              alt="Logo" 
+              style={{ height: "50px", width: "auto", borderRadius: "8px" }} 
+            />
+          </Box>
+        </a>
+
 
         <Box sx={{ display: "flex", alignItems: "center", width: "35%", backgroundColor: "white", borderRadius: "4px" }}>
           <TextField
@@ -82,7 +86,7 @@ const Header = () => {
 
         <Box sx={{ display: "flex", gap: "20px", alignItems: "center" }}>
           <Link 
-            href="#" 
+            href="/create-event" 
             sx={{ 
               color: "white", 
               textDecoration: "none", 
@@ -98,7 +102,7 @@ const Header = () => {
             CRIE SUA EXPERIÊNCIA
           </Link>
           <Link 
-            href="#" 
+            href="" 
             sx={{ 
               color: "white", 
               textDecoration: "none", 
