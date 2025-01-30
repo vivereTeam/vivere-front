@@ -1,11 +1,15 @@
-import ExperienceDetailsPage from "./pages/Experience/ExperienceDetailsPage";
+import AppRoutes from "./pages/home/AppRoutes";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
   return (
-    <div>
-      <ExperienceDetailsPage/>
-    </div>
-  );
+    <>
+      <Header />
+      <AppRoutes />
+      <Footer />
+    </>
+  )
 }
 
 export default App;

@@ -48,7 +48,7 @@ const LargeExperienceCard = ({ event }) => {
           color="text.primary" 
           sx={{ flexGrow: 1 }}
         >
-          {event.description}
+          {event.details}
         </Typography>
 
         {/* Botões sempre no final */}
@@ -72,7 +72,7 @@ LargeExperienceCard.propTypes = {
     date: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    details: PropTypes.string.isRequired,
   }).isRequired,
 };
 
