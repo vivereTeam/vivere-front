@@ -10,6 +10,7 @@ const ExperienceCreationPage = () => {
     startDate: "",
     endDate: "",
     ticketType: "Ingresso",
+    cardType: "",
     agreementChecked: false,
     image: null,
     imagePreview: null,
@@ -46,6 +47,7 @@ const ExperienceCreationPage = () => {
       eventData.address &&
       eventData.startDate &&
       eventData.endDate &&
+      eventData.cardType &&
       eventData.agreementChecked
     );
   };
@@ -58,7 +60,7 @@ const ExperienceCreationPage = () => {
       </Typography>
 
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        1. Categoria
+        1. Escolha a categoria do seu evento *
       </Typography>
       <Select fullWidth name="category" value={eventData.category} onChange={handleChange} margin="normal" >
         <MenuItem value="Workshops e Aulas">Workshops e Aulas</MenuItem>
@@ -73,13 +75,13 @@ const ExperienceCreationPage = () => {
 
       {/* Local */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        2. Onde o seu evento vai acontecer?
+        2. Onde o seu evento vai acontecer? *
       </Typography>
       <TextField fullWidth label="Endereço" name="address" value={eventData.address} onChange={handleChange} margin="normal" required />
 
       {/* Informações básicas */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        3. Informações básicas
+        3. Informações básicas *
       </Typography>
       <TextField fullWidth label="Nome do Evento" name="title" value={eventData.title} onChange={handleChange} margin="normal" required />
 
@@ -104,7 +106,7 @@ const ExperienceCreationPage = () => {
 
       {/* Data e Horário */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        5. Data e horário
+        5. Data e horário *
       </Typography>
       <TextField fullWidth type="date" label="Data de Início" name="startDate" value={eventData.startDate} onChange={handleChange} margin="normal" required />
       <TextField fullWidth type="date" label="Data de Término" name="endDate" value={eventData.endDate} onChange={handleChange} margin="normal" required />
@@ -120,9 +122,17 @@ const ExperienceCreationPage = () => {
         <MenuItem value="Gratuito">Gratuito</MenuItem>
       </Select>
 
+      <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
+        7. Escolha o tamanho do card *
+      </Typography>
+      <Select fullWidth name="cardType" value={eventData.cardType} onChange={handleChange} margin="normal" >
+        <MenuItem value="Card">Card Pequeno</MenuItem>
+        <MenuItem value="LargeCard">Card Grande</MenuItem>
+      </Select>
+
       {/* Responsabilidades */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        7. Responsabilidades
+        8. Responsabilidades *
       </Typography>
       <FormControlLabel
         control={<Checkbox checked={eventData.agreementChecked} onChange={(e) => setEventData({ ...eventData, agreementChecked: e.target.checked })} />}

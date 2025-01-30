@@ -1,7 +1,6 @@
 import { AppBar, Toolbar, TextField, Box, Button, Link, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
 
 
 const Header = () => {
