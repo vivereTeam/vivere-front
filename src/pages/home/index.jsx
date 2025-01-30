@@ -1,8 +1,5 @@
-import ExperienceCard from "./../../components/ExperienceCard.jsx"
-import ExperienceCategory from "./../../components/ExperienceCategory.jsx"
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
-
 
 function Home() {
     return (
