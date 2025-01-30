@@ -15,7 +15,8 @@ function Home() {
         margin: "0 auto",
         maxWidth: "1400px",
         width: "100%",
-        gap: "60px",
+        gap: "30px",
+        marginBottom: "30px",
         "& h1": {
           marginBottom: "16px",
         },
