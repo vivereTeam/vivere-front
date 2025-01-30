@@ -1,7 +1,11 @@
-import AppRoutes from "./pages/home/AppRoutes";
+import ExperienceDetailsPage from "./pages/Experience/ExperienceDetailsPage";
 
 function App() {
-  return <AppRoutes />;
+  return (
+    <div>
+      <ExperienceDetailsPage/>
+    </div>
+  );
 }
 
 export default App;
