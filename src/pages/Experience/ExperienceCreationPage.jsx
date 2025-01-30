@@ -1,26 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TextField, Button, MenuItem, Typography, Checkbox, FormControlLabel, Select, Box, Modal, Card, CardMedia, CardContent } from "@mui/material";
 
 const ExperienceCreationPage = () => {
   const [eventData, setEventData] = useState({
+    category: "",
     title: "",
     address: "",
-    venueName: "",
-    zipCode: "",
-    street: "",
-    number: "",
-    complement: "",
-    neighborhood: "",
-    city: "",
-    state: "",
     description: "",
     startDate: "",
-    startTime: "",
     endDate: "",
-    endTime: "",
     ticketType: "Ingresso",
-    producerName: "",
-    producerDescription: "",
     agreementChecked: false,
     image: null,
     imagePreview: null,
@@ -33,6 +22,8 @@ const ExperienceCreationPage = () => {
     setEventData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+
+  // Envio de Imagem
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -48,24 +39,51 @@ const ExperienceCreationPage = () => {
     console.log("Evento Criado:", eventData);
   };
 
+  const isFormValid = () => {
+    return (
+      eventData.category &&
+      eventData.title &&
+      eventData.address &&
+      eventData.startDate &&
+      eventData.endDate &&
+      eventData.agreementChecked
+    );
+  };
+  
+
   return (
     <Box sx={{ maxWidth: "800px", margin: "20px auto", padding: "20px", boxShadow: 2, borderRadius: "8px" }}>
       <Typography variant="h4" gutterBottom>
         Criar Evento Presencial
       </Typography>
 
+      <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
+        1. Categoria
+      </Typography>
+      <Select fullWidth name="category" value={eventData.category} onChange={handleChange} margin="normal" >
+        <MenuItem value="Workshops e Aulas">Workshops e Aulas</MenuItem>
+        <MenuItem value="Shows e Entretenimento">Shows e Entretenimento</MenuItem>
+        <MenuItem value="Viagens e Turismo">Viagens e Turismo</MenuItem>
+        <MenuItem value="Aventura e Adrenalina">Aventura e Adrenalina</MenuItem>
+        <MenuItem value="Relaxamento e Bem-Estar">Relaxamento e Bem-Estar</MenuItem>
+        <MenuItem value="Gastronomia e Degustações">Gastronomia e Degustações</MenuItem>
+        <MenuItem value="Infantil e Familiar">Infantil e Familiar</MenuItem>
+        <MenuItem value="Experiências Personalizadas">Experiências Personalizadas</MenuItem>
+      </Select>
+
       {/* Local */}
-      <Typography variant="h6" color="primary">
-        1. Onde o seu evento vai acontecer?
+      <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
+        2. Onde o seu evento vai acontecer?
       </Typography>
       <TextField fullWidth label="Endereço" name="address" value={eventData.address} onChange={handleChange} margin="normal" required />
-      <TextField fullWidth label="Nome do Local" name="venueName" value={eventData.venueName} onChange={handleChange} margin="normal" required />
 
       {/* Informações básicas */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        2. Informações básicas
+        3. Informações básicas
       </Typography>
       <TextField fullWidth label="Nome do Evento" name="title" value={eventData.title} onChange={handleChange} margin="normal" required />
+
+      {/* Envio de Imagem */}
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: 2 }}>
         <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: "none" }} id="image-upload" />
         <label htmlFor="image-upload">
@@ -80,33 +98,27 @@ const ExperienceCreationPage = () => {
 
       {/* Descrição */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        3. Descrição do evento
+        4. Descrição do evento
       </Typography>
       <TextField fullWidth label="Descrição" name="description" value={eventData.description} onChange={handleChange} margin="normal" multiline rows={4} />
 
       {/* Data e Horário */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        4. Data e horário
+        5. Data e horário
       </Typography>
       <TextField fullWidth type="date" label="Data de Início" name="startDate" value={eventData.startDate} onChange={handleChange} margin="normal" required />
-      <TextField fullWidth type="time" label="Hora de Início" name="startTime" value={eventData.startTime} onChange={handleChange} margin="normal" required />
+      <TextField fullWidth type="date" label="Data de Término" name="endDate" value={eventData.endDate} onChange={handleChange} margin="normal" required />
+
 
       {/* Ingressos */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        5. Ingressos
+        6. Ingressos
       </Typography>
       <Select fullWidth name="ticketType" value={eventData.ticketType} onChange={handleChange} margin="normal">
         <MenuItem value="Ingresso">Ingresso</MenuItem>
         <MenuItem value="VIP">VIP</MenuItem>
         <MenuItem value="Gratuito">Gratuito</MenuItem>
       </Select>
-
-      {/* Sobre o produtor */}
-      <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        6. Sobre o produtor
-      </Typography>
-      <TextField fullWidth label="Nome do Produtor" name="producerName" value={eventData.producerName} onChange={handleChange} margin="normal" />
-      <TextField fullWidth label="Descrição do Produtor" name="producerDescription" value={eventData.producerDescription} onChange={handleChange} margin="normal" multiline rows={3} />
 
       {/* Responsabilidades */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
@@ -122,7 +134,7 @@ const ExperienceCreationPage = () => {
         <Button variant="outlined" onClick={() => setPreviewOpen(true)}>
           Pré-visualizar
         </Button>
-        <Button variant="contained" color="primary" onClick={handleSubmit} disabled={!eventData.agreementChecked}>
+        <Button variant="contained" color="primary" onClick={handleSubmit} disabled={!isFormValid()}>
           Publicar Evento
         </Button>
       </Box>
@@ -138,12 +150,15 @@ const ExperienceCreationPage = () => {
                 {eventData.startDate ? `Data: ${eventData.startDate}` : "Data não informada"}
               </Typography>
               <Typography variant="subtitle2" color="textSecondary">
-                Local: {eventData.venueName || "Local não informado"}
+                Local: {eventData.address || "Local não informado"}
               </Typography>
               <Typography variant="body2" sx={{ mt: 1 }}>
                 {eventData.description || "Descrição do evento..."}
               </Typography>
-              <Typography variant="caption" color="primary" sx={{ mt: 2 }}>
+              <Typography variant="caption" color="primary" sx={{ mt: 2 }} display="block">
+                Categoria: {eventData.category}
+              </Typography>
+              <Typography variant="caption" color="primary" sx={{ mt: 1 }} display="block">
                 Ingresso: {eventData.ticketType}
               </Typography>
             </CardContent>
