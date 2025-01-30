@@ -1,13 +1,9 @@
-import AppRoutes from "./pages/home/AppRoutes";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import ExperienceDetailsPage from "./pages/Experience/ExperienceDetailsPage"
 
 function App() {
   return (
     <>
-      <Header />
-      <AppRoutes />
-      <Footer />
+      <ExperienceDetailsPage />
     </>
   )
 }
