@@ -1,9 +1,13 @@
 import ExperienceCard from "./../../components/ExperienceCard.jsx"
 import ExperienceCategory from "./../../components/ExperienceCategory.jsx"
+import Header from "../../components/Header"
+import Footer from "../../components/Footer"
+
 
 function Home() {
     return (
         <div style={{fontFamily: "'Poppins', sans-serif"}}>
+            <Header />
             <div>
                 <h1>Categorias</h1>
             </div>
@@ -38,6 +42,7 @@ function Home() {
             <div>
                 <h1>Experiências Personalizadas</h1>
             </div>
+            <Footer />
         </div>
     );
 };
