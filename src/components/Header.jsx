@@ -25,18 +25,24 @@ const Header = () => {
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "64px" }}>
         
         {/* LOGO */}
-        <Box sx={{ display: "flex", alignItems: "center", marginRight: "20px" }}>
-        <svg 
-          width="60" 
-          height="60" 
-          viewBox="0 0 100 100" 
-          xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="45" fill="#270c6b"/>
-          
-          <polygon points="50,15 61,39 88,39 66,57 75,85 50,68 25,85 34,57 12,39 39,39" fill="white"/>
-          
-          <text x="50%" y="95%" textAnchor="middle" fill="white" fontSize="16px" fontFamily="Arial" dy=".3em">Vivere+</text>
-        </svg>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Ícone estilizado */}
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path d="M20 0L24.4903 15.5097L40 20L24.4903 24.4903L20 40L15.5097 24.4903L0 20L15.5097 15.5097L20 0Z" fill="#FFFA00"/>
+            <circle cx="20" cy="20" r="6" fill="#270C6B"/>
+          </svg>
+
+          {/* Texto estilizado */}
+          <span style={{ 
+            fontFamily: "'Montserrat', sans-serif",
+            fontWeight: 700,
+            fontSize: '1.5rem',
+            color: '#fffa00',
+            letterSpacing: '-0.5px'
+          }}>
+            VIVERE
+            <span style={{ color: '#270c6b', marginLeft: '4px' }}>+</span>
+          </span>
         </Box>
 
         {/* CAMPO DE BUSCA */}
