@@ -57,11 +57,20 @@ function App() {
     }));
   };
 
+  // **Nova Função para Remover uma Experiência**
+  const removeExperience = (category, id) => {
+    setAllExperiences((prev) => ({
+      ...prev,
+      [category]: prev[category].filter((exp) => exp.id !== id),
+    }));
+  };
+
   return (
     <AppRoutes
       allExperiences={allExperiences}
       addNewExperience={addNewExperience}
       updateExperience={updateExperience}
+      removeExperience={removeExperience} // Passa a função como prop
     />
   );
 }

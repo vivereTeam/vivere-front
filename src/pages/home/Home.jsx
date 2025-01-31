@@ -1,5 +1,5 @@
 // src/pages/home/Home.jsx
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom"; // Importante adicionar
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -7,7 +7,7 @@ import CardSlider from "../../components/CardSlider";
 import ExperienceCard from "../../components/ExperienceCard";
 import ExperienceCategory from "../../components/ExperienceCategory";
 
-const Home = ({ allExperiences }) => {
+const Home = ({ allExperiences, removeExperience }) => { // Recebe removeExperience como prop
   // Precisamos instanciar o navigate:
   const navigate = useNavigate();
 
@@ -84,7 +84,11 @@ const Home = ({ allExperiences }) => {
                       console.log("Depois do navigate");
                     }}
                   >
-                    <ExperienceCard {...experience} />
+                    <ExperienceCard 
+                      {...experience} 
+                      category={category} // Passa a categoria
+                      removeExperience={removeExperience} // Passa a função de remoção
+                    />
                   </div>
                 ))}
               </div>
