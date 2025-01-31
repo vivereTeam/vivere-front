@@ -1,111 +1,18 @@
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import ExperienceCard from "../../components/ExperienceCard.jsx";
-import PropTypes from "prop-types";
-import ExperienceCategory from "../../components/ExperienceCategory.jsx";
-import LargeExperienceCard from "../../components/LargeExperienceCard.jsx";
-import { Box, IconButton } from "@mui/material";
-import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import experienceData from "./ExperienceData.js";
+// src/pages/home/Home.jsx
+import { Box } from "@mui/material";
+import { useNavigate } from "react-router-dom"; // Importante adicionar
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import CardSlider from "../../components/CardSlider";
+import ExperienceCard from "../../components/ExperienceCard";
+import ExperienceCategory from "../../components/ExperienceCategory";
 
-// Adicionando mais experiências para testar o slider
-experienceData["Shows e Entretenimento"] = [
-  { id: 1, title: "Show do Coldplay", location: "São Paulo", date: "2025-06-10", imageUrl: "https://picsum.photos/id/500/450/450", details: "Um show inesquecível!" },
-  { id: 2, title: "Festival Rock in Rio", location: "Rio de Janeiro", date: "2025-09-20", imageUrl: "https://picsum.photos/id/500/450/450", details: "Maior festival de música do Brasil." },
-  { id: 3, title: "Stand-up Comedy", location: "Belo Horizonte", date: "2025-07-15", imageUrl: "https://picsum.photos/id/500/450/450", details: "Ria até chorar!" },
-  { id: 4, title: "Orquestra Sinfônica", location: "Curitiba", date: "2025-08-05", imageUrl: "https://picsum.photos/id/500/450/450", details: "Música clássica emocionante." },
-  { id: 5, title: "Espetáculo de Circo", location: "Porto Alegre", date: "2025-10-01", imageUrl: "https://picsum.photos/id/500/450/450", details: "Diversão garantida para toda a família." }
-];
+const Home = ({ allExperiences }) => {
+  // Precisamos instanciar o navigate:
+  const navigate = useNavigate();
 
-const NextArrow = ({ onClick }) => (
-  <IconButton
-    onClick={onClick}
-    sx={{
-      position: "absolute",
-      top: "50%",
-      right: "-25px",
-      transform: "translateY(-50%)",
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      color: "white",
-      zIndex: 2,
-      ":hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
-    }}
-  >
-    <ArrowForwardIos />
-  </IconButton>
-);
+  const categories = Object.keys(allExperiences);
 
-const PrevArrow = ({ onClick }) => (
-  <IconButton
-    onClick={onClick}
-    sx={{
-      position: "absolute",
-      top: "50%",
-      left: "-25px",
-      transform: "translateY(-50%)",
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      color: "white",
-      zIndex: 2,
-      ":hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
-    }}
-  >
-    <ArrowBackIos />
-  </IconButton>
-);
-
-const ExperienceSlider = ({ experiences }) => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
-
-  return (
-    <Box sx={{ position: "relative", width: "100%" }}>
-      <Slider {...settings}>
-        {experiences.map((exp) => (
-          <div key={exp.id} style={{ padding: "10px" }}>
-            <ExperienceCard {...exp} />
-          </div>
-        ))}
-      </Slider>
-    </Box>
-  );
-};
-
-ExperienceSlider.propTypes = {
-  experiences: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      location: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string,
-      details: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-};
-
-const Home = () => {
   return (
     <Box
       sx={{
@@ -123,6 +30,9 @@ const Home = () => {
         },
       }}
     >
+      <Header />
+
+      {/* Seções de Categorias em destaque */}
       <div>
         <h1>Categorias</h1>
         <div
@@ -145,12 +55,15 @@ const Home = () => {
         </div>
       </div>
 
-      {Object.keys(experienceData).map((category) => (
-        <div key={category}>
-          <h1>{category}</h1>
-          {category !== "Experiencia em Destaque" ? (
-            experienceData[category].length > 3 ? (
-              <ExperienceSlider experiences={experienceData[category]} />
+      {/* Lista de experiências (eventos) por categoria */}
+      {categories.map((category) => {
+        const experiences = allExperiences[category] || [];
+        return (
+          <div key={category}>
+            <h1>{category}</h1>
+
+            {experiences.length > 3 ? (
+              <CardSlider experiences={experiences} />
             ) : (
               <div
                 style={{
@@ -160,18 +73,27 @@ const Home = () => {
                   justifyContent: "flex-start",
                 }}
               >
-                {experienceData[category].map((experience) => (
-                  <ExperienceCard key={experience.id} {...experience} />
+                {experiences.map((experience) => (
+                  <div
+                    key={experience.id}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      console.log("Clicou em", experience.title);
+                      console.log("Antes do navigate");
+                      navigate(`/event/${experience.id}`);
+                      console.log("Depois do navigate");
+                    }}
+                  >
+                    <ExperienceCard {...experience} />
+                  </div>
                 ))}
               </div>
-            )
-          ) : (
-            experienceData[category].map((experience) => (
-              <LargeExperienceCard key={experience.id} event={experience} />
-            ))
-          )}
-        </div>
-      ))}
+            )}
+          </div>
+        );
+      })}
+
+      <Footer />
     </Box>
   );
 };
