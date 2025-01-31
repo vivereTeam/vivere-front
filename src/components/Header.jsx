@@ -1,6 +1,8 @@
 import { AppBar, Toolbar, TextField, Box, Button, Link, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
+// Importamos Link do React Router, mas damos outro nome para evitar conflito com MUI
+import { Link as RouterLink } from "react-router-dom";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,14 +24,22 @@ const Header = () => {
     <AppBar position="sticky" sx={{ backgroundColor: "#270c6b", padding: "0 20px" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "64px" }}>
         
+        {/* LOGO */}
         <Box sx={{ display: "flex", alignItems: "center", marginRight: "20px" }}>
-          <img 
-            src=""  
-            alt="Logo" 
-            style={{ height: "50px", width: "auto", borderRadius: "8px" }} 
-          />
+        <svg 
+          width="60" 
+          height="60" 
+          viewBox="0 0 100 100" 
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="45" fill="#270c6b"/>
+          
+          <polygon points="50,15 61,39 88,39 66,57 75,85 50,68 25,85 34,57 12,39 39,39" fill="white"/>
+          
+          <text x="50%" y="95%" textAnchor="middle" fill="white" fontSize="16px" fontFamily="Arial" dy=".3em">Vivere+</text>
+        </svg>
         </Box>
 
+        {/* CAMPO DE BUSCA */}
         <Box sx={{ display: "flex", alignItems: "center", width: "35%", backgroundColor: "white", borderRadius: "4px" }}>
           <TextField
             label="Pesquisar experiências"
@@ -80,9 +90,12 @@ const Header = () => {
           </IconButton>
         </Box>
 
+        {/* LINKS/BOTOES À DIREITA */}
         <Box sx={{ display: "flex", gap: "20px", alignItems: "center" }}>
-          <Link 
-            href="#" 
+          {/* CRIE SUA EXPERIÊNCIA -> /create-event */}
+          <Link
+            component={RouterLink}
+            to="/create-event"
             sx={{ 
               color: "white", 
               textDecoration: "none", 
@@ -97,8 +110,10 @@ const Header = () => {
           >
             CRIE SUA EXPERIÊNCIA
           </Link>
-          <Link 
-            href="#" 
+          
+          {/* ACESSE SUA CONTA - você decide para onde leva */}
+          <Link
+            href="#"
             sx={{ 
               color: "white", 
               textDecoration: "none", 
@@ -113,6 +128,8 @@ const Header = () => {
           >
             ACESSE SUA CONTA
           </Link>
+
+          {/* BOTÃO DE CADASTRO - apenas exemplo visual */}
           <Button variant="contained" sx={{ backgroundColor: "#fffa00", color: "black", borderRadius: "4px" }}>
             CADASTRE-SE
           </Button>
