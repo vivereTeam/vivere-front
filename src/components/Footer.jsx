@@ -21,11 +21,22 @@ const Footer = () => {
           {/* Logo */}
           <Grid2 item xs={12} sm={6} md={3}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <img 
-                src="path-to-your-logo.png" // Substitua pela URL real do seu logo
-                alt="Logo" 
-                style={{ width: "120px" }} 
-              />
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <path d="M20 0L24.4903 15.5097L40 20L24.4903 24.4903L20 40L15.5097 24.4903L0 20L15.5097 15.5097L20 0Z" fill="#FFFA00"/>
+              <circle cx="20" cy="20" r="6" fill="#270C6B"/>
+            </svg>
+
+            {/* Texto estilizado */}
+            <span style={{ 
+              fontFamily: "'Montserrat', sans-serif",
+              fontWeight: 700,
+              fontSize: '1.5rem',
+              color: '#fffa00',
+              letterSpacing: '-0.5px'
+            }}>
+              VIVERE
+              <span style={{ color: '#270c6b', marginLeft: '4px' }}>+</span>
+            </span>
             </Box>
           </Grid2>
           

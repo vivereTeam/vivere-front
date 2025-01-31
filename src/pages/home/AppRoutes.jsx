@@ -9,6 +9,7 @@ import CategoryListPage from "./CategoryListPage"; // src/pages/home/CategoryLis
 import ExperienceCreationPage from "../Experience/ExperienceCreationPage"; 
 import ExperienceDetailsPage from "../Experience/ExperienceDetailsPage";
 import EditEventPage from "../Experience/ExperienceEditPage";
+import SearchResultsPage from "./SearchResultsPage"; // Importando a página de busca
 
 function AppRoutes({ allExperiences, addNewExperience, updateExperience, removeExperience }) {
   return (
@@ -17,6 +18,12 @@ function AppRoutes({ allExperiences, addNewExperience, updateExperience, removeE
       <Route 
         path="/" 
         element={<Home allExperiences={allExperiences} removeExperience={removeExperience} />} 
+      />
+
+      {/* PÁGINA DE BUSCA */}
+      <Route 
+        path="/search" 
+        element={<SearchResultsPage allExperiences={allExperiences} />} 
       />
 
       {/* CRIAÇÃO DE NOVO EVENTO */}

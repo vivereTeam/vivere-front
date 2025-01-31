@@ -1,16 +1,19 @@
+// src/components/Header.jsx
 import { AppBar, Toolbar, TextField, Box, Button, Link, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 // Importamos Link do React Router, mas damos outro nome para evitar conflito com MUI
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate(); // Adicionado useNavigate
 
   const handleSearch = () => {
     if (searchQuery.trim() !== "") {
       console.log("Buscando por:", searchQuery);
-      // Aqui você pode redirecionar para uma página de resultados ou chamar uma função de busca
+      // Redireciona para a página de busca com a consulta como parâmetro
+      navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
