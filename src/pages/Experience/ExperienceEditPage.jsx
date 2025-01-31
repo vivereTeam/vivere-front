@@ -1,27 +1,45 @@
-import { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+// src/pages/Experience/ExperienceEditPage.jsx
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
   TextField,
   Button,
   Typography,
-  Grid2,
-  FormControlLabel,
-  Switch
+  Grid2
 } from '@mui/material';
 import { Save, Cancel } from '@mui/icons-material';
-import { ExperienceContext } from '../../context/ExperienceContex';
+import PropTypes from 'prop-types';
 
-const EditEventPage = () => {
+const EditEventPage = ({ allExperiences, updateExperience }) => {
   const { eventId } = useParams();
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const { updateExperience } = useContext(ExperienceContext);
-  const [formData, setFormData] = useState(state.event);
-  
+
+  // Encontrar a categoria e o evento correspondente
+  let currentCategory = null;
+  let currentEvent = null;
+
+  for (const [category, events] of Object.entries(allExperiences)) {
+    const found = events.find((e) => e.id.toString() === eventId.toString());
+    if (found) {
+      currentCategory = category;
+      currentEvent = found;
+      break;
+    }
+  }
+
+  useEffect(() => {
+    if (!currentEvent) {
+      console.warn("Evento não encontrado para ID:", eventId);
+      navigate("/"); // Redireciona para a home se não encontrado
+    }
+  }, [currentEvent, eventId, navigate]);
+
+  const [formData, setFormData] = useState(currentEvent || {});
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateExperience(formData.category, formData);
+    updateExperience(currentCategory, formData);
     navigate(`/event/${eventId}`);
   };
 
@@ -31,6 +49,23 @@ const EditEventPage = () => {
       [field]: e.target.value
     }));
   };
+
+  const handleDetailsChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      details: e.target.value
+    }));
+  };
+
+  if (!currentEvent) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography variant="h5" align="center">
+          Evento não encontrado.
+        </Typography>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -44,7 +79,7 @@ const EditEventPage = () => {
             <TextField
               fullWidth
               label="Título do Evento"
-              value={formData.title}
+              value={formData.title || ''}
               onChange={handleChange('title')}
               variant="outlined"
               required
@@ -56,7 +91,7 @@ const EditEventPage = () => {
               fullWidth
               type="date"
               label="Data"
-              value={formData.date}
+              value={formData.date || ''}
               onChange={handleChange('date')}
               InputLabelProps={{
                 shrink: true,
@@ -69,7 +104,7 @@ const EditEventPage = () => {
             <TextField
               fullWidth
               label="Horário"
-              value={formData.time}
+              value={formData.time || ''}
               onChange={handleChange('time')}
               required
             />
@@ -79,7 +114,7 @@ const EditEventPage = () => {
             <TextField
               fullWidth
               label="Localização"
-              value={formData.location}
+              value={formData.location || ''}
               onChange={handleChange('location')}
               multiline
               rows={2}
@@ -91,11 +126,8 @@ const EditEventPage = () => {
             <TextField
               fullWidth
               label="Detalhes (um por linha)"
-              value={formData.details.join('\n')}
-              onChange={(e) => setFormData(prev => ({
-                ...prev,
-                details: e.target.value.split('\n')
-              }))}
+              value={formData.details || ''}
+              onChange={handleDetailsChange}
               multiline
               rows={4}
             />
@@ -127,5 +159,10 @@ const EditEventPage = () => {
     </Container>
   );
 }
+
+EditEventPage.propTypes = {
+  allExperiences: PropTypes.object.isRequired,
+  updateExperience: PropTypes.func.isRequired,
+};
 
 export default EditEventPage;

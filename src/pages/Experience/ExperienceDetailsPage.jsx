@@ -30,13 +30,14 @@ import {
   Add,
   Edit,
   ShoppingCart,
-  ArrowBack, // Importando o ícone de voltar
+  ArrowBack,
 } from "@mui/icons-material";
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import PropTypes from 'prop-types';
 
-function ExperienceDetailsPage({ allExperiences }) {
+function ExperienceDetailsPage({ allExperiences, updateExperience }) {
   const { eventId } = useParams(); // Pega o ID da rota (/event/:eventId)
   const navigate = useNavigate();
 
@@ -56,11 +57,6 @@ function ExperienceDetailsPage({ allExperiences }) {
       console.warn("Evento não encontrado para ID:", eventId);
     }
   }, [event, eventId]);
-
-  // Bloqueia scroll do body ao abrir carrinho
-  useEffect(() => {
-    document.body.style.overflow = cartOpen ? "hidden" : "auto";
-  }, [cartOpen]);
 
   // Função auxiliar: percorre todas as categorias e procura o ID
   function findEventById(all, id) {
@@ -86,7 +82,7 @@ function ExperienceDetailsPage({ allExperiences }) {
 
   // Editar evento
   const handleEdit = () => {
-    navigate(`/edit/${eventId}`, { state: { event } });
+    navigate(`/edit/${eventId}`); // Removido o estado
   };
 
   // Adicionar ingresso ao carrinho
@@ -708,5 +704,10 @@ function ExperienceDetailsPage({ allExperiences }) {
     </Box>
   );
 }
+
+ExperienceDetailsPage.propTypes = {
+  allExperiences: PropTypes.object.isRequired,
+  updateExperience: PropTypes.func.isRequired,
+};
 
 export default ExperienceDetailsPage;

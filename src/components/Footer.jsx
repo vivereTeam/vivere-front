@@ -2,7 +2,7 @@
 import { 
   Box, 
   Container, 
-  Grid, 
+  Grid2, 
   Typography, 
   Link, 
   IconButton, 
@@ -17,9 +17,9 @@ const Footer = () => {
   return (
     <Box sx={{ backgroundColor: "#270c6b", color: "#FFFFFF", padding: "40px 0" }}>
       <Container maxWidth="lg">
-        <Grid container spacing={4}>
+        <Grid2 container spacing={4}>
           {/* Logo */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid2 item xs={12} sm={6} md={3}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <img 
                 src="path-to-your-logo.png" // Substitua pela URL real do seu logo
@@ -27,10 +27,10 @@ const Footer = () => {
                 style={{ width: "120px" }} 
               />
             </Box>
-          </Grid>
+          </Grid2>
           
           {/* Links Rápidos */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid2 item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
               Links Rápidos
             </Typography>
@@ -40,10 +40,10 @@ const Footer = () => {
               <Link href="/ajuda" color="#fffa00" underline="hover">Ajuda</Link>
               <Link href="/termos-de-uso" color="#fffa00" underline="hover">Termos de Uso</Link>
             </Box>
-          </Grid>
+          </Grid2>
           
           {/* Redes Sociais */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid2 item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
               Redes Sociais
             </Typography>
@@ -79,10 +79,10 @@ const Footer = () => {
                 <CloseIcon /> {/* Você mencionou o uso do CloseIcon anteriormente */}
               </IconButton>
             </Box>
-          </Grid>
+          </Grid2>
 
           {/* Newsletter */}
-          <Grid item xs={12} sm={6} md={3}>
+          <Grid2 item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold", color: "#fffa00" }}>
               Newsletter
             </Typography>
@@ -117,8 +117,8 @@ const Footer = () => {
                 Inscrever-se
               </Button>
             </Box>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
 
         {/* Linha de Separação */}
         <Box sx={{ borderTop: "1px solid rgba(255, 255, 255, 0.3)", mt: 4, pt: 2 }}>

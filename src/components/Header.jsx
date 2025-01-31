@@ -26,11 +26,17 @@ const Header = () => {
         
         {/* LOGO */}
         <Box sx={{ display: "flex", alignItems: "center", marginRight: "20px" }}>
-          <img 
-            src=""  // coloque aqui a URL do seu logo
-            alt="Logo" 
-            style={{ height: "50px", width: "auto", borderRadius: "8px" }} 
-          />
+        <svg 
+          width="60" 
+          height="60" 
+          viewBox="0 0 100 100" 
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="45" fill="#270c6b"/>
+          
+          <polygon points="50,15 61,39 88,39 66,57 75,85 50,68 25,85 34,57 12,39 39,39" fill="white"/>
+          
+          <text x="50%" y="95%" textAnchor="middle" fill="white" fontSize="16px" fontFamily="Arial" dy=".3em">Vivere+</text>
+        </svg>
         </Box>
 
         {/* CAMPO DE BUSCA */}

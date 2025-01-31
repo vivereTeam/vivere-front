@@ -1,15 +1,12 @@
-// App.jsx
-import { useState, useEffect } from "react";
+// src/App.jsx
+import React, { useState, useEffect } from "react";
 import AppRoutes from "./pages/home/AppRoutes";
 
 function App() {
-  // Guarda todas as experiências no estado local (por categoria).
-  // Você pode iniciar com dados fixos ou vazio.
   const [allExperiences, setAllExperiences] = useState(() => {
     const saved = localStorage.getItem("allExperiences");
     if (saved) return JSON.parse(saved);
 
-    // Exemplo: estado inicial com algumas categorias:
     return {
       "Shows e Entretenimento": [
         {
@@ -31,15 +28,15 @@ function App() {
           details: "Praias incríveis!",
         },
       ],
+      // Adicione outras categorias conforme necessário
     };
   });
 
-  // Salva no localStorage sempre que o estado mudar
   useEffect(() => {
     localStorage.setItem("allExperiences", JSON.stringify(allExperiences));
   }, [allExperiences]);
 
-  // Função que cria/insere nova experiência em uma categoria
+  // Função para adicionar uma nova experiência
   const addNewExperience = (category, newEvent) => {
     setAllExperiences((prev) => {
       const existingEvents = prev[category] || [];
@@ -50,10 +47,21 @@ function App() {
     });
   };
 
+  // Função para atualizar uma experiência existente
+  const updateExperience = (category, updatedExperience) => {
+    setAllExperiences((prev) => ({
+      ...prev,
+      [category]: prev[category].map((exp) =>
+        exp.id === updatedExperience.id ? updatedExperience : exp
+      ),
+    }));
+  };
+
   return (
     <AppRoutes
       allExperiences={allExperiences}
       addNewExperience={addNewExperience}
+      updateExperience={updateExperience}
     />
   );
 }

@@ -1,4 +1,5 @@
 // src/pages/home/AppRoutes.jsx
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 // IMPORTS DOS SEUS COMPONENTES/PÁGINAS
@@ -9,8 +10,7 @@ import ExperienceCreationPage from "../Experience/ExperienceCreationPage";
 import ExperienceDetailsPage from "../Experience/ExperienceDetailsPage";
 import EditEventPage from "../Experience/ExperienceEditPage";
 
-// Recebemos as props "allExperiences" e "addNewExperience" do App.jsx
-function AppRoutes({ allExperiences, addNewExperience }) {
+function AppRoutes({ allExperiences, addNewExperience, updateExperience }) {
   return (
     <Routes>
       {/* HOME */}
@@ -26,10 +26,6 @@ function AppRoutes({ allExperiences, addNewExperience }) {
       />
 
       {/* DETALHES DO EVENTO  */}
-      {/*
-        Passamos "allExperiences" para que a página de detalhes possa 
-        buscar o evento correto a partir do "eventId" da URL
-      */}
       <Route
         path="/event/:eventId"
         element={<ExperienceDetailsPage allExperiences={allExperiences} />}
@@ -38,7 +34,7 @@ function AppRoutes({ allExperiences, addNewExperience }) {
       {/* EDIÇÃO DE EVENTO */}
       <Route 
         path="/edit/:eventId" 
-        element={<EditEventPage />} 
+        element={<EditEventPage allExperiences={allExperiences} updateExperience={updateExperience} />} 
       />
 
       {/* ROTAS DE CATEGORIAS */}
