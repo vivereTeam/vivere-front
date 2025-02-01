@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { useState, useEffect } from "react";
+import {useEffect, useState} from "react";
 import AppRoutes from "./pages/home/AppRoutes";
 
 function App() {
@@ -28,7 +28,6 @@ function App() {
           details: "Praias incríveis!",
         },
       ],
-      // Adicione outras categorias conforme necessário
     };
   });
 
@@ -36,7 +35,6 @@ function App() {
     localStorage.setItem("allExperiences", JSON.stringify(allExperiences));
   }, [allExperiences]);
 
-  // Função para adicionar uma nova experiência
   const addNewExperience = (category, newEvent) => {
     setAllExperiences((prev) => {
       const existingEvents = prev[category] || [];
@@ -47,7 +45,6 @@ function App() {
     });
   };
 
-  // Função para atualizar uma experiência existente
   const updateExperience = (category, updatedExperience) => {
     setAllExperiences((prev) => ({
       ...prev,
@@ -57,7 +54,6 @@ function App() {
     }));
   };
 
-  // **Nova Função para Remover uma Experiência**
   const removeExperience = (category, id) => {
     setAllExperiences((prev) => ({
       ...prev,
@@ -70,7 +66,7 @@ function App() {
       allExperiences={allExperiences}
       addNewExperience={addNewExperience}
       updateExperience={updateExperience}
-      removeExperience={removeExperience} // Passa a função como prop
+      removeExperience={removeExperience}
     />
   );
 }
