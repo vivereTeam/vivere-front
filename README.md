@@ -61,6 +61,7 @@ Siga os passos abaixo para configurar o projeto localmente:
 
 ### **Passos para Instalação**
 1. **Clone o Repositório**:
+
    ```bash
    git clone https://github.com/J0aoPaulo/vivere.git
    cd vivere

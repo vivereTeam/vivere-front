@@ -1,35 +1,74 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.jsx
+import {useEffect, useState} from "react";
+import AppRoutes from "./pages/home/AppRoutes";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [allExperiences, setAllExperiences] = useState(() => {
+    const saved = localStorage.getItem("allExperiences");
+    if (saved) return JSON.parse(saved);
+
+    return {
+      "Shows e Entretenimento": [
+        {
+          id: 1,
+          title: "Show do Coldplay",
+          location: "São Paulo",
+          date: "2025-06-10",
+          imageUrl: "https://picsum.photos/id/500/450/450",
+          details: "Um show inesquecível!",
+        },
+      ],
+      "Viagens e Turismo": [
+        {
+          id: 2,
+          title: "Pacote para Florianópolis",
+          location: "Santa Catarina",
+          date: "2025-01-10",
+          imageUrl: "https://picsum.photos/id/501/450/450",
+          details: "Praias incríveis!",
+        },
+      ],
+    };
+  });
+
+  useEffect(() => {
+    localStorage.setItem("allExperiences", JSON.stringify(allExperiences));
+  }, [allExperiences]);
+
+  const addNewExperience = (category, newEvent) => {
+    setAllExperiences((prev) => {
+      const existingEvents = prev[category] || [];
+      return {
+        ...prev,
+        [category]: [...existingEvents, newEvent],
+      };
+    });
+  };
+
+  const updateExperience = (category, updatedExperience) => {
+    setAllExperiences((prev) => ({
+      ...prev,
+      [category]: prev[category].map((exp) =>
+        exp.id === updatedExperience.id ? updatedExperience : exp
+      ),
+    }));
+  };
+
+  const removeExperience = (category, id) => {
+    setAllExperiences((prev) => ({
+      ...prev,
+      [category]: prev[category].filter((exp) => exp.id !== id),
+    }));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <AppRoutes
+      allExperiences={allExperiences}
+      addNewExperience={addNewExperience}
+      updateExperience={updateExperience}
+      removeExperience={removeExperience}
+    />
+  );
 }
 
-export default App
+export default App;
