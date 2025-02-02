@@ -40,16 +40,18 @@
 
 ## 📂 Estrutura do Projeto
 
+
 ```plaintext
-vivere/
-├── src/            # Código-fonte principal
-│   ├── components/ # Componentes reutilizáveis
-│   ├── pages/      # Páginas da aplicação
-│   ├── services/   # Lógica de integração com APIs
-│   └── App.jsx     # Ponto de entrada da aplicação
-├── public/         # Arquivos estáticos
-├── README.md       # Documentação do projeto
-└── package.json    # Dependências e scripts
+├── App.jsx
+├── components
+├── context
+├── main.jsx
+├── pages
+│   ├── Experience
+│   └── home
+└── styles
+    ├── index.css
+    └── theme.js
 ``` 
 
 ## 🔧 Instalação e Configuração
