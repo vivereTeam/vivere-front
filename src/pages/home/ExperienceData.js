@@ -1,11 +1,11 @@
-import aventuraAdrenalina from "./assets/Aventura e Adrenalina.png";
-import experienciasPersonalizadas from "./assets/Experiências Personalizadas.png";
-import gastronomiaDegustacoes from "./assets/Gastronomia e Degustações.png";
-import infantilFamiliar from "./assets/Infantil e Familiar.png";
-import relaxamentoBemEstar from "./assets/Relaxamento e Bem-Estar.png";
-import showsEntretenimento from "./assets/Shows e Entretenimento.png";
-import viagensTurismo from "./assets/Viagens e Turismo.png";
-import workshopsAulas from "./assets/Workshops e Aulas.png";
+import aventuraAdrenalina from "../../assets/Aventura e Adrenalina.png";
+import experienciasPersonalizadas from "../..//assets/Experiências Personalizadas.png";
+import gastronomiaDegustacoes from "../..//assets/Gastronomia e Degustações.png";
+import infantilFamiliar from "../..//assets/Infantil e Familiar.png";
+import relaxamentoBemEstar from "../../assets/Relaxamento e Bem-Estar.png";
+import showsEntretenimento from "../../assets/Shows e Entretenimento.png";
+import viagensTurismo from "../../assets/Viagens e Turismo.png";
+import workshopsAulas from "../../assets/Workshops e Aulas.png";
 
 const experienceData = {
   "Workshops e Aulas": [
