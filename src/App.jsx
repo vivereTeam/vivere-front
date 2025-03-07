@@ -1,6 +1,6 @@
 // src/App.jsx
 import React, { useState, useEffect } from "react";
-import AppRoutes from "./pages/home/AppRoutes";
+import AppRoutes from "./routes/routes";
 
 function App() {
   const [allExperiences, setAllExperiences] = useState(() => {
