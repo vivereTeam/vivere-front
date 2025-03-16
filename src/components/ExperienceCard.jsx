@@ -2,7 +2,7 @@ import { Card, CardContent, CardMedia, Typography, IconButton, Tooltip } from "@
 import { Close } from "@mui/icons-material";
 import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
-import { deleteEvento } from '../services/api';
+import { deleteEvento } from '../api';
 
 const ExperienceCard = ({ event, removeExperience }) => {
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ const ExperienceCard = ({ event, removeExperience }) => {
           color="primary"
           sx={{ fontWeight: "bold", textTransform: "uppercase", mb: 1 }}
         >
-          {event.dataInicio}
+          {event.dataInicio ? new Date(event.dataInicio).toLocaleDateString() : "Data não informada"}
         </Typography>
         <Typography
           variant="h6"
@@ -98,6 +98,10 @@ const ExperienceCard = ({ event, removeExperience }) => {
         >
           {event.descricao}
         </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          Preço: {event.preco === 0 ? "Gratuito" : event.preco ? `R$ ${event.preco.toFixed(2)}` : "Preço não informado"}
+        </Typography>
+        
       </CardContent>
     </Card>
   );
@@ -108,10 +112,11 @@ ExperienceCard.propTypes = {
     id: PropTypes.number.isRequired,
     titulo: PropTypes.string.isRequired,
     endereco: PropTypes.string.isRequired,
-    dataInicio: PropTypes.string.isRequired,
-    imagemUrl: PropTypes.string,
+    dataInicio: PropTypes.string,
+    imagemUrl: PropTypes.string.isRequired,
     descricao: PropTypes.string.isRequired,
     categoria: PropTypes.string.isRequired,
+    preco: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
   }).isRequired,
   removeExperience: PropTypes.func.isRequired,
 };
