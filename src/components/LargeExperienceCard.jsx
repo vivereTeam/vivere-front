@@ -1,7 +1,23 @@
 import PropTypes from "prop-types";
-import { Card, CardMedia, CardContent, Typography, Button, Box } from "@mui/material";
+import { Card, CardMedia, CardContent, Typography, Button, Box, IconButton, Tooltip } from "@mui/material";
+import { Close } from "@mui/icons-material";
+import { deleteEvento } from '../api';
 
-const LargeExperienceCard = ({ event }) => {
+const LargeExperienceCard = ({ event, removeExperience }) => {
+  const handleRemove = async (e) => {
+    e.stopPropagation();
+
+    if (window.confirm(`Tem certeza que deseja remover "${event.titulo}"?`)) {
+      try {
+        await deleteEvento(event.id);
+        removeExperience(event.categoria, event.id);
+      } catch (error) {
+        console.error('Erro ao remover evento:', error);
+        alert('Ocorreu um erro ao remover o evento. Tente novamente.');
+      }
+    }
+  };
+
   return (
     <Card
       sx={{
@@ -12,8 +28,28 @@ const LargeExperienceCard = ({ event }) => {
         margin: "20px auto",
         borderRadius: "16px",
         boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)",
+        position: 'relative',
       }}
     >
+      {/* Botão de Remoção com Tooltip */}
+      <Tooltip title="Remover" arrow>
+        <IconButton 
+          onClick={handleRemove}
+          sx={{ 
+            position: 'absolute', 
+            top: 8, 
+            right: 8, 
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            '&:hover': {
+              backgroundColor: 'rgba(255, 255, 255, 1)',
+            },
+          }}
+          size="small"
+        >
+          <Close fontSize="small" color="action" />
+        </IconButton>
+      </Tooltip>
+
       {/* Imagem */}
       <CardMedia
         component="img"
@@ -82,6 +118,7 @@ LargeExperienceCard.propTypes = {
     descricao: PropTypes.string.isRequired,
     categoria: PropTypes.string.isRequired,
   }).isRequired,
+  removeExperience: PropTypes.func.isRequired,
 };
 
 export default LargeExperienceCard;
