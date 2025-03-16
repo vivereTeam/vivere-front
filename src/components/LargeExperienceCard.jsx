@@ -21,8 +21,8 @@ const LargeExperienceCard = ({ event }) => {
           width: "70%", 
           objectFit: "cover" 
         }}
-        image={event.imageUrl}
-        alt={event.title}
+        image={event.imagemUrl}
+        alt={event.titulo}
       />
       
       {/* Conteúdo textual */}
@@ -35,20 +35,27 @@ const LargeExperienceCard = ({ event }) => {
         }}
       >
         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-          {event.date}
+          {event.dataInicio}
         </Typography>
         <Typography variant="h5" component="div" gutterBottom>
-          {event.title}
+          {event.titulo}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ marginBottom: "16px" }}>
-          {event.location}
+          {event.endereco}
         </Typography>
         <Typography 
           variant="body1" 
           color="text.primary" 
-          sx={{ flexGrow: 1 }}
+          sx={{ 
+            flexGrow: 1,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+          }}
         >
-          {event.details}
+          {event.descricao}
         </Typography>
 
         {/* Botões sempre no final */}
@@ -67,12 +74,12 @@ const LargeExperienceCard = ({ event }) => {
 
 LargeExperienceCard.propTypes = {
   event: PropTypes.shape({
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, 
-    imageUrl: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
-    details: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    imagemUrl: PropTypes.string.isRequired,
+    dataInicio: PropTypes.string.isRequired,
+    titulo: PropTypes.string.isRequired,
+    endereco: PropTypes.string.isRequired,
+    descricao: PropTypes.string.isRequired,
   }).isRequired,
 };
 
