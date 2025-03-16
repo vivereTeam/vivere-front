@@ -1,23 +1,31 @@
 import { Card, CardContent, CardMedia, Typography, IconButton, Tooltip } from "@mui/material";
-import { Close } from "@mui/icons-material"; // Importando o ícone Close
+import { Close } from "@mui/icons-material";
 import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
+import { deleteEvento } from '../services/api';
 
 const ExperienceCard = ({ event, removeExperience }) => {
   const navigate = useNavigate();
 
-  const handleRemove = (e) => {
-    e.stopPropagation(); // Evita que o clique no botão remova o card também navegue
+  const handleRemove = async (e) => {
+    e.stopPropagation();
+
     if (window.confirm(`Tem certeza que deseja remover "${event.titulo}"?`)) {
-      removeExperience(event.categoria, event.id);
+      try {
+        await deleteEvento(event.id);
+        removeExperience(event.categoria, event.id);
+      } catch (error) {
+        console.error('Erro ao remover evento:', error);
+        alert('Ocorreu um erro ao remover o evento. Tente novamente.');
+      }
     }
   };
 
   return (
     <Card 
       sx={{ 
-        maxWidth: 345, // Largura fixa
-        height: 400, // Altura fixa
+        maxWidth: 345, 
+        height: 400, 
         borderRadius: 5, 
         boxShadow: 5, 
         position: 'relative',
@@ -31,7 +39,6 @@ const ExperienceCard = ({ event, removeExperience }) => {
       }}
       onClick={() => navigate(`/event/${event.id}`)}
     >
-      {/* Botão de Remoção com Tooltip */}
       <Tooltip title="Remover" arrow>
         <IconButton 
           onClick={handleRemove}
@@ -46,20 +53,18 @@ const ExperienceCard = ({ event, removeExperience }) => {
           }}
           size="small"
         >
-          <Close fontSize="small" color="action" /> {/* Usando o ícone Close com cor discreta */}
+          <Close fontSize="small" color="action" />
         </IconButton>
       </Tooltip>
 
-      {/* Imagem */}
       <CardMedia
         component="img"
         height="140"
         image={event.imagemUrl}
         alt={event.titulo}
-        sx={{ objectFit: 'cover' }} // Garante que a imagem cubra o espaço
+        sx={{ objectFit: 'cover' }}
       />
 
-      {/* Conteúdo textual */}
       <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Typography
           variant="subtitle2"
@@ -87,7 +92,7 @@ const ExperienceCard = ({ event, removeExperience }) => {
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             display: '-webkit-box',
-            WebkitLineClamp: 3, // Limita a 3 linhas
+            WebkitLineClamp: 3,
             WebkitBoxOrient: 'vertical',
           }}
         >
