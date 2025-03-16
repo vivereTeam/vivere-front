@@ -10,6 +10,8 @@ import ExperienceCreationPage from "../Experience/ExperienceCreationPage";
 import ExperienceDetailsPage from "../Experience/ExperienceDetailsPage";
 import EditEventPage from "../Experience/ExperienceEditPage";
 import SearchResultsPage from "./SearchResultsPage"; // Importando a página de busca
+import Login from "./Login";
+import Cadastro from "./Cadastro";
 
 function AppRoutes({ allExperiences, addNewExperience, updateExperience, removeExperience }) {
   return (
@@ -51,7 +53,19 @@ function AppRoutes({ allExperiences, addNewExperience, updateExperience, removeE
         {/* rota aninhada => /category-list/:category */}
         <Route path=":category" element={<CategoryPage />} />
       </Route>
+
+    {/* ROTA DE LOGIN */}
+    <Route path="/login" element={<Login/>}></Route>
+
+
+    {/* ROTA DE CADASTRO*/}
+    <Route path="/register" element={<Cadastro/>}>
+  
+
+    </Route>
+    
     </Routes>
+
   );
 }
 
