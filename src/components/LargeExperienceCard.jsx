@@ -31,7 +31,6 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
         position: 'relative',
       }}
     >
-      {/* Botão de Remoção com Tooltip */}
       <Tooltip title="Remover" arrow>
         <IconButton 
           onClick={handleRemove}
@@ -50,7 +49,6 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
         </IconButton>
       </Tooltip>
 
-      {/* Imagem */}
       <CardMedia
         component="img"
         sx={{ 
@@ -61,7 +59,6 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
         alt={event.titulo}
       />
       
-      {/* Conteúdo textual */}
       <CardContent 
         sx={{ 
           flex: "1", 
@@ -71,7 +68,7 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
         }}
       >
         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-          {event.dataInicio}
+          {event.dataInicio ? new Date(event.dataInicio).toLocaleDateString() : "Data não informada"}
         </Typography>
         <Typography variant="h5" component="div" gutterBottom>
           {event.titulo}
@@ -94,7 +91,10 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
           {event.descricao}
         </Typography>
 
-        {/* Botões sempre no final */}
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          Preço: {event.preco === 0 ? "Gratuito" : event.preco ? `R$ ${event.preco.toFixed(2)}` : "Preço não informado"}
+        </Typography>
+
         <Box display="flex" justifyContent="space-between">
           <Button variant="outlined" size="small">
             Mais informações
@@ -112,11 +112,12 @@ LargeExperienceCard.propTypes = {
   event: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     imagemUrl: PropTypes.string.isRequired,
-    dataInicio: PropTypes.string.isRequired,
+    dataInicio: PropTypes.string,
     titulo: PropTypes.string.isRequired,
     endereco: PropTypes.string.isRequired,
     descricao: PropTypes.string.isRequired,
     categoria: PropTypes.string.isRequired,
+    preco: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
   }).isRequired,
   removeExperience: PropTypes.func.isRequired,
 };
