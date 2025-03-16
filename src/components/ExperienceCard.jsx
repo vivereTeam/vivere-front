@@ -1,16 +1,23 @@
-// src/components/ExperienceCard.jsx
 import { Card, CardContent, CardMedia, Typography, IconButton, Tooltip } from "@mui/material";
-import { Close } from "@mui/icons-material"; // Importando o ícone Close
+import { Close } from "@mui/icons-material";
 import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
+import { deleteEvento } from '../services/api';
 
-const ExperienceCard = ({ id, imageUrl, date, title, location, details, category, removeExperience }) => {
+const ExperienceCard = ({ event, removeExperience }) => {
   const navigate = useNavigate();
 
-  const handleRemove = (e) => {
-    e.stopPropagation(); // Evita que o clique no botão remova o card também navegue
-    if (window.confirm(`Tem certeza que deseja remover "${title}"?`)) {
-      removeExperience(category, id);
+  const handleRemove = async (e) => {
+    e.stopPropagation();
+
+    if (window.confirm(`Tem certeza que deseja remover "${event.titulo}"?`)) {
+      try {
+        await deleteEvento(event.id);
+        removeExperience(event.categoria, event.id);
+      } catch (error) {
+        console.error('Erro ao remover evento:', error);
+        alert('Ocorreu um erro ao remover o evento. Tente novamente.');
+      }
     }
   };
 
@@ -18,6 +25,7 @@ const ExperienceCard = ({ id, imageUrl, date, title, location, details, category
     <Card 
       sx={{ 
         maxWidth: 345, 
+        height: 400, 
         borderRadius: 5, 
         boxShadow: 5, 
         position: 'relative',
@@ -25,11 +33,12 @@ const ExperienceCard = ({ id, imageUrl, date, title, location, details, category
         '&:hover': {
           transform: 'scale(1.02)',
         },
-        cursor: 'pointer'
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
       }}
-      onClick={() => navigate(`/event/${id}`)}
+      onClick={() => navigate(`/event/${event.id}`)}
     >
-      {/* Botão de Remoção com Tooltip */}
       <Tooltip title="Remover" arrow>
         <IconButton 
           onClick={handleRemove}
@@ -44,40 +53,50 @@ const ExperienceCard = ({ id, imageUrl, date, title, location, details, category
           }}
           size="small"
         >
-          <Close fontSize="small" color="action" /> {/* Usando o ícone Close com cor discreta */}
+          <Close fontSize="small" color="action" />
         </IconButton>
       </Tooltip>
 
       <CardMedia
         component="img"
         height="140"
-        image={imageUrl}
-        alt={title}
+        image={event.imagemUrl}
+        alt={event.titulo}
+        sx={{ objectFit: 'cover' }}
       />
-      <CardContent>
+
+      <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Typography
           variant="subtitle2"
           color="primary"
           sx={{ fontWeight: "bold", textTransform: "uppercase", mb: 1 }}
         >
-          {date}
+          {event.dataInicio}
         </Typography>
         <Typography
           variant="h6"
           component="div"
           sx={{ fontWeight: "bold", mb: 1 }}
         >
-          {title}
+          {event.titulo}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {location}
+          {event.endereco}
         </Typography>
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ mt: 1, fontStyle: "italic" }}
+          sx={{ 
+            mt: 1, 
+            fontStyle: "italic",
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+          }}
         >
-          {details}
+          {event.descricao}
         </Typography>
       </CardContent>
     </Card>
@@ -85,14 +104,16 @@ const ExperienceCard = ({ id, imageUrl, date, title, location, details, category
 };
 
 ExperienceCard.propTypes = {
+  event: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired, // Alterado para string
-    imageUrl: PropTypes.string,
-    details: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired, // Nova prop
-    removeExperience: PropTypes.func.isRequired, // Nova prop
-}
+    titulo: PropTypes.string.isRequired,
+    endereco: PropTypes.string.isRequired,
+    dataInicio: PropTypes.string.isRequired,
+    imagemUrl: PropTypes.string,
+    descricao: PropTypes.string.isRequired,
+    categoria: PropTypes.string.isRequired,
+  }).isRequired,
+  removeExperience: PropTypes.func.isRequired,
+};
 
 export default ExperienceCard;
