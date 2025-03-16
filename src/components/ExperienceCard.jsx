@@ -16,7 +16,8 @@ const ExperienceCard = ({ event, removeExperience }) => {
   return (
     <Card 
       sx={{ 
-        maxWidth: 345, 
+        maxWidth: 345, // Largura fixa
+        height: 400, // Altura fixa
         borderRadius: 5, 
         boxShadow: 5, 
         position: 'relative',
@@ -24,7 +25,9 @@ const ExperienceCard = ({ event, removeExperience }) => {
         '&:hover': {
           transform: 'scale(1.02)',
         },
-        cursor: 'pointer'
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
       }}
       onClick={() => navigate(`/event/${event.id}`)}
     >
@@ -47,13 +50,17 @@ const ExperienceCard = ({ event, removeExperience }) => {
         </IconButton>
       </Tooltip>
 
+      {/* Imagem */}
       <CardMedia
         component="img"
         height="140"
         image={event.imagemUrl}
         alt={event.titulo}
+        sx={{ objectFit: 'cover' }} // Garante que a imagem cubra o espaço
       />
-      <CardContent>
+
+      {/* Conteúdo textual */}
+      <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Typography
           variant="subtitle2"
           color="primary"
@@ -74,7 +81,15 @@ const ExperienceCard = ({ event, removeExperience }) => {
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ mt: 1, fontStyle: "italic" }}
+          sx={{ 
+            mt: 1, 
+            fontStyle: "italic",
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            display: '-webkit-box',
+            WebkitLineClamp: 3, // Limita a 3 linhas
+            WebkitBoxOrient: 'vertical',
+          }}
         >
           {event.descricao}
         </Typography>
