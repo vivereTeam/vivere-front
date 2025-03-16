@@ -80,6 +80,7 @@ LargeExperienceCard.propTypes = {
     titulo: PropTypes.string.isRequired,
     endereco: PropTypes.string.isRequired,
     descricao: PropTypes.string.isRequired,
+    categoria: PropTypes.string.isRequired,
   }).isRequired,
 };
 
