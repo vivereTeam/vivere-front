@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { Box, IconButton } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import ExperienceCard from "./ExperienceCard"; // está na mesma pasta components?
+import ExperienceCard from "./ExperienceCard"; 
 
 const NextArrow = ({ onClick }) => (
   <IconButton
