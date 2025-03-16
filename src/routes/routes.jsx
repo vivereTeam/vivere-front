@@ -2,7 +2,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-// IMPORTS DOS SEUS COMPONENTES/PÁGINAS
 import Home from "./Home"; // src/pages/home/Home.jsx
 import CategoryPage from "./CategoryPage"; // src/pages/home/CategoryPage.jsx
 import CategoryListPage from "./CategoryListPage"; // src/pages/home/CategoryListPage.jsx
