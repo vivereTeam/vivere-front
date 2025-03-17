@@ -2,7 +2,7 @@ import { Card, CardContent, CardMedia, Typography, IconButton, Tooltip } from "@
 import { Close } from "@mui/icons-material";
 import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
-import { deleteEvento } from '../api';
+import { deleteEvento } from '../services/api';
 
 const ExperienceCard = ({ event, removeExperience }) => {
   const navigate = useNavigate();
@@ -20,6 +20,10 @@ const ExperienceCard = ({ event, removeExperience }) => {
       }
     }
   };
+
+  if (!event) {
+    return <div>Carregando...</div>;
+  }
 
   return (
     <Card 
@@ -101,7 +105,6 @@ const ExperienceCard = ({ event, removeExperience }) => {
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           Preço: {event.preco === 0 ? "Gratuito" : event.preco ? `R$ ${event.preco.toFixed(2)}` : "Preço não informado"}
         </Typography>
-        
       </CardContent>
     </Card>
   );
@@ -109,7 +112,7 @@ const ExperienceCard = ({ event, removeExperience }) => {
 
 ExperienceCard.propTypes = {
   event: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     titulo: PropTypes.string.isRequired,
     endereco: PropTypes.string.isRequired,
     dataInicio: PropTypes.string,
