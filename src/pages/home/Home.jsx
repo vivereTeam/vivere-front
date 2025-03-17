@@ -1,15 +1,46 @@
-// src/pages/home/Home.jsx
 import { Box, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom"; // Importante adicionar
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CardSlider from "../../components/CardSlider";
 import ExperienceCard from "../../components/ExperienceCard";
 import ExperienceCategory from "../../components/ExperienceCategory";
+import { getAllEventos, deleteEvento } from "../../services/api";
 
-const Home = ({ allExperiences, removeExperience }) => { // Recebe removeExperience como prop
-  // Precisamos instanciar o navigate:
+const Home = () => {
   const navigate = useNavigate();
+  const [allExperiences, setAllExperiences] = useState({});
+
+  useEffect(() => {
+    const fetchEventos = async () => {
+      try {
+        const eventos = await getAllEventos();
+        const groupedByCategory = eventos.reduce((acc, evento) => {
+          const { categoria } = evento;
+          if (!acc[categoria]) acc[categoria] = [];
+          acc[categoria].push(evento);
+          return acc;
+        }, {});
+        setAllExperiences(groupedByCategory);
+      } catch (error) {
+        console.error("Erro ao buscar eventos:", error);
+      }
+    };
+    fetchEventos();
+  }, []);
+
+  const removeExperience = async (category, id) => {
+    try {
+      await deleteEvento(id);
+      setAllExperiences((prev) => ({
+        ...prev,
+        [category]: prev[category].filter((exp) => exp.id !== id),
+      }));
+    } catch (error) {
+      console.error("Erro ao remover evento:", error);
+    }
+  };
 
   const categories = Object.keys(allExperiences);
 
@@ -32,7 +63,6 @@ const Home = ({ allExperiences, removeExperience }) => { // Recebe removeExperie
     >
       <Header />
 
-      {/* Seções de Categorias em destaque */}
       <div>
         <h1>Categorias</h1>
         <div
@@ -55,15 +85,30 @@ const Home = ({ allExperiences, removeExperience }) => { // Recebe removeExperie
         </div>
       </div>
 
-      {/* Lista de experiências (eventos) por categoria */}
       {categories.map((category) => {
         const experiences = allExperiences[category] || [];
+        const largeCards = experiences.filter((exp) => exp.cardSize === "LARGE");
+        const normalCards = experiences.filter((exp) => exp.cardSize === "NORMAL");
+
         return (
           <div key={category}>
             <h1>{category}</h1>
 
-            {experiences.length > 3 ? (
-              <CardSlider experiences={experiences} />
+            {largeCards.length > 0 && (
+              <div style={{ marginBottom: "20px" }}>
+                {largeCards.map((experience) => (
+                  <div key={experience.id} style={{ marginBottom: "20px" }}>
+                    <ExperienceCard
+                      event={experience}
+                      removeExperience={removeExperience}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {normalCards.length > 3 ? (
+              <CardSlider experiences={normalCards} removeExperience={removeExperience} />
             ) : (
               <div
                 style={{
@@ -73,21 +118,15 @@ const Home = ({ allExperiences, removeExperience }) => { // Recebe removeExperie
                   justifyContent: "flex-start",
                 }}
               >
-                {experiences.map((experience) => (
+                {normalCards.map((experience) => (
                   <div
                     key={experience.id}
                     style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      console.log("Clicou em", experience.title);
-                      console.log("Antes do navigate");
-                      navigate(`/event/${experience.id}`);
-                      console.log("Depois do navigate");
-                    }}
+                    onClick={() => navigate(`/event/${experience.id}`)}
                   >
-                    <ExperienceCard 
-                      {...experience} 
-                      category={category} // Passa a categoria
-                      removeExperience={removeExperience} // Passa a função de remoção
+                    <ExperienceCard
+                      event={experience}
+                      removeExperience={removeExperience}
                     />
                   </div>
                 ))}
