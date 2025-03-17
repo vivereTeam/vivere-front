@@ -92,6 +92,7 @@ const Header = () => {
             }}
             InputProps={{
               disableUnderline: true,
+              notched: false,
             }}
           />
           <IconButton onClick={handleSearch} sx={{ color: "#270c6b", padding: "8px" }}>
