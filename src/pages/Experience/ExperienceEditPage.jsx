@@ -1,168 +1,98 @@
-// src/pages/Experience/ExperienceEditPage.jsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Grid2
-} from '@mui/material';
+import axios from 'axios';
+import { Container, TextField, Button, Typography, Grid } from '@mui/material';
 import { Save, Cancel } from '@mui/icons-material';
-import PropTypes from 'prop-types';
 
-const EditEventPage = ({ allExperiences, updateExperience }) => {
-  const { eventId } = useParams();
-  const navigate = useNavigate();
+const EditEventPage = () => {
+    const { eventId } = useParams();
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        titulo: '',
+        descricao: '',
+        data: '',
+    });
 
-  // Encontrar a categoria e o evento correspondente
-  let currentCategory = null;
-  let currentEvent = null;
+    // Buscar os dados do evento ao carregar a página
+    useEffect(() => {
+        axios.get(`http://localhost:5000/eventos/${eventId}`)
+            .then(response => {
+                setFormData(response.data); // Preenche os campos com os dados do evento
+            })
+            .catch(error => {
+                console.error("Erro ao buscar evento:", error);
+                navigate("/"); // Redireciona para a home se o evento não for encontrado
+            });
+    }, [eventId, navigate]);
 
-  for (const [category, events] of Object.entries(allExperiences)) {
-    const found = events.find((e) => e.id.toString() === eventId.toString());
-    if (found) {
-      currentCategory = category;
-      currentEvent = found;
-      break;
-    }
-  }
+    // Atualizar os campos conforme o usuário digita
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-  useEffect(() => {
-    if (!currentEvent) {
-      console.warn("Evento não encontrado para ID:", eventId);
-      navigate("/"); // Redireciona para a home se não encontrado
-    }
-  }, [currentEvent, eventId, navigate]);
+    // Enviar os dados atualizados para o backend
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.put(`http://localhost:5000/eventos/${eventId}`, formData);
+            alert("Evento atualizado com sucesso!");
+            navigate("/"); // Volta para a página inicial após a edição
+        } catch (error) {
+            console.error("Erro ao atualizar evento:", error);
+        }
+    };
 
-  const [formData, setFormData] = useState(currentEvent || {});
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updateExperience(currentCategory, formData);
-    navigate(`/event/${eventId}`);
-  };
-
-  const handleChange = (field) => (e) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: e.target.value
-    }));
-  };
-
-  const handleDetailsChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      details: e.target.value
-    }));
-  };
-
-  if (!currentEvent) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Typography variant="h5" align="center">
-          Evento não encontrado.
-        </Typography>
-      </Container>
+        <Container>
+            <Typography variant="h4" gutterBottom>Editar Evento</Typography>
+            <form onSubmit={handleSubmit}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Título"
+                            name="titulo"
+                            value={formData.titulo}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Descrição"
+                            name="descricao"
+                            value={formData.descricao}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            multiline
+                            rows={4}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Data"
+                            name="data"
+                            type="date"
+                            value={formData.data}
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                            InputLabelProps={{ shrink: true }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button type="submit" variant="contained" color="primary" startIcon={<Save />}>
+                            Salvar
+                        </Button>
+                        <Button onClick={() => navigate("/")} variant="outlined" color="secondary" startIcon={<Cancel />} style={{ marginLeft: 10 }}>
+                            Cancelar
+                        </Button>
+                    </Grid>
+                </Grid>
+            </form>
+        </Container>
     );
-  }
-
-  return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h3" gutterBottom>
-        Editar Evento
-      </Typography>
-
-      <form onSubmit={handleSubmit}>
-        <Grid2 container spacing={3}>
-          <Grid2 item xs={12}>
-            <TextField
-              fullWidth
-              label="Título do Evento"
-              value={formData.title || ''}
-              onChange={handleChange('title')}
-              variant="outlined"
-              required
-            />
-          </Grid2>
-
-          <Grid2 item xs={12} md={6}>
-            <TextField
-              fullWidth
-              type="date"
-              label="Data"
-              value={formData.date || ''}
-              onChange={handleChange('date')}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-            />
-          </Grid2>
-
-          <Grid2 item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Horário"
-              value={formData.time || ''}
-              onChange={handleChange('time')}
-              required
-            />
-          </Grid2>
-
-          <Grid2 item xs={12}>
-            <TextField
-              fullWidth
-              label="Localização"
-              value={formData.location || ''}
-              onChange={handleChange('location')}
-              multiline
-              rows={2}
-              required
-            />
-          </Grid2>
-
-          <Grid2 item xs={12}>
-            <TextField
-              fullWidth
-              label="Detalhes (um por linha)"
-              value={formData.details || ''}
-              onChange={handleDetailsChange}
-              multiline
-              rows={4}
-            />
-          </Grid2>
-
-          <Grid2 item xs={12} sx={{ display: 'flex', gap: 2 }}>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              startIcon={<Save />}
-              size="large"
-            >
-              Salvar
-            </Button>
-            
-            <Button
-              variant="outlined"
-              color="error"
-              startIcon={<Cancel />}
-              size="large"
-              onClick={() => navigate(-1)}
-            >
-              Cancelar
-            </Button>
-          </Grid2>
-        </Grid2>
-      </form>
-    </Container>
-  );
-}
-
-EditEventPage.propTypes = {
-  allExperiences: PropTypes.object.isRequired,
-  updateExperience: PropTypes.func.isRequired,
 };
 
 export default EditEventPage;
