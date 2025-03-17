@@ -1,4 +1,3 @@
-// src/components/CardSlider.jsx
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -43,7 +42,7 @@ const PrevArrow = ({ onClick }) => (
   </IconButton>
 );
 
-function CardSlider({ experiences }) {
+function CardSlider({ experiences, removeExperience }) {
   const settings = {
     dots: true,
     infinite: true,
@@ -68,12 +67,8 @@ function CardSlider({ experiences }) {
     <Box sx={{ position: "relative", width: "100%" }}>
       <Slider {...settings}>
         {experiences.map((exp) => (
-          <div
-            key={exp.id}
-            style={{ padding: "10px", cursor: "pointer" }}
-            onClick={() => console.log("Clicou em", exp.title)}
-          >
-            <ExperienceCard {...exp} />
+          <div key={exp.id} style={{ padding: "10px" }}>
+            <ExperienceCard event={exp} removeExperience={removeExperience} />
           </div>
         ))}
       </Slider>
