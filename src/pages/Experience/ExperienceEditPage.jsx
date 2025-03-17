@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Container, TextField, Button, Typography, Grid } from '@mui/material';
 import { Save, Cancel } from '@mui/icons-material';
+import { getEventoById, updateEvento } from '../../services/api';
 
 const EditEventPage = () => {
     const { eventId } = useParams();
@@ -15,9 +15,9 @@ const EditEventPage = () => {
 
     // Buscar os dados do evento ao carregar a página
     useEffect(() => {
-        axios.get(`http://localhost:5000/eventos/${eventId}`)
+        getEventoById(eventId)
             .then(response => {
-                setFormData(response.data); // Preenche os campos com os dados do evento
+                setFormData(response); // Preenche os campos com os dados do evento
             })
             .catch(error => {
                 console.error("Erro ao buscar evento:", error);
@@ -34,7 +34,7 @@ const EditEventPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:5000/eventos/${eventId}`, formData);
+            await updateEvento(eventId, formData);
             alert("Evento atualizado com sucesso!");
             navigate("/"); // Volta para a página inicial após a edição
         } catch (error) {
