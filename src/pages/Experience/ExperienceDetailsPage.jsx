@@ -1,4 +1,3 @@
-// src/pages/Experience/ExperienceDetailsPage.jsx
 import {
   Button,
   Card,
@@ -37,41 +36,30 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 
-function ExperienceDetailsPage({ allExperiences, updateExperience }) {
-  const { eventId } = useParams(); // Pega o ID da rota (/event/:eventId)
+function ExperienceDetailsPage({ allExperiences }) {
+  const { eventId } = useParams();
   const navigate = useNavigate();
-
-  // Carrinho de compras (tickets)
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
-
-  // Notificação (ao copiar link)
   const [showNotification, setShowNotification] = useState(false);
-
-  // Buscar evento no objeto allExperiences
   const event = findEventById(allExperiences, eventId);
 
-  // Se não encontra o evento, poderíamos exibir mensagem ou redirecionar
   useEffect(() => {
     if (!event) {
       console.warn("Evento não encontrado para ID:", eventId);
     }
   }, [event, eventId]);
 
-  // Função auxiliar: percorre todas as categorias e procura o ID
   function findEventById(all, id) {
     for (const category of Object.keys(all)) {
-      // all[category] é um array de eventos
       const found = all[category].find((e) => e.id.toString() === id.toString());
       if (found) {
-        // Podemos devolver o evento com a categoria embutida
         return { ...found, category };
       }
     }
     return null;
   }
 
-  // Compartilhar (copia a URL atual)
   const handleShare = () => {
     const url = window.location.href;
     navigator.clipboard
@@ -80,12 +68,10 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
       .catch((err) => console.error("Falha ao copiar:", err));
   };
 
-  // Editar evento
   const handleEdit = () => {
-    navigate(`/edit/${eventId}`); // Removido o estado
+    navigate(`/edit/${eventId}`);
   };
 
-  // Adicionar ingresso ao carrinho
   const handleAddToCart = (ticket) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.type === ticket.type);
@@ -96,13 +82,11 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
             : item
         );
       }
-      // Se não existe, adiciona um novo item ao carrinho
       return [...prev, { ...ticket, quantity: 1 }];
     });
     setCartOpen(true);
   };
 
-  // Ajustar quantidade no carrinho
   const handleQuantityChange = (ticketType, operation) => {
     setCartItems((prev) => {
       const newItems = [...prev];
@@ -128,14 +112,12 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
     });
   };
 
-  // Calcula total do carrinho
   const calculateTotal = () =>
     cartItems.reduce(
       (total, item) => total + (item.price + item.tax) * item.quantity,
       0
     );
 
-  // Caso o evento não tenha sido encontrado
   if (!event) {
     return (
       <Box
@@ -155,11 +137,9 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
     );
   }
 
-  // Se o evento foi encontrado, renderiza os detalhes
   return (
     <Box sx={{ bgcolor: "#f8f9fa", minHeight: "100vh", py: 4 }}>
       <Container maxWidth="lg">
-        {/* Cabeçalho (botão de voltar, categoria, botões de editar, compartilhar e carrinho) */}
         <Box
           sx={{
             display: "flex",
@@ -169,7 +149,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
             gap: 2,
           }}
         >
-          {/* Botão Voltar */}
           <Button
             variant="text"
             startIcon={<ArrowBack />}
@@ -182,7 +161,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
             Voltar
           </Button>
 
-          {/* Chip de Categoria */}
           <Chip
             label={event.category}
             color="secondary"
@@ -194,7 +172,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
             }}
           />
 
-          {/* Botões de Editar, Compartilhar e Carrinho */}
           <Box sx={{ display: "flex", gap: 2, marginLeft: "auto" }}>
             <IconButton
               onClick={handleEdit}
@@ -250,9 +227,7 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
           </Box>
         </Box>
 
-        {/* Layout principal (imagem + detalhes) */}
         <Grid container spacing={4}>
-          {/* IMAGEM PRINCIPAL */}
           <Grid item xs={12} md={6}>
             <Card
               sx={{
@@ -293,7 +268,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
             </Card>
           </Grid>
 
-          {/* DETALHES DO EVENTO */}
           <Grid item xs={12} md={6}>
             <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
               <Typography
@@ -311,7 +285,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
                 {event.title}
               </Typography>
 
-              {/* INFORMAÇÕES CHAVE (data, horário, local) */}
               <Stack spacing={3} sx={{ mb: 4 }}>
                 {[
                   {
@@ -358,7 +331,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
                 ))}
               </Stack>
 
-              {/* DESCRIÇÃO DETALHADA */}
               <Box
                 sx={{
                   mb: 4,
@@ -391,7 +363,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
                 </Typography>
               </Box>
 
-              {/* SEÇÃO DE INGRESSOS */}
               <Box
                 sx={{
                   mb: 4,
@@ -511,7 +482,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
                 </Typography>
               </Box>
 
-              {/* Garantia de Segurança */}
               <Box
                 sx={{
                   p: 3,
@@ -553,7 +523,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
           </Grid>
         </Grid>
 
-        {/* Carrinho de Compras */}
         <Drawer
           anchor="right"
           open={cartOpen}
@@ -605,7 +574,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
                     <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                       {item.type}
                     </Typography>
-                    {/* Botão para remover totalmente */}
                     <IconButton
                       onClick={() => handleQuantityChange(item.type, "decrement")}
                       size="small"
@@ -622,7 +590,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
                       alignItems: "center",
                     }}
                   >
-                    {/* Botões + e - para alterar quantidade */}
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                       <IconButton
                         onClick={() => handleQuantityChange(item.type, "decrement")}
@@ -642,7 +609,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
                       </IconButton>
                     </Box>
 
-                    {/* Valor subtotal */}
                     <Typography variant="body1" sx={{ fontWeight: 600 }}>
                       R$ {((item.price + item.tax) * item.quantity).toFixed(2)}
                     </Typography>
@@ -654,7 +620,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
 
           <Divider sx={{ mt: 2 }} />
 
-          {/* Footer do carrinho */}
           <Box sx={{ mt: 3 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
               <Typography variant="h6" sx={{ fontWeight: 700 }}>
@@ -685,7 +650,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
           </Box>
         </Drawer>
 
-        {/* Notificação (link copiado) */}
         <Snackbar
           open={showNotification}
           autoHideDuration={6000}
@@ -707,7 +671,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
 
 ExperienceDetailsPage.propTypes = {
   allExperiences: PropTypes.object.isRequired,
-  updateExperience: PropTypes.func.isRequired,
 };
 
 export default ExperienceDetailsPage;
