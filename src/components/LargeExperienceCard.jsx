@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Card, CardMedia, CardContent, Typography, Button, Box, IconButton, Tooltip } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import { deleteEvento } from '../api';
+import { deleteEvento } from '../services/api';
 
 const LargeExperienceCard = ({ event, removeExperience }) => {
   const handleRemove = async (e) => {
