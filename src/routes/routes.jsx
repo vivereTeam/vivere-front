@@ -1,70 +1,51 @@
-// src/pages/home/AppRoutes.jsx
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-
-import Home from "./Home"; // src/pages/home/Home.jsx
-import CategoryPage from "./CategoryPage"; // src/pages/home/CategoryPage.jsx
-import CategoryListPage from "./CategoryListPage"; // src/pages/home/CategoryListPage.jsx
-import ExperienceCreationPage from "../Experience/ExperienceCreationPage"; 
-import ExperienceDetailsPage from "../Experience/ExperienceDetailsPage";
-import EditEventPage from "../Experience/ExperienceEditPage";
-import SearchResultsPage from "./SearchResultsPage"; // Importando a página de busca
-import Login from "./Login";
-import Cadastro from "./Cadastro";
+import Home from "../pages/home/Home";
+import CategoryPage from "../pages/home/CategoryPage";
+import CategoryListPage from "../pages/home/CategoryListPage";
+import ExperienceCreationPage from "../pages/Experience/ExperienceCreationPage";
+import ExperienceDetailsPage from "../pages/Experience/ExperienceDetailsPage";
+import EditEventPage from "../pages/Experience/ExperienceEditPage";
+import SearchResultsPage from "../pages/home/SearchResultsPage";
+import Login from "../pages/home/Login";
+import Cadastro from "../pages/home/Cadastro";
 
 function AppRoutes({ allExperiences, addNewExperience, updateExperience, removeExperience }) {
   return (
     <Routes>
-      {/* HOME */}
       <Route 
         path="/" 
         element={<Home allExperiences={allExperiences} removeExperience={removeExperience} />} 
       />
 
-      {/* PÁGINA DE BUSCA */}
       <Route 
         path="/search" 
         element={<SearchResultsPage allExperiences={allExperiences} />} 
       />
 
-      {/* CRIAÇÃO DE NOVO EVENTO */}
       <Route
         path="/create-event"
         element={<ExperienceCreationPage addNewExperience={addNewExperience} />}
       />
 
-      {/* DETALHES DO EVENTO  */}
       <Route
         path="/event/:eventId"
-        element={<ExperienceDetailsPage allExperiences={allExperiences} removeExperience={removeExperience} />}
+        element={<ExperienceDetailsPage allExperiences={allExperiences} />}
       />
 
-      {/* EDIÇÃO DE EVENTO */}
       <Route 
         path="/edit/:eventId" 
         element={<EditEventPage allExperiences={allExperiences} updateExperience={updateExperience} />} 
       />
 
-      {/* ROTAS DE CATEGORIAS */}
       <Route path="/category-list">
-        {/* index => /category-list */}
         <Route index element={<CategoryListPage />} />
-        {/* rota aninhada => /category-list/:category */}
         <Route path=":category" element={<CategoryPage />} />
       </Route>
 
-    {/* ROTA DE LOGIN */}
-    <Route path="/login" element={<Login/>}></Route>
-
-
-    {/* ROTA DE CADASTRO*/}
-    <Route path="/register" element={<Cadastro/>}>
-  
-
-    </Route>
-    
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Cadastro />} />
     </Routes>
-
   );
 }
 
