@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "../../components/Header";
@@ -7,6 +7,17 @@ import CardSlider from "../../components/CardSlider";
 import ExperienceCard from "../../components/ExperienceCard";
 import ExperienceCategory from "../../components/ExperienceCategory";
 import { getAllEventos, deleteEvento } from "../../services/api";
+
+const formattedCategories = {
+  SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
+  WORKSHOPS_AULAS: "Workshops e Aulas",
+  VIAGENS_TURISMO: "Viagens e Turismo",
+  AVENTURA_ADRENALINA: "Aventura e Adrenalina",
+  RELAXAMENTO_BEM_ESTAR: "Relaxamento e Bem-Estar",
+  GASTRONOMIA_DEGUSTACOES: "Gastronomia e Degustações",
+  INFANTIL_FAMILIAR: "Infantil e Familiar",
+  EXPERIENCIAS_PERSONALIZADAS: "Experiências Personalizadas",
+};
 
 const Home = () => {
   const navigate = useNavigate();
@@ -73,26 +84,21 @@ const Home = () => {
             justifyContent: "space-around",
           }}
         >
-          <ExperienceCategory category="Workshops e Aulas" />
-          <ExperienceCategory category="Shows e Entretenimento" />
-          <ExperienceCategory category="Viagens e Turismo" />
-          <ExperienceCategory category="Aventura e Adrenalina" />
-          <ExperienceCategory category="Relaxamento e Bem-Estar" />
-          <ExperienceCategory category="Gastronomia e Degustações" />
-          <ExperienceCategory category="Infantil e Familiar" />
-          <ExperienceCategory category="Experiências Personalizadas" />
-          <ExperienceCategory category="Lista de Categorias" />
+          {Object.entries(formattedCategories).map(([key, value]) => (
+            <ExperienceCategory key={key} category={value} />
+          ))}
         </div>
       </div>
 
       {categories.map((category) => {
+        const formattedCategory = formattedCategories[category] || category;
         const experiences = allExperiences[category] || [];
         const largeCards = experiences.filter((exp) => exp.cardSize === "LARGE");
         const normalCards = experiences.filter((exp) => exp.cardSize === "NORMAL");
 
         return (
           <div key={category}>
-            <h1>{category}</h1>
+            <h1>{formattedCategory}</h1> {/* Exibe o nome formatado */}
 
             {largeCards.length > 0 && (
               <div style={{ marginBottom: "20px" }}>
