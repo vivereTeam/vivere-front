@@ -8,7 +8,6 @@ import ExperienceCard from "../../components/ExperienceCard";
 import LargeExperienceCard from "../../components/LargeExperienceCard";
 import ExperienceCategory from "../../components/CategoryIcon";
 import { getAllEventos, deleteEvento } from "../../services/api";
-import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
 
 const formattedCategories = {
   SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
@@ -51,7 +50,7 @@ const Home = () => {
         const updatedCategory = prev[category].filter((exp) => exp.id !== id);
 
         if (updatedCategory.length === 0) {
-          const { [category]: _, ...rest } = prev;
+          const {  ...rest } = prev;
           return rest;
         }
 
@@ -84,13 +83,13 @@ const Home = () => {
         maxWidth: "1400px",
         width: "100%",
         gap: "30px",
-        marginBottom: "30px",
+        marginTop: "30px",
+        marginBottom: "60px",
         "& h1": {
           marginBottom: "16px",
         },
       }}
       >
-      <Header />
 
       <div>
         <h1>Categorias</h1>
@@ -170,7 +169,6 @@ const Home = () => {
         );
       })}
 
-      <Footer />
     </Box>
   );
 };

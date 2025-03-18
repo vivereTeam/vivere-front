@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import AppRoutes from "./routes/routes";
 import { getAllEventos } from "./services/api";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
   const [allExperiences, setAllExperiences] = useState({});
@@ -23,7 +25,13 @@ function App() {
     fetchExperiences();
   }, []);
 
-  return <AppRoutes allExperiences={allExperiences} />;
+  return (
+    <div>
+      <Header />
+      <AppRoutes allExperiences={allExperiences} />
+      <Footer />
+    </div>
+  );
 }
 
 export default App;

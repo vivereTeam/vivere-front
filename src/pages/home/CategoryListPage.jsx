@@ -1,4 +1,4 @@
-import ExperienceCategory from "../../components/ExperienceCategory.jsx";
+import ExperienceCategory from "../../components/CategoryIcon.jsx";
 
 function CategoryListPage() {
     return (
