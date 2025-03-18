@@ -1,8 +1,6 @@
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
 import CardSlider from "../../components/CardSlider";
 import ExperienceCard from "../../components/ExperienceCard";
 import LargeExperienceCard from "../../components/LargeExperienceCard";

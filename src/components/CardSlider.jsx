@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -65,7 +66,7 @@ function CardSlider({ experiences, removeExperience, isLargeCard }) {
   };
 
   return (
-    <Box sx={{ position: "relative", width: "100%" }}>
+    <Box sx={{ position: "relative", width: "100%",}}>
       <Slider {...settings}>
         {experiences.map((exp) => (
           <div key={exp.id} style={{ padding: "10px" }}>

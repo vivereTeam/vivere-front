@@ -31,6 +31,7 @@ const ExperienceCard = ({ event, removeExperience }) => {
         borderRadius: 5,
         boxShadow: 5,
         position: "relative",
+        margin: "40px auto", // Centraliza horizontalmente
         transition: "transform 0.2s",
         "&:hover": {
           transform: "scale(1.02)",
@@ -38,6 +39,7 @@ const ExperienceCard = ({ event, removeExperience }) => {
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center", // Centraliza verticalmente
       }}
       onClick={() => navigate(`/event/${event.id}`)}
     >
@@ -67,7 +69,7 @@ const ExperienceCard = ({ event, removeExperience }) => {
         sx={{ objectFit: "cover" }}
       />
 
-      <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
         <Typography
           variant="subtitle2"
           color="primary"

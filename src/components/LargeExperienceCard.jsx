@@ -21,12 +21,13 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
       sx={{
         display: "flex",
         flexDirection: "row",
-        width: "100%",
+        width: "91%",
         height: "450px",
         margin: "20px auto",
         borderRadius: "16px",
         boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)",
         position: 'relative',
+        overflow: "hidden",
       }}
     >
       <Tooltip title="Remover" arrow>
@@ -40,6 +41,7 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
             '&:hover': {
               backgroundColor: 'rgba(255, 255, 255, 1)',
             },
+            zIndex: 2,
           }}
           size="small"
         >
@@ -51,7 +53,8 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
         component="img"
         sx={{ 
           width: "70%", 
-          objectFit: "cover" 
+          objectFit: "cover",
+          flexShrink: 0,
         }}
         image={event.imagemUrl}
         alt={event.titulo}
@@ -62,7 +65,8 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
           flex: "1", 
           padding: "20px", 
           display: "flex", 
-          flexDirection: "column" 
+          flexDirection: "column",
+          justifyContent: "center",
         }}
       >
         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
@@ -93,7 +97,7 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
           Preço: {event.preco === 0 ? "Gratuito" : event.preco ? `R$ ${event.preco.toFixed(2)}` : "Preço não informado"}
         </Typography>
 
-        <Box display="flex" justifyContent="space-between">
+        <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>
           <Button variant="outlined" size="small">
             Mais informações
           </Button>
