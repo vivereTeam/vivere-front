@@ -1,11 +1,12 @@
-// src/components/CardSlider.jsx
+/* eslint-disable react/prop-types */
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import { Box, IconButton } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import ExperienceCard from "./ExperienceCard"; 
+import ExperienceCard from "./ExperienceCard";
+import LargeExperienceCard from "./LargeExperienceCard";
 
 const NextArrow = ({ onClick }) => (
   <IconButton
@@ -43,19 +44,19 @@ const PrevArrow = ({ onClick }) => (
   </IconButton>
 );
 
-function CardSlider({ experiences }) {
+function CardSlider({ experiences, removeExperience, isLargeCard }) {
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: isLargeCard ? 1 : 3,
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     responsive: [
       {
         breakpoint: 1024,
-        settings: { slidesToShow: 2 },
+        settings: { slidesToShow: isLargeCard ? 1 : 2 },
       },
       {
         breakpoint: 600,
@@ -65,15 +66,21 @@ function CardSlider({ experiences }) {
   };
 
   return (
-    <Box sx={{ position: "relative", width: "100%" }}>
+    <Box sx={{ position: "relative", width: "100%",}}>
       <Slider {...settings}>
         {experiences.map((exp) => (
-          <div
-            key={exp.id}
-            style={{ padding: "10px", cursor: "pointer" }}
-            onClick={() => console.log("Clicou em", exp.title)}
-          >
-            <ExperienceCard {...exp} />
+          <div key={exp.id} style={{ padding: "10px" }}>
+            {isLargeCard ? (
+              <LargeExperienceCard
+                event={exp}
+                removeExperience={removeExperience}
+              />
+            ) : (
+              <ExperienceCard
+                event={exp}
+                removeExperience={removeExperience}
+              />
+            )}
           </div>
         ))}
       </Slider>

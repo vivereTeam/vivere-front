@@ -1,17 +1,74 @@
-// src/pages/home/Home.jsx
-import { Box, Button } from "@mui/material";
-import { useNavigate } from "react-router-dom"; // Importante adicionar
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import { Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import CardSlider from "../../components/CardSlider";
 import ExperienceCard from "../../components/ExperienceCard";
-import ExperienceCategory from "../../components/ExperienceCategory";
+import LargeExperienceCard from "../../components/LargeExperienceCard";
+import ExperienceCategory from "../../components/CategoryIcon";
+import { getAllEventos, deleteEvento } from "../../services/api";
 
-const Home = ({ allExperiences, removeExperience }) => { // Recebe removeExperience como prop
-  // Precisamos instanciar o navigate:
+const formattedCategories = {
+  SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
+  WORKSHOPS_AULAS: "Workshops e Aulas",
+  VIAGENS_TURISMO: "Viagens e Turismo",
+  AVENTURA_ADRENALINA: "Aventura e Adrenalina",
+  RELAXAMENTO_BEM_ESTAR: "Relaxamento e Bem-Estar",
+  GASTRONOMIA_DEGUSTACOES: "Gastronomia e Degustações",
+  INFANTIL_FAMILIAR: "Infantil e Familiar",
+  EXPERIENCIAS_PERSONALIZADAS: "Experiências Personalizadas",
+};
+
+const Home = () => {
   const navigate = useNavigate();
+  const [allExperiences, setAllExperiences] = useState({});
 
-  const categories = Object.keys(allExperiences);
+  useEffect(() => {
+    const fetchEventos = async () => {
+      try {
+        const eventos = await getAllEventos();
+        const groupedByCategory = eventos.reduce((acc, evento) => {
+          const { categoria } = evento;
+          if (!acc[categoria]) acc[categoria] = [];
+          acc[categoria].push(evento);
+          return acc;
+        }, {});
+        setAllExperiences(groupedByCategory);
+      } catch (error) {
+        console.error("Erro ao buscar eventos:", error);
+      }
+    };
+    fetchEventos();
+  }, []);
+
+  const removeExperience = async (category, id) => {
+    try {
+      await deleteEvento(id);
+
+      setAllExperiences((prev) => {
+        const updatedCategory = prev[category].filter((exp) => exp.id !== id);
+
+        if (updatedCategory.length === 0) {
+          const {  ...rest } = prev;
+          return rest;
+        }
+
+        return {
+          ...prev,
+          [category]: updatedCategory,
+        };
+      });
+    } catch (error) {
+      console.error("Erro ao remover evento:", error);
+    }
+  };
+
+  const featuredExperiences = Object.values(allExperiences)
+    .flat()
+    .filter((exp) => exp.cardSize === "LARGE");
+
+  const categoriesWithNormalCards = Object.keys(allExperiences).filter(
+    (category) => allExperiences[category].some((exp) => exp.cardSize === "NORMAL")
+  );
 
   return (
     <Box
@@ -24,15 +81,14 @@ const Home = ({ allExperiences, removeExperience }) => { // Recebe removeExperie
         maxWidth: "1400px",
         width: "100%",
         gap: "30px",
-        marginBottom: "30px",
+        marginTop: "30px",
+        marginBottom: "60px",
         "& h1": {
           marginBottom: "16px",
         },
       }}
-    >
-      <Header />
+      >
 
-      {/* Seções de Categorias em destaque */}
       <div>
         <h1>Categorias</h1>
         <div
@@ -43,27 +99,47 @@ const Home = ({ allExperiences, removeExperience }) => { // Recebe removeExperie
             justifyContent: "space-around",
           }}
         >
-          <ExperienceCategory category="Workshops e Aulas" />
-          <ExperienceCategory category="Shows e Entretenimento" />
-          <ExperienceCategory category="Viagens e Turismo" />
-          <ExperienceCategory category="Aventura e Adrenalina" />
-          <ExperienceCategory category="Relaxamento e Bem-Estar" />
-          <ExperienceCategory category="Gastronomia e Degustações" />
-          <ExperienceCategory category="Infantil e Familiar" />
-          <ExperienceCategory category="Experiências Personalizadas" />
+          {Object.entries(formattedCategories).map(([key, value]) => (
+            <ExperienceCategory key={key} category={value} />
+          ))}
           <ExperienceCategory category="Lista de Categorias" />
         </div>
       </div>
 
-      {/* Lista de experiências (eventos) por categoria */}
-      {categories.map((category) => {
+      {featuredExperiences.length > 0 && (
+        <div>
+          <h1>Experiência em Destaque</h1>
+          {featuredExperiences.length === 1 ? (
+            <LargeExperienceCard
+              event={featuredExperiences[0]}
+              removeExperience={removeExperience}
+            />
+          ) : (
+            <CardSlider
+              key={featuredExperiences.length}
+              experiences={featuredExperiences}
+              removeExperience={removeExperience}
+              isLargeCard
+            />
+          )}
+        </div>
+      )}
+
+      {categoriesWithNormalCards.map((category) => {
+        const formattedCategory = formattedCategories[category] || category;
         const experiences = allExperiences[category] || [];
+        const normalCards = experiences.filter((exp) => exp.cardSize === "NORMAL");
+
         return (
           <div key={category}>
-            <h1>{category}</h1>
+            <h1>{formattedCategory}</h1>
 
-            {experiences.length > 3 ? (
-              <CardSlider experiences={experiences} />
+            {normalCards.length > 3 ? (
+              <CardSlider
+                key={normalCards.length}
+                experiences={normalCards}
+                removeExperience={removeExperience}
+              />
             ) : (
               <div
                 style={{
@@ -73,21 +149,15 @@ const Home = ({ allExperiences, removeExperience }) => { // Recebe removeExperie
                   justifyContent: "flex-start",
                 }}
               >
-                {experiences.map((experience) => (
+                {normalCards.map((experience) => (
                   <div
                     key={experience.id}
                     style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      console.log("Clicou em", experience.title);
-                      console.log("Antes do navigate");
-                      navigate(`/event/${experience.id}`);
-                      console.log("Depois do navigate");
-                    }}
+                    onClick={() => navigate(`/event/${experience.id}`)}
                   >
-                    <ExperienceCard 
-                      {...experience} 
-                      category={category} // Passa a categoria
-                      removeExperience={removeExperience} // Passa a função de remoção
+                    <ExperienceCard
+                      event={experience}
+                      removeExperience={removeExperience}
                     />
                   </div>
                 ))}
@@ -97,7 +167,6 @@ const Home = ({ allExperiences, removeExperience }) => { // Recebe removeExperie
         );
       })}
 
-      <Footer />
     </Box>
   );
 };
