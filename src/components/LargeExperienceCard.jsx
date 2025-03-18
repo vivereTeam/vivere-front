@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { Card, CardMedia, CardContent, Typography, Button, Box, IconButton, Tooltip } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import { deleteEvento } from '../services/api';
 
 const LargeExperienceCard = ({ event, removeExperience }) => {
   const handleRemove = async (e) => {
@@ -9,8 +8,7 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
 
     if (window.confirm(`Tem certeza que deseja remover "${event.titulo}"?`)) {
       try {
-        await deleteEvento(event.id);
-        removeExperience(event.categoria, event.id);
+        await removeExperience(event.categoria, event.id);
       } catch (error) {
         console.error('Erro ao remover evento:', error);
         alert('Ocorreu um erro ao remover o evento. Tente novamente.');

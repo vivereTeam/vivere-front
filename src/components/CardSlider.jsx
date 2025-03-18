@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { Box, IconButton } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import ExperienceCard from "./ExperienceCard";
+import LargeExperienceCard from "./LargeExperienceCard";
 
 const NextArrow = ({ onClick }) => (
   <IconButton
@@ -42,19 +43,19 @@ const PrevArrow = ({ onClick }) => (
   </IconButton>
 );
 
-function CardSlider({ experiences, removeExperience }) {
+function CardSlider({ experiences, removeExperience, isLargeCard }) {
   const settings = {
     dots: true,
-    infinite: false,
+    infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: isLargeCard ? 1 : 3,
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     responsive: [
       {
         breakpoint: 1024,
-        settings: { slidesToShow: 2 },
+        settings: { slidesToShow: isLargeCard ? 1 : 2 },
       },
       {
         breakpoint: 600,
@@ -68,7 +69,17 @@ function CardSlider({ experiences, removeExperience }) {
       <Slider {...settings}>
         {experiences.map((exp) => (
           <div key={exp.id} style={{ padding: "10px" }}>
-            <ExperienceCard event={exp} removeExperience={removeExperience} />
+            {isLargeCard ? (
+              <LargeExperienceCard
+                event={exp}
+                removeExperience={removeExperience}
+              />
+            ) : (
+              <ExperienceCard
+                event={exp}
+                removeExperience={removeExperience}
+              />
+            )}
           </div>
         ))}
       </Slider>

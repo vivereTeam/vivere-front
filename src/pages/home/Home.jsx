@@ -5,8 +5,10 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import CardSlider from "../../components/CardSlider";
 import ExperienceCard from "../../components/ExperienceCard";
-import ExperienceCategory from "../../components/ExperienceCategory";
+import LargeExperienceCard from "../../components/LargeExperienceCard";
+import ExperienceCategory from "../../components/CategoryIcon";
 import { getAllEventos, deleteEvento } from "../../services/api";
+import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
 
 const formattedCategories = {
   SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
@@ -63,7 +65,13 @@ const Home = () => {
     }
   };
 
-  const categories = Object.keys(allExperiences);
+  const featuredExperiences = Object.values(allExperiences)
+    .flat()
+    .filter((exp) => exp.cardSize === "LARGE");
+
+  const categoriesWithNormalCards = Object.keys(allExperiences).filter(
+    (category) => allExperiences[category].some((exp) => exp.cardSize === "NORMAL")
+  );
 
   return (
     <Box
@@ -81,7 +89,7 @@ const Home = () => {
           marginBottom: "16px",
         },
       }}
-    >
+      >
       <Header />
 
       <div>
@@ -97,35 +105,41 @@ const Home = () => {
           {Object.entries(formattedCategories).map(([key, value]) => (
             <ExperienceCategory key={key} category={value} />
           ))}
+          <ExperienceCategory category="Lista de Categorias" />
         </div>
       </div>
 
-      {categories.map((category) => {
+      {featuredExperiences.length > 0 && (
+        <div>
+          <h1>Experiência em Destaque</h1>
+          {featuredExperiences.length === 1 ? (
+            <LargeExperienceCard
+              event={featuredExperiences[0]}
+              removeExperience={removeExperience}
+            />
+          ) : (
+            <CardSlider
+              key={featuredExperiences.length}
+              experiences={featuredExperiences}
+              removeExperience={removeExperience}
+              isLargeCard
+            />
+          )}
+        </div>
+      )}
+
+      {categoriesWithNormalCards.map((category) => {
         const formattedCategory = formattedCategories[category] || category;
         const experiences = allExperiences[category] || [];
-        const largeCards = experiences.filter((exp) => exp.cardSize === "LARGE");
         const normalCards = experiences.filter((exp) => exp.cardSize === "NORMAL");
 
         return (
           <div key={category}>
             <h1>{formattedCategory}</h1>
 
-            {largeCards.length > 0 && (
-              <div style={{ marginBottom: "20px" }}>
-                {largeCards.map((experience) => (
-                  <div key={experience.id} style={{ marginBottom: "20px" }}>
-                    <ExperienceCard
-                      event={experience}
-                      removeExperience={removeExperience}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-
             {normalCards.length > 3 ? (
               <CardSlider
-                key={normalCards.length} // Força a reinicialização do Slider
+                key={normalCards.length}
                 experiences={normalCards}
                 removeExperience={removeExperience}
               />
