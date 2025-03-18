@@ -44,10 +44,20 @@ const Home = () => {
   const removeExperience = async (category, id) => {
     try {
       await deleteEvento(id);
-      setAllExperiences((prev) => ({
-        ...prev,
-        [category]: prev[category].filter((exp) => exp.id !== id),
-      }));
+
+      setAllExperiences((prev) => {
+        const updatedCategory = prev[category].filter((exp) => exp.id !== id);
+
+        if (updatedCategory.length === 0) {
+          const { [category]: _, ...rest } = prev;
+          return rest;
+        }
+
+        return {
+          ...prev,
+          [category]: updatedCategory,
+        };
+      });
     } catch (error) {
       console.error("Erro ao remover evento:", error);
     }
@@ -98,7 +108,7 @@ const Home = () => {
 
         return (
           <div key={category}>
-            <h1>{formattedCategory}</h1> {/* Exibe o nome formatado */}
+            <h1>{formattedCategory}</h1>
 
             {largeCards.length > 0 && (
               <div style={{ marginBottom: "20px" }}>
@@ -114,7 +124,11 @@ const Home = () => {
             )}
 
             {normalCards.length > 3 ? (
-              <CardSlider experiences={normalCards} removeExperience={removeExperience} />
+              <CardSlider
+                key={normalCards.length} // Força a reinicialização do Slider
+                experiences={normalCards}
+                removeExperience={removeExperience}
+              />
             ) : (
               <div
                 style={{

@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { Box, IconButton } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import ExperienceCard from "./ExperienceCard"; 
+import ExperienceCard from "./ExperienceCard";
 
 const NextArrow = ({ onClick }) => (
   <IconButton
@@ -45,7 +45,7 @@ const PrevArrow = ({ onClick }) => (
 function CardSlider({ experiences, removeExperience }) {
   const settings = {
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,

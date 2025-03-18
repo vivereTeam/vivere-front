@@ -1,8 +1,7 @@
 import { Card, CardContent, CardMedia, Typography, IconButton, Tooltip } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import { deleteEvento } from '../services/api';
 
 const ExperienceCard = ({ event, removeExperience }) => {
   const navigate = useNavigate();
@@ -12,11 +11,10 @@ const ExperienceCard = ({ event, removeExperience }) => {
 
     if (window.confirm(`Tem certeza que deseja remover "${event.titulo}"?`)) {
       try {
-        await deleteEvento(event.id);
-        removeExperience(event.categoria, event.id);
+        await removeExperience(event.categoria, event.id);
       } catch (error) {
-        console.error('Erro ao remover evento:', error);
-        alert('Ocorreu um erro ao remover o evento. Tente novamente.');
+        console.error("Erro ao remover evento:", error);
+        alert("Ocorreu um erro ao remover o evento. Tente novamente.");
       }
     }
   };
@@ -26,33 +24,33 @@ const ExperienceCard = ({ event, removeExperience }) => {
   }
 
   return (
-    <Card 
-      sx={{ 
-        maxWidth: 345, 
-        height: 400, 
-        borderRadius: 5, 
-        boxShadow: 5, 
-        position: 'relative',
-        transition: 'transform 0.2s',
-        '&:hover': {
-          transform: 'scale(1.02)',
+    <Card
+      sx={{
+        maxWidth: 345,
+        height: 400,
+        borderRadius: 5,
+        boxShadow: 5,
+        position: "relative",
+        transition: "transform 0.2s",
+        "&:hover": {
+          transform: "scale(1.02)",
         },
-        cursor: 'pointer',
-        display: 'flex',
-        flexDirection: 'column',
+        cursor: "pointer",
+        display: "flex",
+        flexDirection: "column",
       }}
       onClick={() => navigate(`/event/${event.id}`)}
     >
       <Tooltip title="Remover" arrow>
-        <IconButton 
+        <IconButton
           onClick={handleRemove}
-          sx={{ 
-            position: 'absolute', 
-            top: 8, 
-            right: 8, 
-            backgroundColor: 'rgba(255, 255, 255, 0.7)',
-            '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 1)',
+          sx={{
+            position: "absolute",
+            top: 8,
+            right: 8,
+            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            "&:hover": {
+              backgroundColor: "rgba(255, 255, 255, 1)",
             },
           }}
           size="small"
@@ -66,10 +64,10 @@ const ExperienceCard = ({ event, removeExperience }) => {
         height="140"
         image={event.imagemUrl}
         alt={event.titulo}
-        sx={{ objectFit: 'cover' }}
+        sx={{ objectFit: "cover" }}
       />
 
-      <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <Typography
           variant="subtitle2"
           color="primary"
@@ -77,11 +75,7 @@ const ExperienceCard = ({ event, removeExperience }) => {
         >
           {event.dataInicio ? new Date(event.dataInicio).toLocaleDateString() : "Data não informada"}
         </Typography>
-        <Typography
-          variant="h6"
-          component="div"
-          sx={{ fontWeight: "bold", mb: 1 }}
-        >
+        <Typography variant="h6" component="div" sx={{ fontWeight: "bold", mb: 1 }}>
           {event.titulo}
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -90,14 +84,14 @@ const ExperienceCard = ({ event, removeExperience }) => {
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ 
-            mt: 1, 
+          sx={{
+            mt: 1,
             fontStyle: "italic",
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            display: '-webkit-box',
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
             WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical',
+            WebkitBoxOrient: "vertical",
           }}
         >
           {event.descricao}
