@@ -26,9 +26,11 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <Header />
-      <AppRoutes allExperiences={allExperiences} />
+      <div style={{ flex: 1 }}>
+        <AppRoutes allExperiences={allExperiences} />
+      </div>
       <Footer />
     </div>
   );
