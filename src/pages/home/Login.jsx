@@ -23,6 +23,7 @@ function Login() {
             const response = await userLogin(email, password);
             if (response.token) {
                 localStorage.setItem('token', response.token);
+                localStorage.setItem('userName', response.user.nome);
                 navigate('/');
             }
         } catch (err) {
