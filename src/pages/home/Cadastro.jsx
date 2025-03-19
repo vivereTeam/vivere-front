@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { userRegister } from '../../services/api';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 function Cadastro() {
+  const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [nome, setNome] = useState('');
   const [mensagem, setMensagem] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -17,6 +17,13 @@ function Cadastro() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validação do formato do email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMensagem('Formato de email inválido. O email deve seguir o padrão: exemplo@dominio.com');
+      return;
+    }
+
     try {
       const response = await userRegister(email, password, nome);
       setMensagem('Cadastro realizado com sucesso!');
@@ -24,7 +31,11 @@ function Cadastro() {
       setEmail('');
       setPassword('');
     } catch (error) {
-      setMensagem('Erro ao cadastrar. Tente novamente.');
+      if (error.response && error.response.data && error.response.data.error) {
+        setMensagem(error.response.data.error);
+      } else {
+        setMensagem('Erro ao cadastrar. Tente novamente.');
+      }
     }
   };
 
@@ -36,6 +47,7 @@ function Cadastro() {
         alignItems: 'center',
         minHeight: '100vh',
         backgroundColor: '#f4f4f4',
+        fontFamily: "'Poppins', sans-serif",
       }}>
         <div style={{
           maxWidth: '400px',
@@ -50,9 +62,30 @@ function Cadastro() {
 
           <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: '20px' }}>
+              <label htmlFor="nome" style={{ display: 'block', marginBottom: '8px' }}>Nome</label>
+              <input
+                type="text"
+                id="nome"
+                name="nome"
+                placeholder="Digite seu nome"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  fontSize: '16px',
+                  borderRadius: '4px',
+                  border: '1px solid #ccc',
+                  boxSizing: 'border-box',
+                }}
+                required
+              />
+            </div>
+
+            <div style={{ marginBottom: '20px' }}>
               <label htmlFor="email" style={{ display: 'block', marginBottom: '8px' }}>Email</label>
               <input
-                type="email"
+                type="text"
                 id="email"
                 name="email"
                 placeholder="Digite seu email"
@@ -100,27 +133,6 @@ function Cadastro() {
               />
             </div>
 
-            <div style={{ marginBottom: '20px' }}>
-              <label htmlFor="nome" style={{ display: 'block', marginBottom: '8px' }}>Nome</label>
-              <input
-                type="text"
-                id="nome"
-                name="nome"
-                placeholder="Digite seu nome"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  fontSize: '16px',
-                  borderRadius: '4px',
-                  border: '1px solid #ccc',
-                  boxSizing: 'border-box',
-                }}
-                required
-              />
-            </div>
-
             <div>
               <button
                 type="submit"
@@ -140,7 +152,15 @@ function Cadastro() {
             </div>
           </form>
 
-          {mensagem && <p style={{ marginTop: '20px', color: mensagem.includes('Erro') ? 'red' : 'green' }}>{mensagem}</p>}
+          {mensagem && (
+            <p style={{ 
+              marginTop: '20px', 
+              color: mensagem === 'Cadastro realizado com sucesso!' ? 'green' : 'red',
+              textAlign: 'center',
+            }}>
+              {mensagem}
+            </p>
+          )}
 
           <div style={{ marginTop: '20px' }}>
             <a href="/login" style={{ color: '#007BFF', textDecoration: 'none' }}>Já possui uma conta? Faça login</a>
