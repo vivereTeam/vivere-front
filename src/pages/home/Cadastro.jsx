@@ -1,13 +1,33 @@
+import React, { useState } from 'react';
+import { userRegister } from '../../services/api';
 
 function Cadastro() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [nome, setNome] = useState('');
+  const [mensagem, setMensagem] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await userRegister(email, password, nome);
+      setMensagem('Cadastro realizado com sucesso!');
+      setNome('');
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+      setMensagem('Erro ao cadastrar. Tente novamente.');
+    }
+  };
+
   return (
     <div>
-
       <div style={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: '100vh', // Usando minHeight para melhor comportamento em telas pequenas
+        minHeight: '100vh',
         backgroundColor: '#f4f4f4',
       }}>
         <div style={{
@@ -19,28 +39,9 @@ function Cadastro() {
           boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
           textAlign: 'center',
         }}>
-          <h2 style={{ marginBottom: '20px' }}>Cadastro</h2> {/* Corrigido o título para Cadastro */}
+          <h2 style={{ marginBottom: '20px' }}>Cadastro</h2>
 
-          <form>
-            <div style={{ marginBottom: '20px' }}>
-              <label htmlFor="usuario" style={{ display: 'block', marginBottom: '8px' }}>Usuário</label>
-              <input
-                type="text"
-                id="usuario"
-                name="usuario"
-                placeholder="Digite seu nome de usuário"
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  fontSize: '16px',
-                  borderRadius: '4px',
-                  border: '1px solid #ccc',
-                  boxSizing: 'border-box', // Garantir que o padding não altere o tamanho total
-                }}
-                required
-              />
-            </div>
-
+          <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: '20px' }}>
               <label htmlFor="email" style={{ display: 'block', marginBottom: '8px' }}>Email</label>
               <input
@@ -48,32 +49,57 @@ function Cadastro() {
                 id="email"
                 name="email"
                 placeholder="Digite seu email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 style={{
                   width: '100%',
                   padding: '12px',
                   fontSize: '16px',
                   borderRadius: '4px',
                   border: '1px solid #ccc',
-                  boxSizing: 'border-box', // Garantir que o padding não altere o tamanho total
+                  boxSizing: 'border-box',
                 }}
                 required
               />
             </div>
 
             <div style={{ marginBottom: '20px' }}>
-              <label htmlFor="senha" style={{ display: 'block', marginBottom: '8px' }}>Senha</label>
+              <label htmlFor="password" style={{ display: 'block', marginBottom: '8px' }}>Senha</label>
               <input
                 type="password"
-                id="senha"
-                name="senha"
+                id="password"
+                name="password"
                 placeholder="Digite sua senha"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 style={{
                   width: '100%',
                   padding: '12px',
                   fontSize: '16px',
                   borderRadius: '4px',
                   border: '1px solid #ccc',
-                  boxSizing: 'border-box', // Garantir que o padding não altere o tamanho total
+                  boxSizing: 'border-box',
+                }}
+                required
+              />
+            </div>
+
+            <div style={{ marginBottom: '20px' }}>
+              <label htmlFor="nome" style={{ display: 'block', marginBottom: '8px' }}>Nome</label>
+              <input
+                type="text"
+                id="nome"
+                name="nome"
+                placeholder="Digite seu nome"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  fontSize: '16px',
+                  borderRadius: '4px',
+                  border: '1px solid #ccc',
+                  boxSizing: 'border-box',
                 }}
                 required
               />
@@ -98,12 +124,13 @@ function Cadastro() {
             </div>
           </form>
 
+          {mensagem && <p style={{ marginTop: '20px', color: mensagem.includes('Erro') ? 'red' : 'green' }}>{mensagem}</p>}
+
           <div style={{ marginTop: '20px' }}>
-            <a href="/login" style={{ color: '#007BFF', textDecoration: 'none' }}>Já possui uma conta? Faça login</a> {/* Corrigido o link para login */}
+            <a href="/login" style={{ color: '#007BFF', textDecoration: 'none' }}>Já possui uma conta? Faça login</a>
           </div>
         </div>
       </div>
-
     </div>
   );
 }
