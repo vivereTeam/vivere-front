@@ -2,7 +2,6 @@
 import { AppBar, Toolbar, TextField, Box, Button, Link, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
-// Importamos Link do React Router, mas damos outro nome para evitar conflito com MUI
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 const Header = () => {
@@ -27,26 +26,35 @@ const Header = () => {
     <AppBar position="sticky" sx={{ backgroundColor: "#270c6b", padding: "0 20px" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "64px" }}>
         
-        {/* LOGO */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {/* Ícone estilizado */}
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-            <path d="M20 0L24.4903 15.5097L40 20L24.4903 24.4903L20 40L15.5097 24.4903L0 20L15.5097 15.5097L20 0Z" fill="#FFFA00"/>
-            <circle cx="20" cy="20" r="6" fill="#270C6B"/>
-          </svg>
+        <Box 
+            component={RouterLink} 
+            to="/" 
+            sx={{ display: 'flex', 
+              alignItems: 'center', 
+              gap: '8px', textDecoration: 'none',
+              transition: "transform 0.3s ease",
+              ":hover": { transform: "scale(1.1)" },}}
+          >
+            {/* Ícone estilizado */}
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <path d="M20 0L24.4903 15.5097L40 20L24.4903 24.4903L20 40L15.5097 24.4903L0 20L15.5097 15.5097L20 0Z" fill="#FFFA00"/>
+              <circle cx="20" cy="20" r="6" fill="#270C6B"/>
+            </svg>
 
-          {/* Texto estilizado */}
-          <span style={{ 
-            fontFamily: "'Montserrat', sans-serif",
-            fontWeight: 700,
-            fontSize: '1.5rem',
-            color: '#fffa00',
-            letterSpacing: '-0.5px'
-          }}>
-            VIVERE
-            <span style={{ color: '#270c6b', marginLeft: '4px' }}>+</span>
-          </span>
-        </Box>
+            {/* Texto estilizado */}
+            <span style={{ 
+              fontFamily: "'Montserrat', sans-serif",
+              fontWeight: 700,
+              fontSize: '1.5rem',
+              color: '#fffa00',
+              letterSpacing: '-0.5px'
+            }}>
+              VIVERE
+              <span style={{ color: '#270c6b', marginLeft: '4px' }}>+</span>
+            </span>
+          </Box>
+
+
 
         {/* CAMPO DE BUSCA */}
         <Box sx={{ display: "flex", alignItems: "center", width: "35%", backgroundColor: "white", borderRadius: "4px" }}>
