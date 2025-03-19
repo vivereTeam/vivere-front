@@ -34,31 +34,46 @@ import {
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import PropTypes from 'prop-types';
 
-function ExperienceDetailsPage({ allExperiences }) {
+import { getEventoById } from "../../services/api";
+
+function ExperienceDetailsPage() {
   const { eventId } = useParams();
   const navigate = useNavigate();
+
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
-  const event = findEventById(allExperiences, eventId);
 
   useEffect(() => {
-    if (!event) {
-      console.warn("Evento não encontrado para ID:", eventId);
-    }
-  }, [event, eventId]);
+    const fetchEvent = async () => {
+      try {
+        const data = await getEventoById(eventId);
+        const mappedEvent = {
+          id: data.id,
+          categoria: data.categoria,
+          titulo: data.titulo,
+          imagemUrl: data.imagemUrl,
+          dataInicio: data.dataInicio,
+          dataTermino: data.dataTermino,
+          endereco: data.endereco,
+          descricao: data.descricao,
+          isExclusive: false,
+          tickets: [],
+        };
 
-  function findEventById(all, id) {
-    for (const category of Object.keys(all)) {
-      const found = all[category].find((e) => e.id.toString() === id.toString());
-      if (found) {
-        return { ...found, category };
+        setEvent(mappedEvent);
+      } catch (error) {
+        console.error("Erro ao buscar evento por ID:", error);
+      } finally {
+        setLoading(false);
       }
-    }
-    return null;
-  }
+    };
+    fetchEvent();
+  }, [eventId]);
 
   const handleShare = () => {
     const url = window.location.href;
@@ -118,6 +133,25 @@ function ExperienceDetailsPage({ allExperiences }) {
       0
     );
 
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          minHeight: "80vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: "#f8f9fa",
+          px: 2,
+        }}
+      >
+        <Typography variant="h5" align="center">
+          Carregando evento...
+        </Typography>
+      </Box>
+    );
+  }
+
   if (!event) {
     return (
       <Box
@@ -162,7 +196,7 @@ function ExperienceDetailsPage({ allExperiences }) {
           </Button>
 
           <Chip
-            label={event.category}
+            label={event.categoria}
             color="secondary"
             sx={{
               fontWeight: 700,
@@ -241,8 +275,8 @@ function ExperienceDetailsPage({ allExperiences }) {
               <CardMedia
                 component="img"
                 height="600"
-                image={event.imageUrl}
-                alt={event.title}
+                image={event.imagemUrl}
+                alt={event.titulo}
                 sx={{ objectFit: "cover" }}
               />
 
@@ -282,7 +316,7 @@ function ExperienceDetailsPage({ allExperiences }) {
                   letterSpacing: "-0.5px",
                 }}
               >
-                {event.title}
+                {event.titulo}
               </Typography>
 
               <Stack spacing={3} sx={{ mb: 4 }}>
@@ -290,21 +324,21 @@ function ExperienceDetailsPage({ allExperiences }) {
                   {
                     icon: <CalendarToday color="primary" sx={{ fontSize: 30 }} />,
                     label: "Data de Início",
-                    value: event.startDate
-                      ? new Date(event.startDate).toLocaleString()
+                    value: event.dataInicio
+                      ? new Date(event.dataInicio).toLocaleString()
                       : "Data de Início não informada",
                   },
                   {
                     icon: <Schedule color="primary" sx={{ fontSize: 30 }} />,
                     label: "Data de Término",
-                    value: event.endDate
-                      ? new Date(event.endDate).toLocaleString()
+                    value: event.dataTermino
+                      ? new Date(event.dataTermino).toLocaleString()
                       : "Data de Término não informada",
                   },
                   {
                     icon: <LocationOn color="primary" sx={{ fontSize: 30 }} />,
                     label: "Localização",
-                    value: event.location || "Local não informado",
+                    value: event.endereco || "Local não informado",
                   },
                 ].map((item, index) => (
                   <Box
@@ -359,7 +393,7 @@ function ExperienceDetailsPage({ allExperiences }) {
                   variant="body1"
                   sx={{ color: "text.secondary", lineHeight: 1.6 }}
                 >
-                  {event.details}
+                  {event.descricao}
                 </Typography>
               </Box>
 
@@ -650,6 +684,7 @@ function ExperienceDetailsPage({ allExperiences }) {
           </Box>
         </Drawer>
 
+        {/* Snackbar de notificação de compartilhamento */}
         <Snackbar
           open={showNotification}
           autoHideDuration={6000}
@@ -670,7 +705,6 @@ function ExperienceDetailsPage({ allExperiences }) {
 }
 
 ExperienceDetailsPage.propTypes = {
-  allExperiences: PropTypes.object.isRequired,
 };
 
 export default ExperienceDetailsPage;
