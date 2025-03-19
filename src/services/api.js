@@ -51,10 +51,10 @@ export const userLogin = async (email, senha) => {
     return response.data;
 };
 
-export const userRegister = async (email, senha, nome) => {
-    const response = await api.post('/users/register', { email, senha, nome });
+export const userRegister = async (email, password, nome) => {
+    const response = await api.post('/usuario/register', { email, password, nome });
     return response.data;
-};
+  };
 
 export const createAdmin = async (email, senha, nome, secretKey) => {
     const response = await api.post('/users/admin', { email, senha, nome, secretKey });
