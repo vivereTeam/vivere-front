@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { userRegister } from '../../services/api';
+import { IconButton, InputAdornment, TextField } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 function Cadastro() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nome, setNome] = useState('');
   const [mensagem, setMensagem] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,20 +72,29 @@ function Cadastro() {
 
             <div style={{ marginBottom: '20px' }}>
               <label htmlFor="password" style={{ display: 'block', marginBottom: '8px' }}>Senha</label>
-              <input
-                type="password"
+              <TextField
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 name="password"
                 placeholder="Digite sua senha"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
                 style={{
-                  width: '100%',
-                  padding: '12px',
                   fontSize: '16px',
                   borderRadius: '4px',
-                  border: '1px solid #ccc',
-                  boxSizing: 'border-box',
                 }}
                 required
               />
