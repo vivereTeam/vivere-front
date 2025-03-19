@@ -1,12 +1,33 @@
 import { useState } from 'react';
+import { userLogin } from '../../services/api';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        try {
+            const response = await userLogin(email, password);
+            if (response.token) {
+                localStorage.setItem('token', response.token);
+                navigate('/');
+            }
+        } catch (err) {
+            setError('Email ou senha incorretos. Tente novamente.');
+        }
     };
 
     return (
@@ -30,14 +51,16 @@ function Login() {
                 }}>
                     <h2 style={{ marginBottom: '20px' }}>Login</h2>
 
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div style={{ marginBottom: '20px' }}>
                             <label htmlFor="email" style={{ display: 'block', marginBottom: '8px' }}>Email</label>
                             <input
-                                type="text"
+                                type="email"
                                 id="email"
                                 name="email"
                                 placeholder="Digite seu email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 style={{
                                     width: '100%',
                                     padding: '12px',
@@ -57,6 +80,8 @@ function Login() {
                                 id="senha"
                                 name="senha"
                                 placeholder="Digite sua senha"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 fullWidth
                                 InputProps={{
                                     endAdornment: (
@@ -77,6 +102,12 @@ function Login() {
                                 required
                             />
                         </div>
+
+                        {error && (
+                            <p style={{ color: 'red', marginBottom: '20px', textAlign: 'center' }}>
+                                {error}
+                            </p>
+                        )}
 
                         <div>
                             <button
