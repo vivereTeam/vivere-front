@@ -3,6 +3,7 @@ import { userLogin } from '../../services/api';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -22,8 +24,7 @@ function Login() {
         try {
             const response = await userLogin(email, password);
             if (response.token) {
-                localStorage.setItem('token', response.token);
-                localStorage.setItem('userName', response.user.nome);
+                login(response.token, response.user.nome);
                 navigate('/');
             }
         } catch (err) {
