@@ -22,7 +22,7 @@ const Header = () => {
 
   return (
     <AppBar position="sticky" sx={{ backgroundColor: "#270c6b", padding: "0 20px" }}>
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "64px" }}>
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "64px", fontFamily: "'Poppins', sans-serif"}}>
         
         {/* LOGO */}
         <Box 
