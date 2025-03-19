@@ -1,10 +1,6 @@
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
-
 function Login() {
     return(
         <div>
-        <Header />
       <div style={{
       display: 'flex',
       justifyContent: 'center',
@@ -86,7 +82,6 @@ function Login() {
     </div>
             
 
-        <Footer />
     </div>
     );
 };

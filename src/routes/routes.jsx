@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import { Routes, Route } from "react-router-dom";
 import Home from "../pages/home/Home";
 import CategoryPage from "../pages/home/CategoryPage";

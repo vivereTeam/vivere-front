@@ -1,10 +1,7 @@
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
 
 function Cadastro() {
   return (
     <div>
-      <Header />
 
       <div style={{
         display: 'flex',
@@ -102,12 +99,11 @@ function Cadastro() {
           </form>
 
           <div style={{ marginTop: '20px' }}>
-            <a href="/login" style={{ color: '#007BFF', textDecoration: 'none' }}>login</a> {/* Corrigido o link para login */}
+            <a href="/login" style={{ color: '#007BFF', textDecoration: 'none' }}>Já possui uma conta? Faça login</a> {/* Corrigido o link para login */}
           </div>
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }
