@@ -46,8 +46,8 @@ export const populateDB = async () => {
     return response.data;
 };
 
-export const userLogin = async (email, senha) => {
-    const response = await api.post('/users/login', { email, senha });
+export const userLogin = async (email, password) => {
+    const response = await api.post('/usuario/login', { email, password });
     return response.data;
 };
 
