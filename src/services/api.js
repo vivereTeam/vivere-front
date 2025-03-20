@@ -46,7 +46,7 @@ export const getEventosByCategory = async (id_categoria) => {
 export const searchEventos = async (termo) => {
     const response = await api.get('/eventos/search', {
         params: { q: termo },
-        ...getAuthHeader(), // Adiciona o token ao cabeçalho
+        ...getAuthHeader(),
     });
     return response.data;
 };

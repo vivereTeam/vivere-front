@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { Routes, Route } from "react-router-dom";
 import Home from "../pages/home/Home";
 import CategoryPage from "../pages/home/CategoryPage";
@@ -38,10 +37,8 @@ function AppRoutes({ allExperiences, addNewExperience, updateExperience, removeE
         element={<EditEventPage allExperiences={allExperiences} updateExperience={updateExperience} />} 
       />
 
-      <Route path="/category-list">
-        <Route index element={<CategoryListPage />} />
-        <Route path=":category" element={<CategoryPage />} />
-      </Route>
+      <Route path="/category-list" element={<CategoryListPage />} />
+      <Route path="/category/:category" element={<CategoryPage allExperiences={allExperiences} />} />
 
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Cadastro />} />
