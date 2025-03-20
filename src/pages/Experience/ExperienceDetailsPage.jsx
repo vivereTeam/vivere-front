@@ -37,6 +37,17 @@ import { useState, useEffect } from "react";
 import { getEventoById } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 
+const formattedCategories = {
+  SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
+  WORKSHOPS_AULAS: "Workshops e Aulas",
+  VIAGENS_TURISMO: "Viagens e Turismo",
+  AVENTURA_ADRENALINA: "Aventura e Adrenalina",
+  RELAXAMENTO_BEM_ESTAR: "Relaxamento e Bem-Estar",
+  GASTRONOMIA_DEGUSTACOES: "Gastronomia e Degustações",
+  INFANTIL_FAMILIAR: "Infantil e Familiar",
+  EXPERIENCIAS_PERSONALIZADAS: "Experiências Personalizadas",
+};
+
 function ExperienceDetailsPage() {
   const { eventId } = useParams();
   const navigate = useNavigate();
@@ -55,7 +66,7 @@ function ExperienceDetailsPage() {
         const data = await getEventoById(eventId);
         const mappedEvent = {
           id: data.id,
-          categoria: data.categoria,
+          categoria: formattedCategories[data.categoria] || data.categoria,
           titulo: data.titulo,
           imagemUrl: data.imagemUrl,
           dataInicio: data.dataInicio,
