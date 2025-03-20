@@ -46,15 +46,15 @@ export const populateDB = async () => {
     return response.data;
 };
 
-export const userLogin = async (email, senha) => {
-    const response = await api.post('/users/login', { email, senha });
+export const userLogin = async (email, password) => {
+    const response = await api.post('/usuario/login', { email, password });
     return response.data;
 };
 
-export const userRegister = async (email, senha, nome) => {
-    const response = await api.post('/users/register', { email, senha, nome });
+export const userRegister = async (email, password, nome) => {
+    const response = await api.post('/usuario/register', { email, password, nome });
     return response.data;
-};
+  };
 
 export const createAdmin = async (email, senha, nome, secretKey) => {
     const response = await api.post('/users/admin', { email, senha, nome, secretKey });

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AuthProvider } from "./context/AuthContext";
 import AppRoutes from "./routes/routes";
 import { getAllEventos } from "./services/api";
 import Header from "./components/Header";
@@ -26,10 +27,14 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <Header />
-      <AppRoutes allExperiences={allExperiences} />
-      <Footer />
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <AuthProvider>
+        <Header />
+        <div style={{ flex: 1 }}>
+          <AppRoutes allExperiences={allExperiences} />
+        </div>
+        <Footer />
+      </AuthProvider>
     </div>
   );
 }
