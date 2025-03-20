@@ -2,9 +2,11 @@ import { Card, CardContent, CardMedia, Typography, IconButton, Tooltip } from "@
 import { Close } from "@mui/icons-material";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const ExperienceCard = ({ event, removeExperience }) => {
   const navigate = useNavigate();
+  const { loggedIn, userRole } = useAuth();
 
   const handleRemove = async (e) => {
     e.stopPropagation();
@@ -31,7 +33,7 @@ const ExperienceCard = ({ event, removeExperience }) => {
         borderRadius: 5,
         boxShadow: 5,
         position: "relative",
-        margin: "40px auto", // Centraliza horizontalmente
+        margin: "40px auto",
         transition: "transform 0.2s",
         "&:hover": {
           transform: "scale(1.02)",
@@ -39,27 +41,29 @@ const ExperienceCard = ({ event, removeExperience }) => {
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center", // Centraliza verticalmente
+        justifyContent: "center",
       }}
       onClick={() => navigate(`/event/${event.id}`)}
     >
-      <Tooltip title="Remover" arrow>
-        <IconButton
-          onClick={handleRemove}
-          sx={{
-            position: "absolute",
-            top: 8,
-            right: 8,
-            backgroundColor: "rgba(255, 255, 255, 0.7)",
-            "&:hover": {
-              backgroundColor: "rgba(255, 255, 255, 1)",
-            },
-          }}
-          size="small"
-        >
-          <Close fontSize="small" color="action" />
-        </IconButton>
-      </Tooltip>
+      {loggedIn && userRole === "ADMIN" && (
+        <Tooltip title="Remover" arrow>
+          <IconButton
+            onClick={handleRemove}
+            sx={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 1)",
+              },
+            }}
+            size="small"
+          >
+            <Close fontSize="small" color="action" />
+          </IconButton>
+        </Tooltip>
+      )}
 
       <CardMedia
         component="img"

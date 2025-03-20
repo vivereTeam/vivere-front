@@ -37,7 +37,7 @@ function ExperienceCategory({ category }) {
         direction="column"
         alignItems="center"
         sx={{
-          ":hover .avatar-container": { bgcolor: isCategoryList ? "#1976D2" : "#FF5722" },
+          ":hover .avatar-container": { bgcolor: isCategoryList ? "#1976D2" : "#270c6b" },
         }}
       >
         <Avatar

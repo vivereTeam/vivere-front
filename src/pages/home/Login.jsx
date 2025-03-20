@@ -24,7 +24,7 @@ function Login() {
         try {
             const response = await userLogin(email, password);
             if (response.token) {
-                login(response.token, response.user.nome);
+                login(response.token, response.user.nome, response.user.role);
                 navigate('/');
             }
         } catch (err) {

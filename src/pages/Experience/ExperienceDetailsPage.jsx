@@ -34,12 +34,24 @@ import {
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-
 import { getEventoById } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
+
+const formattedCategories = {
+  SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
+  WORKSHOPS_AULAS: "Workshops e Aulas",
+  VIAGENS_TURISMO: "Viagens e Turismo",
+  AVENTURA_ADRENALINA: "Aventura e Adrenalina",
+  RELAXAMENTO_BEM_ESTAR: "Relaxamento e Bem-Estar",
+  GASTRONOMIA_DEGUSTACOES: "Gastronomia e Degustações",
+  INFANTIL_FAMILIAR: "Infantil e Familiar",
+  EXPERIENCIAS_PERSONALIZADAS: "Experiências Personalizadas",
+};
 
 function ExperienceDetailsPage() {
   const { eventId } = useParams();
   const navigate = useNavigate();
+  const { loggedIn, userRole } = useAuth();
 
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -54,7 +66,7 @@ function ExperienceDetailsPage() {
         const data = await getEventoById(eventId);
         const mappedEvent = {
           id: data.id,
-          categoria: data.categoria,
+          categoria: formattedCategories[data.categoria] || data.categoria,
           titulo: data.titulo,
           imagemUrl: data.imagemUrl,
           dataInicio: data.dataInicio,
@@ -207,23 +219,25 @@ function ExperienceDetailsPage() {
           />
 
           <Box sx={{ display: "flex", gap: 2, marginLeft: "auto" }}>
-            <IconButton
-              onClick={handleEdit}
-              aria-label="Editar evento"
-              color="secondary"
-              sx={{
-                border: "2px solid",
-                borderColor: "secondary.main",
-                "&:hover": {
-                  bgcolor: "secondary.main",
-                  color: "white",
-                  transform: "scale(1.1)",
-                },
-                transition: "all 0.3s",
-              }}
-            >
-              <Edit />
-            </IconButton>
+            {loggedIn && userRole === "ADMIN" && (
+              <IconButton
+                onClick={handleEdit}
+                aria-label="Editar evento"
+                color="secondary"
+                sx={{
+                  border: "2px solid",
+                  borderColor: "secondary.main",
+                  "&:hover": {
+                    bgcolor: "secondary.main",
+                    color: "white",
+                    transform: "scale(1.1)",
+                  },
+                  transition: "all 0.3s",
+                }}
+              >
+                <Edit />
+              </IconButton>
+            )}
             <IconButton
               onClick={handleShare}
               aria-label="Compartilhar"

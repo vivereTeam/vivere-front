@@ -15,7 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const Footer = () => {
   return (
-    <Box sx={{ backgroundColor: "#270c6b", color: "#FFFFFF", padding: "40px 0" }}>
+    <Box sx={{ backgroundColor: "#270c6b", color: "#FFFFFF", padding: "40px 0", fontFamily: "'Poppins', sans-serif" }}>
       <Container maxWidth="lg">
         <Grid2 container spacing={4}>
           {/* Logo */}

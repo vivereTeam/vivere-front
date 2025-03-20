@@ -6,7 +6,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const { loggedIn, userName, logout } = useAuth();
+  const { loggedIn, userName, userRole, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleSearch = () => {
@@ -19,6 +19,11 @@ const Header = () => {
     if (event.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   return (
@@ -114,43 +119,63 @@ const Header = () => {
         <Box sx={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           {loggedIn && (
             <>
-              <Link
-                component={RouterLink}
-                to="/create-event"
-                sx={{
-                  color: 'white',
-                  textDecoration: 'none',
-                  padding: '5px 10px',
-                  borderRadius: '4px',
-                  transition: 'background-color 0.3s ease, color 0.3s ease',
-                  '&:hover': {
-                    backgroundColor: '#fffa00',
-                    color: 'black',
-                  },
-                }}
-              >
-                CRIE SUA EXPERIÊNCIA
-              </Link>
+              {userRole === 'ADMIN' && (
+                <Link
+                  component={RouterLink}
+                  to="/create-event"
+                  sx={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    padding: '5px 10px',
+                    borderRadius: '4px',
+                    transition: 'background-color 0.3s ease, color 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: '#fffa00',
+                      color: 'black',
+                    },
+                  }}
+                >
+                  CRIE SUA EXPERIÊNCIA
+                </Link>
+              )}
               <span style={{ color: '#fffa00' }}>Olá, {userName}!</span>
             </>
           )}
 
-          <Button
-            component={RouterLink}
-            to={loggedIn ? '#' : '/login'}
-            variant="contained"
-            onClick={loggedIn ? logout : undefined}
-            sx={{
-              backgroundColor: '#fffa00',
-              color: 'black',
-              borderRadius: '4px',
-              '&:hover': {
-                backgroundColor: '#e6e600',
-              },
-            }}
-          >
-            {loggedIn ? 'SAIR' : 'ACESSE SUA CONTA'}
-          </Button>
+          {loggedIn ? (
+            <Button
+              component={RouterLink}
+              to="/"
+              variant="contained"
+              onClick={handleLogout}
+              sx={{
+                backgroundColor: '#fffa00',
+                color: 'black',
+                borderRadius: '4px',
+                '&:hover': {
+                  backgroundColor: '#e6e600',
+                },
+              }}
+            >
+              SAIR
+            </Button>
+          ) : (
+            <Button
+              component={RouterLink}
+              to="/login"
+              variant="contained"
+              sx={{
+                backgroundColor: '#fffa00',
+                color: 'black',
+                borderRadius: '4px',
+                '&:hover': {
+                  backgroundColor: '#e6e600',
+                },
+              }}
+            >
+              ACESSE SUA CONTA
+            </Button>
+          )}
         </Box>
       </Toolbar>
     </AppBar>

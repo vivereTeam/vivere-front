@@ -14,7 +14,7 @@ const NextArrow = ({ onClick }) => (
     sx={{
       position: "absolute",
       top: "50%",
-      right: "-25px",
+      right: "-40px",
       transform: "translateY(-50%)",
       backgroundColor: "rgba(0, 0, 0, 0.5)",
       color: "white",
@@ -32,7 +32,7 @@ const PrevArrow = ({ onClick }) => (
     sx={{
       position: "absolute",
       top: "50%",
-      left: "-25px",
+      left: "-40px",
       transform: "translateY(-50%)",
       backgroundColor: "rgba(0, 0, 0, 0.5)",
       color: "white",
@@ -66,7 +66,7 @@ function CardSlider({ experiences, removeExperience, isLargeCard }) {
   };
 
   return (
-    <Box sx={{ position: "relative", width: "100%",}}>
+    <Box sx={{ position: "relative", width: "100%" }}>
       <Slider {...settings}>
         {experiences.map((exp) => (
           <div key={exp.id} style={{ padding: "10px" }}>
