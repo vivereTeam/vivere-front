@@ -63,10 +63,10 @@ const ExperienceCard = ({ event, removeExperience }) => {
 
       <CardMedia
         component="img"
-        height="140"
+        height="195"
         image={event.imagemUrl}
         alt={event.titulo}
-        sx={{ objectFit: "cover" }}
+        sx={{ objectFit: "contain", bgcolor: "#fafafa" }}
       />
 
       <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
