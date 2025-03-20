@@ -21,6 +21,11 @@ const Header = () => {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   return (
     <AppBar position="sticky" sx={{ backgroundColor: '#270c6b', padding: '0 20px' }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '64px', fontFamily: "'Poppins', sans-serif" }}>
@@ -137,22 +142,40 @@ const Header = () => {
             </>
           )}
 
-          <Button
-            component={RouterLink}
-            to={loggedIn ? '#' : '/login'}
-            variant="contained"
-            onClick={loggedIn ? logout : undefined}
-            sx={{
-              backgroundColor: '#fffa00',
-              color: 'black',
-              borderRadius: '4px',
-              '&:hover': {
-                backgroundColor: '#e6e600',
-              },
-            }}
-          >
-            {loggedIn ? 'SAIR' : 'ACESSE SUA CONTA'}
-          </Button>
+          {loggedIn ? (
+            <Button
+              component={RouterLink}
+              to="/"
+              variant="contained"
+              onClick={handleLogout}
+              sx={{
+                backgroundColor: '#fffa00',
+                color: 'black',
+                borderRadius: '4px',
+                '&:hover': {
+                  backgroundColor: '#e6e600',
+                },
+              }}
+            >
+              SAIR
+            </Button>
+          ) : (
+            <Button
+              component={RouterLink}
+              to="/login"
+              variant="contained"
+              sx={{
+                backgroundColor: '#fffa00',
+                color: 'black',
+                borderRadius: '4px',
+                '&:hover': {
+                  backgroundColor: '#e6e600',
+                },
+              }}
+            >
+              ACESSE SUA CONTA
+            </Button>
+          )}
         </Box>
       </Toolbar>
     </AppBar>
