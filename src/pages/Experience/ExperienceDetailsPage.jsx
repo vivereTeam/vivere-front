@@ -34,12 +34,13 @@ import {
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-
 import { getEventoById } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 
 function ExperienceDetailsPage() {
   const { eventId } = useParams();
   const navigate = useNavigate();
+  const { loggedIn, userRole } = useAuth();
 
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -207,23 +208,25 @@ function ExperienceDetailsPage() {
           />
 
           <Box sx={{ display: "flex", gap: 2, marginLeft: "auto" }}>
-            <IconButton
-              onClick={handleEdit}
-              aria-label="Editar evento"
-              color="secondary"
-              sx={{
-                border: "2px solid",
-                borderColor: "secondary.main",
-                "&:hover": {
-                  bgcolor: "secondary.main",
-                  color: "white",
-                  transform: "scale(1.1)",
-                },
-                transition: "all 0.3s",
-              }}
-            >
-              <Edit />
-            </IconButton>
+            {loggedIn && userRole === "ADMIN" && (
+              <IconButton
+                onClick={handleEdit}
+                aria-label="Editar evento"
+                color="secondary"
+                sx={{
+                  border: "2px solid",
+                  borderColor: "secondary.main",
+                  "&:hover": {
+                    bgcolor: "secondary.main",
+                    color: "white",
+                    transform: "scale(1.1)",
+                  },
+                  transition: "all 0.3s",
+                }}
+              >
+                <Edit />
+              </IconButton>
+            )}
             <IconButton
               onClick={handleShare}
               aria-label="Compartilhar"
