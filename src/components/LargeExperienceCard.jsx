@@ -1,8 +1,11 @@
 import PropTypes from "prop-types";
 import { Card, CardMedia, CardContent, Typography, Button, Box, IconButton, Tooltip } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { useAuth } from "../context/AuthContext";
 
 const LargeExperienceCard = ({ event, removeExperience }) => {
+  const { loggedIn, userRole } = useAuth();
+
   const handleRemove = async (e) => {
     e.stopPropagation();
 
@@ -30,24 +33,26 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
         overflow: "hidden",
       }}
     >
-      <Tooltip title="Remover" arrow>
-        <IconButton 
-          onClick={handleRemove}
-          sx={{ 
-            position: 'absolute', 
-            top: 8, 
-            right: 8, 
-            backgroundColor: 'rgba(255, 255, 255, 0.7)',
-            '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 1)',
-            },
-            zIndex: 2,
-          }}
-          size="small"
-        >
-          <Close fontSize="small" color="action" />
-        </IconButton>
-      </Tooltip>
+      {loggedIn && userRole === "ADMIN" && (
+        <Tooltip title="Remover" arrow>
+          <IconButton 
+            onClick={handleRemove}
+            sx={{ 
+              position: 'absolute', 
+              top: 8, 
+              right: 8, 
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 1)',
+              },
+              zIndex: 2,
+            }}
+            size="small"
+          >
+            <Close fontSize="small" color="action" />
+          </IconButton>
+        </Tooltip>
+      )}
 
       <CardMedia
         component="img"
