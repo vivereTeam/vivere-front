@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, TextField, Button, Typography, Grid } from '@mui/material';
+import { Container, TextField, Button, Typography, Grid2 } from '@mui/material';
 import { Save, Cancel } from '@mui/icons-material';
 import { getEventoById, updateEvento } from '../../services/api';
 
@@ -13,30 +13,27 @@ const EditEventPage = () => {
         data: '',
     });
 
-    // Buscar os dados do evento ao carregar a página
     useEffect(() => {
         getEventoById(eventId)
             .then(response => {
-                setFormData(response); // Preenche os campos com os dados do evento
+                setFormData(response);
             })
             .catch(error => {
                 console.error("Erro ao buscar evento:", error);
-                navigate("/"); // Redireciona para a home se o evento não for encontrado
+                navigate("/"); 
             });
     }, [eventId, navigate]);
 
-    // Atualizar os campos conforme o usuário digita
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // Enviar os dados atualizados para o backend
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await updateEvento(eventId, formData);
             alert("Evento atualizado com sucesso!");
-            navigate("/"); // Volta para a página inicial após a edição
+            navigate("/");
         } catch (error) {
             console.error("Erro ao atualizar evento:", error);
         }
@@ -46,8 +43,8 @@ const EditEventPage = () => {
         <Container>
             <Typography variant="h4" gutterBottom>Editar Evento</Typography>
             <form onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
+                <Grid2 container spacing={2}>
+                    <Grid2 item xs={12}>
                         <TextField
                             label="Título"
                             name="titulo"
@@ -56,8 +53,8 @@ const EditEventPage = () => {
                             fullWidth
                             required
                         />
-                    </Grid>
-                    <Grid item xs={12}>
+                    </Grid2>
+                    <Grid2 item xs={12}>
                         <TextField
                             label="Descrição"
                             name="descricao"
@@ -68,8 +65,8 @@ const EditEventPage = () => {
                             multiline
                             rows={4}
                         />
-                    </Grid>
-                    <Grid item xs={12}>
+                    </Grid2>
+                    <Grid2 item xs={12}>
                         <TextField
                             label="Data"
                             name="data"
@@ -80,16 +77,16 @@ const EditEventPage = () => {
                             required
                             InputLabelProps={{ shrink: true }}
                         />
-                    </Grid>
-                    <Grid item xs={12}>
+                    </Grid2>
+                    <Grid2 item xs={12}>
                         <Button type="submit" variant="contained" color="primary" startIcon={<Save />}>
                             Salvar
                         </Button>
                         <Button onClick={() => navigate("/")} variant="outlined" color="secondary" startIcon={<Cancel />} style={{ marginLeft: 10 }}>
                             Cancelar
                         </Button>
-                    </Grid>
-                </Grid>
+                    </Grid2>
+                </Grid2>
             </form>
         </Container>
     );
