@@ -6,7 +6,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const { loggedIn, userName, logout } = useAuth();
+  const { loggedIn, userName, userRole, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleSearch = () => {
@@ -114,23 +114,25 @@ const Header = () => {
         <Box sx={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           {loggedIn && (
             <>
-              <Link
-                component={RouterLink}
-                to="/create-event"
-                sx={{
-                  color: 'white',
-                  textDecoration: 'none',
-                  padding: '5px 10px',
-                  borderRadius: '4px',
-                  transition: 'background-color 0.3s ease, color 0.3s ease',
-                  '&:hover': {
-                    backgroundColor: '#fffa00',
-                    color: 'black',
-                  },
-                }}
-              >
-                CRIE SUA EXPERIÊNCIA
-              </Link>
+              {userRole === 'ADMIN' && (
+                <Link
+                  component={RouterLink}
+                  to="/create-event"
+                  sx={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    padding: '5px 10px',
+                    borderRadius: '4px',
+                    transition: 'background-color 0.3s ease, color 0.3s ease',
+                    '&:hover': {
+                      backgroundColor: '#fffa00',
+                      color: 'black',
+                    },
+                  }}
+                >
+                  CRIE SUA EXPERIÊNCIA
+                </Link>
+              )}
               <span style={{ color: '#fffa00' }}>Olá, {userName}!</span>
             </>
           )}
