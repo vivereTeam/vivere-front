@@ -45,9 +45,11 @@ const PrevArrow = ({ onClick }) => (
 );
 
 function CardSlider({ experiences, removeExperience, isLargeCard }) {
+  const hasMultiple = experiences.length > 1;
+
   const settings = {
-    dots: true,
-    infinite: true,
+    dots: hasMultiple,
+    infinite: hasMultiple,
     speed: 500,
     slidesToShow: isLargeCard ? 1 : 3,
     slidesToScroll: 1,

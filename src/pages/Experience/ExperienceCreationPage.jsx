@@ -149,7 +149,6 @@ const ExperienceCreationPage = () => {
         Criar Evento Presencial
       </Typography>
 
-      {/* 1. Categoria */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         1. Categoria
       </Typography>
@@ -174,7 +173,6 @@ const ExperienceCreationPage = () => {
         <MenuItem value="Experiências Personalizadas">Experiências Personalizadas</MenuItem>
       </Select>
 
-      {/* 2. Onde o evento vai acontecer? */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         2. Onde o seu evento vai acontecer?
       </Typography>
@@ -188,7 +186,6 @@ const ExperienceCreationPage = () => {
         required
       />
 
-      {/* 3. Informações básicas */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         3. Informações básicas
       </Typography>
@@ -202,7 +199,6 @@ const ExperienceCreationPage = () => {
         required
       />
 
-      {/* Upload de imagem */}
       <Box
         sx={{
           display: "flex",
@@ -237,7 +233,6 @@ const ExperienceCreationPage = () => {
         )}
       </Box>
 
-      {/* 5. Descrição */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         5. Descrição do evento
       </Typography>
@@ -252,7 +247,6 @@ const ExperienceCreationPage = () => {
         rows={4}
       />
 
-      {/* 6. Data e horário */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         6. Data e horário
       </Typography>
@@ -281,7 +275,6 @@ const ExperienceCreationPage = () => {
         />
       </Box>
 
-      {/* 7. Responsabilidades */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         7. Responsabilidades
       </Typography>
@@ -297,7 +290,6 @@ const ExperienceCreationPage = () => {
         label="Estou de acordo com os Termos de uso e as Diretrizes da Comunidade."
       />
 
-      {/* 8. Definir preço do ingresso */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         8. Definir Preço do Ingresso
       </Typography>
@@ -326,7 +318,6 @@ const ExperienceCreationPage = () => {
         />
       </Box>
 
-      {/* 9. Escolher tamanho do Card */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         9. Tamanho do Card
       </Typography>
@@ -345,7 +336,6 @@ const ExperienceCreationPage = () => {
         <MenuItem value="LARGE">Large</MenuItem>
       </Select>
 
-      {/* Botões de ação */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
         <Button variant="outlined" onClick={() => setPreviewOpen(true)}>
           Pré-visualizar
@@ -360,7 +350,6 @@ const ExperienceCreationPage = () => {
         </Button>
       </Box>
 
-      {/* Modal de pré-visualização */}
       <Modal open={previewOpen} onClose={() => setPreviewOpen(false)}>
         <Box
           sx={{

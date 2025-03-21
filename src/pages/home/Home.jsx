@@ -48,7 +48,7 @@ const Home = () => {
         const updatedCategory = prev[category].filter((exp) => exp.id !== id);
 
         if (updatedCategory.length === 0) {
-          const {  ...rest } = prev;
+          const { [category]: _, ...rest } = prev;
           return rest;
         }
 
@@ -67,7 +67,8 @@ const Home = () => {
     .filter((exp) => exp.cardSize === "LARGE");
 
   const categoriesWithNormalCards = Object.keys(allExperiences).filter(
-    (category) => allExperiences[category].some((exp) => exp.cardSize === "NORMAL")
+    (category) =>
+      allExperiences[category].some((exp) => exp.cardSize === "NORMAL")
   );
 
   return (
@@ -87,8 +88,7 @@ const Home = () => {
           marginBottom: "16px",
         },
       }}
-      >
-
+    >
       <div>
         <h1>Categorias</h1>
         <div
@@ -128,45 +128,21 @@ const Home = () => {
       {categoriesWithNormalCards.map((category) => {
         const formattedCategory = formattedCategories[category] || category;
         const experiences = allExperiences[category] || [];
-        const normalCards = experiences.filter((exp) => exp.cardSize === "NORMAL");
+        const normalCards = experiences.filter(
+          (exp) => exp.cardSize === "NORMAL"
+        );
 
         return (
           <div key={category}>
             <h1>{formattedCategory}</h1>
-
-            {normalCards.length > 3 ? (
-              <CardSlider
-                key={normalCards.length}
-                experiences={normalCards}
-                removeExperience={removeExperience}
-              />
-            ) : (
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "20px",
-                  justifyContent: "flex-start",
-                }}
-              >
-                {normalCards.map((experience) => (
-                  <div
-                    key={experience.id}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => navigate(`/event/${experience.id}`)}
-                  >
-                    <ExperienceCard
-                      event={experience}
-                      removeExperience={removeExperience}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
+            <CardSlider
+              key={normalCards.length}
+              experiences={normalCards}
+              removeExperience={removeExperience}
+            />
           </div>
         );
       })}
-
     </Box>
   );
 };

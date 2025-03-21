@@ -28,8 +28,8 @@ const ExperienceCard = ({ event, removeExperience }) => {
   return (
     <Card
       sx={{
-        maxWidth: 345,
-        height: 400,
+        width: 345,
+        height: 400,           
         borderRadius: 5,
         boxShadow: 5,
         position: "relative",
@@ -41,7 +41,6 @@ const ExperienceCard = ({ event, removeExperience }) => {
         cursor: "pointer",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
       }}
       onClick={() => navigate(`/event/${event.id}`)}
     >
@@ -70,8 +69,8 @@ const ExperienceCard = ({ event, removeExperience }) => {
         image={event.imagemUrl}
         alt={event.titulo}
         sx={{
+          height: 200,
           width: "100%",
-          height: "auto",
           objectFit: "cover",
           bgcolor: "#fafafa",
         }}
@@ -82,7 +81,8 @@ const ExperienceCard = ({ event, removeExperience }) => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "flex-start",
+          overflow: "hidden", 
         }}
       >
         <Typography
@@ -94,12 +94,15 @@ const ExperienceCard = ({ event, removeExperience }) => {
             ? new Date(event.dataInicio).toLocaleDateString()
             : "Data não informada"}
         </Typography>
+
         <Typography variant="h6" component="div" sx={{ fontWeight: "bold", mb: 1 }}>
           {event.titulo}
         </Typography>
+
         <Typography variant="body2" color="text.secondary">
           {event.endereco}
         </Typography>
+
         <Typography
           variant="body2"
           color="text.secondary"
@@ -115,6 +118,7 @@ const ExperienceCard = ({ event, removeExperience }) => {
         >
           {event.descricao}
         </Typography>
+
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           Preço:{" "}
           {event.preco === 0
