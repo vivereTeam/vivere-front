@@ -66,9 +66,9 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
       <CardMedia
         component="img"
         sx={{ 
-          width: "70%", 
-          objectFit: "cover",
-          flexShrink: 0,
+          width: "70%",
+          height: "100%",    // faz a imagem ocupar toda a altura do card
+          objectFit: "cover"
         }}
         image={event.imagemUrl}
         alt={event.titulo}

@@ -16,6 +16,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { createEvento } from "../../services/api";
 
+// Função para mapear o texto do select de categoria para o enum do Prisma
 function mapCategoria(frontCategory) {
   switch (frontCategory) {
     case "Shows e Entretenimento":
@@ -54,15 +55,18 @@ const ExperienceCreationPage = () => {
     imagePreview: null,
     ticketPrice: "",
     ticketTax: "",
+    cardSize: "", // Novo campo para armazenar o tamanho do card
   });
 
   const [previewOpen, setPreviewOpen] = useState(false);
 
+  // Lida com mudanças nos campos de texto e selects
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEventData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  // Lida com upload de imagem (apenas preview local, sem upload real)
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -74,6 +78,7 @@ const ExperienceCreationPage = () => {
     }
   };
 
+  // Verifica se todos os campos obrigatórios estão preenchidos
   const isFormValid = () => {
     return (
       eventData.category &&
@@ -83,24 +88,28 @@ const ExperienceCreationPage = () => {
       eventData.endDate &&
       eventData.agreementChecked &&
       eventData.ticketPrice &&
-      eventData.ticketTax
+      eventData.ticketTax &&
+      eventData.cardSize // Se quiser obrigar o usuário a escolher
     );
   };
 
+  // Ao clicar em "Publicar Evento"
   const handleSubmit = async () => {
     if (!isFormValid()) return;
 
+    // Monta o objeto no formato que o backend espera (campos do Prisma)
     const newEventData = {
       titulo: eventData.title,
       descricao: eventData.description || "Sem descrição",
       endereco: eventData.address,
       dataInicio: eventData.startDate,
       dataTermino: eventData.endDate,
-      ticketType: "INGRESSO", 
+      ticketType: "INGRESSO", // Pode mudar se quiser
       imagemUrl: eventData.imagePreview || "",
       preco: eventData.ticketPrice,
       categoria: mapCategoria(eventData.category),
-      cardSize: "NORMAL",
+      // Usamos o valor que o usuário escolheu (NORMAL ou LARGE)
+      cardSize: eventData.cardSize || "NORMAL",
     };
 
     try {
@@ -129,6 +138,7 @@ const ExperienceCreationPage = () => {
         Criar Evento Presencial
       </Typography>
 
+      {/* 1. Categoria */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         1. Categoria
       </Typography>
@@ -153,6 +163,7 @@ const ExperienceCreationPage = () => {
         <MenuItem value="Experiências Personalizadas">Experiências Personalizadas</MenuItem>
       </Select>
 
+      {/* 2. Onde o evento vai acontecer? */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         2. Onde o seu evento vai acontecer?
       </Typography>
@@ -166,6 +177,7 @@ const ExperienceCreationPage = () => {
         required
       />
 
+      {/* 3. Informações básicas */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         3. Informações básicas
       </Typography>
@@ -179,6 +191,7 @@ const ExperienceCreationPage = () => {
         required
       />
 
+      {/* Upload de imagem */}
       <Box
         sx={{
           display: "flex",
@@ -213,6 +226,7 @@ const ExperienceCreationPage = () => {
         )}
       </Box>
 
+      {/* 5. Descrição */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         5. Descrição do evento
       </Typography>
@@ -227,6 +241,7 @@ const ExperienceCreationPage = () => {
         rows={4}
       />
 
+      {/* 6. Data e horário */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         6. Data e horário
       </Typography>
@@ -255,6 +270,7 @@ const ExperienceCreationPage = () => {
         />
       </Box>
 
+      {/* 7. Responsabilidades */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         7. Responsabilidades
       </Typography>
@@ -270,6 +286,7 @@ const ExperienceCreationPage = () => {
         label="Estou de acordo com os Termos de uso e as Diretrizes da Comunidade."
       />
 
+      {/* 8. Definir preço do ingresso */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         8. Definir Preço do Ingresso
       </Typography>
@@ -298,6 +315,26 @@ const ExperienceCreationPage = () => {
         />
       </Box>
 
+      {/* 9. Escolher tamanho do Card */}
+      <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
+        9. Tamanho do Card
+      </Typography>
+      <Select
+        fullWidth
+        name="cardSize"
+        value={eventData.cardSize}
+        onChange={handleChange}
+        margin="normal"
+        displayEmpty
+      >
+        <MenuItem value="">
+          <em>Selecione o tamanho</em>
+        </MenuItem>
+        <MenuItem value="NORMAL">Normal</MenuItem>
+        <MenuItem value="LARGE">Large</MenuItem>
+      </Select>
+
+      {/* Botões de ação */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
         <Button variant="outlined" onClick={() => setPreviewOpen(true)}>
           Pré-visualizar
@@ -312,6 +349,7 @@ const ExperienceCreationPage = () => {
         </Button>
       </Box>
 
+      {/* Modal de pré-visualização */}
       <Modal open={previewOpen} onClose={() => setPreviewOpen(false)}>
         <Box
           sx={{
@@ -367,9 +405,7 @@ const ExperienceCreationPage = () => {
                 <Typography variant="h6" color="secondary" sx={{ mb: 1 }}>
                   Ingresso Disponível
                 </Typography>
-                <Typography variant="body1">
-                  Tipo: Ingresso
-                </Typography>
+                <Typography variant="body1">Tipo: Ingresso</Typography>
                 <Typography variant="body1">
                   Preço: R$ {parseFloat(eventData.ticketPrice).toFixed(2)}
                 </Typography>
@@ -377,13 +413,21 @@ const ExperienceCreationPage = () => {
                   Taxa: R$ {parseFloat(eventData.ticketTax).toFixed(2)}
                 </Typography>
                 <Typography variant="body1">
-                  Total: R${" "}
+                  Total:{" "}
                   {(
                     parseFloat(eventData.ticketPrice) +
                     parseFloat(eventData.ticketTax)
                   ).toFixed(2)}
                 </Typography>
               </Box>
+              <Typography
+                variant="caption"
+                color="primary"
+                sx={{ mt: 2 }}
+                display="block"
+              >
+                Tamanho do Card: {eventData.cardSize || "N/A"}
+              </Typography>
             </CardContent>
           </Card>
           <Button

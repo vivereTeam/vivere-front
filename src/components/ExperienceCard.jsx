@@ -67,19 +67,32 @@ const ExperienceCard = ({ event, removeExperience }) => {
 
       <CardMedia
         component="img"
-        height="195"
         image={event.imagemUrl}
         alt={event.titulo}
-        sx={{ objectFit: "contain", bgcolor: "#fafafa" }}
+        sx={{
+          width: "100%",
+          height: "auto",
+          objectFit: "cover",
+          bgcolor: "#fafafa",
+        }}
       />
 
-      <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+      <CardContent
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
         <Typography
           variant="subtitle2"
           color="primary"
           sx={{ fontWeight: "bold", textTransform: "uppercase", mb: 1 }}
         >
-          {event.dataInicio ? new Date(event.dataInicio).toLocaleDateString() : "Data não informada"}
+          {event.dataInicio
+            ? new Date(event.dataInicio).toLocaleDateString()
+            : "Data não informada"}
         </Typography>
         <Typography variant="h6" component="div" sx={{ fontWeight: "bold", mb: 1 }}>
           {event.titulo}
@@ -103,7 +116,12 @@ const ExperienceCard = ({ event, removeExperience }) => {
           {event.descricao}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          Preço: {event.preco === 0 ? "Gratuito" : event.preco ? `R$ ${event.preco.toFixed(2)}` : "Preço não informado"}
+          Preço:{" "}
+          {event.preco === 0
+            ? "Gratuito"
+            : event.preco
+            ? `R$ ${event.preco.toFixed(2)}`
+            : "Preço não informado"}
         </Typography>
       </CardContent>
     </Card>
