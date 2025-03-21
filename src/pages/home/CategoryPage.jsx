@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; // Importações adicionadas
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Box, Typography, Grid } from "@mui/material";
 import ExperienceCard from "../../components/ExperienceCard";

@@ -17,7 +17,6 @@ function Cadastro() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validação do formato do email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setMensagem('Formato de email inválido. O email deve seguir o padrão: exemplo@dominio.com');

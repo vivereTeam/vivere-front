@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-// src/pages/home/SearchResultsPage.jsx
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Typography, Grid2 } from "@mui/material";
