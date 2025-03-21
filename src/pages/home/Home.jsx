@@ -135,7 +135,6 @@ const Home = () => {
         return (
           <div key={category}>
             <h1>{formattedCategory}</h1>
-            {/* Agora SEMPRE usamos o CardSlider, independentemente da quantidade de cards */}
             <CardSlider
               key={normalCards.length}
               experiences={normalCards}

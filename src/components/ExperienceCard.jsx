@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  IconButton,
-  Tooltip
-} from "@mui/material";
+import { Card, CardContent, CardMedia, Typography, IconButton, Tooltip } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
@@ -35,19 +28,19 @@ const ExperienceCard = ({ event, removeExperience }) => {
   return (
     <Card
       sx={{
-        maxWidth: 345,
-        // Removido o "height: 400" para deixar a altura dinâmica
+        width: 345,
+        height: 400,           
         borderRadius: 5,
         boxShadow: 5,
         position: "relative",
         margin: "40px auto",
         transition: "transform 0.2s",
         "&:hover": {
-          transform: "scale(1.02)"
+          transform: "scale(1.02)",
         },
         cursor: "pointer",
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
       }}
       onClick={() => navigate(`/event/${event.id}`)}
     >
@@ -61,8 +54,8 @@ const ExperienceCard = ({ event, removeExperience }) => {
               right: 8,
               backgroundColor: "rgba(255, 255, 255, 0.7)",
               "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 1)"
-              }
+                backgroundColor: "rgba(255, 255, 255, 1)",
+              },
             }}
             size="small"
           >
@@ -76,10 +69,10 @@ const ExperienceCard = ({ event, removeExperience }) => {
         image={event.imagemUrl}
         alt={event.titulo}
         sx={{
+          height: 200,
           width: "100%",
-          height: 200,        // Altura fixa (pode ajustar conforme desejar)
-          objectFit: "cover", // "cover" preenche o espaço e corta a imagem uniformemente
-          bgcolor: "#fafafa"
+          objectFit: "cover",
+          bgcolor: "#fafafa",
         }}
       />
 
@@ -88,7 +81,8 @@ const ExperienceCard = ({ event, removeExperience }) => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center"
+          justifyContent: "flex-start",
+          overflow: "hidden", 
         }}
       >
         <Typography
@@ -100,12 +94,15 @@ const ExperienceCard = ({ event, removeExperience }) => {
             ? new Date(event.dataInicio).toLocaleDateString()
             : "Data não informada"}
         </Typography>
+
         <Typography variant="h6" component="div" sx={{ fontWeight: "bold", mb: 1 }}>
           {event.titulo}
         </Typography>
+
         <Typography variant="body2" color="text.secondary">
           {event.endereco}
         </Typography>
+
         <Typography
           variant="body2"
           color="text.secondary"
@@ -116,11 +113,12 @@ const ExperienceCard = ({ event, removeExperience }) => {
             textOverflow: "ellipsis",
             display: "-webkit-box",
             WebkitLineClamp: 3,
-            WebkitBoxOrient: "vertical"
+            WebkitBoxOrient: "vertical",
           }}
         >
           {event.descricao}
         </Typography>
+
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           Preço:{" "}
           {event.preco === 0
@@ -143,9 +141,9 @@ ExperienceCard.propTypes = {
     imagemUrl: PropTypes.string.isRequired,
     descricao: PropTypes.string.isRequired,
     categoria: PropTypes.string.isRequired,
-    preco: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])])
+    preco: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf([null])]),
   }).isRequired,
-  removeExperience: PropTypes.func.isRequired
+  removeExperience: PropTypes.func.isRequired,
 };
 
 export default ExperienceCard;
