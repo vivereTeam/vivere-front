@@ -1,4 +1,3 @@
-// src/components/Footer.jsx
 import { 
   Box, 
   Container, 
@@ -18,7 +17,6 @@ const Footer = () => {
     <Box sx={{ backgroundColor: "#270c6b", color: "#FFFFFF", padding: "40px 0", fontFamily: "'Poppins', sans-serif" }}>
       <Container maxWidth="lg">
         <Grid2 container spacing={4}>
-          {/* Logo */}
           <Grid2 item xs={12} sm={6} md={3}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -26,7 +24,6 @@ const Footer = () => {
               <circle cx="20" cy="20" r="6" fill="#270C6B"/>
             </svg>
 
-            {/* Texto estilizado */}
             <span style={{ 
               fontFamily: "'Montserrat', sans-serif",
               fontWeight: 700,
@@ -40,7 +37,6 @@ const Footer = () => {
             </Box>
           </Grid2>
           
-          {/* Links Rápidos */}
           <Grid2 item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
               Links Rápidos
@@ -53,7 +49,6 @@ const Footer = () => {
             </Box>
           </Grid2>
           
-          {/* Redes Sociais */}
           <Grid2 item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
               Redes Sociais
@@ -87,12 +82,11 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 sx={{ color: "#fffa00" }}
               >
-                <CloseIcon /> {/* Você mencionou o uso do CloseIcon anteriormente */}
+                <CloseIcon />
               </IconButton>
             </Box>
           </Grid2>
 
-          {/* Newsletter */}
           <Grid2 item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold", color: "#fffa00" }}>
               Newsletter
@@ -131,7 +125,6 @@ const Footer = () => {
           </Grid2>
         </Grid2>
 
-        {/* Linha de Separação */}
         <Box sx={{ borderTop: "1px solid rgba(255, 255, 255, 0.3)", mt: 4, pt: 2 }}>
           <Typography variant="body2" align="center" sx={{ color: "#CCCCCC" }}>
             © 2025 Vivere. Curso FullStack Atlântico. Capacita Brasil.

@@ -1,4 +1,3 @@
-// src/pages/Experience/ExperienceCreationPage.jsx
 import { useState } from "react";
 import {
   TextField,
@@ -15,8 +14,33 @@ import {
   CardContent,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { createEvento } from "../../services/api";
 
-const ExperienceCreationPage = ({ addNewExperience }) => {
+function mapCategoria(frontCategory) {
+  switch (frontCategory) {
+    case "Shows e Entretenimento":
+      return "SHOWS_ENTRETENIMENTO";
+    case "Workshops e Aulas":
+      return "WORKSHOPS_AULAS";
+    case "Viagens e Turismo":
+      return "VIAGENS_TURISMO";
+    case "Aventura e Adrenalina":
+      return "AVENTURA_ADRENALINA";
+    case "Relaxamento e Bem-Estar":
+      return "RELAXAMENTO_BEM_ESTAR";
+    case "Gastronomia e Degustações":
+      return "GASTRONOMIA_DEGUSTACOES";
+    case "Infantil e Familiar":
+      return "INFANTIL_FAMILIAR";
+    case "Experiências Personalizadas":
+      return "EXPERIENCIAS_PERSONALIZADAS";
+    default:
+      return "SHOWS_ENTRETENIMENTO";
+  }
+}
+
+const ExperienceCreationPage = () => {
   const navigate = useNavigate();
 
   const [eventData, setEventData] = useState({
@@ -31,6 +55,7 @@ const ExperienceCreationPage = ({ addNewExperience }) => {
     imagePreview: null,
     ticketPrice: "",
     ticketTax: "",
+    cardSize: "",
   });
 
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -40,7 +65,6 @@ const ExperienceCreationPage = ({ addNewExperience }) => {
     setEventData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Envio de Imagem
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -61,39 +85,53 @@ const ExperienceCreationPage = ({ addNewExperience }) => {
       eventData.endDate &&
       eventData.agreementChecked &&
       eventData.ticketPrice &&
-      eventData.ticketTax
+      eventData.ticketTax &&
+      eventData.cardSize
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isFormValid()) return;
 
-    // Cria objeto da nova experiência
-    const newEvent = {
-      id: Date.now(), // Exemplo de ID numérico
-      title: eventData.title,
-      location: eventData.address,
-      startDate: eventData.startDate,
-      endDate: eventData.endDate,
-      imageUrl: eventData.imagePreview,
-      details: eventData.description || "Sem descrição",
-      category: eventData.category,
-      tickets: [
-        {
-          id: `${Date.now()}-0`,
-          type: "Ingresso",
-          price: parseFloat(eventData.ticketPrice),
-          tax: parseFloat(eventData.ticketTax),
-          soldOut: false,
-        },
-      ],
+    let finalImageUrl = "";
+    if (eventData.image) {
+      try {
+        const formData = new FormData();
+        formData.append("file", eventData.image);
+        const uploadResp = await axios.post("http://localhost:3000/eventos/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        finalImageUrl = uploadResp.data.imageUrl;
+      } catch (uploadError) {
+        console.error("Erro ao fazer upload da imagem:", uploadError);
+        alert("Falha no upload da imagem.");
+        return;
+      }
+    }
+
+    const newEventData = {
+      titulo: eventData.title,
+      descricao: eventData.description || "Sem descrição",
+      endereco: eventData.address,
+      dataInicio: eventData.startDate,
+      dataTermino: eventData.endDate,
+      ticketType: "INGRESSO",
+      imagemUrl: finalImageUrl || "",
+      preco: eventData.ticketPrice,
+      categoria: mapCategoria(eventData.category),
+      cardSize: eventData.cardSize || "NORMAL",
     };
 
-    // Adiciona ao estado global, na categoria selecionada
-    addNewExperience(eventData.category, newEvent);
-
-    // Redireciona para a Home
-    navigate("/");
+    try {
+      await createEvento(newEventData);
+      alert("Evento criado com sucesso!");
+      navigate("/");
+    } catch (error) {
+      console.error("Erro ao criar evento:", error);
+      alert("Ocorreu um erro ao criar o evento. Verifique se você está logado como ADMIN.");
+    }
   };
 
   return (
@@ -136,7 +174,7 @@ const ExperienceCreationPage = ({ addNewExperience }) => {
         <MenuItem value="Experiências Personalizadas">Experiências Personalizadas</MenuItem>
       </Select>
 
-      {/* 2. Onde o seu evento vai acontecer */}
+      {/* 2. Onde o evento vai acontecer? */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         2. Onde o seu evento vai acontecer?
       </Typography>
@@ -164,7 +202,7 @@ const ExperienceCreationPage = ({ addNewExperience }) => {
         required
       />
 
-      {/* 4. Envio de Imagem */}
+      {/* Upload de imagem */}
       <Box
         sx={{
           display: "flex",
@@ -199,7 +237,7 @@ const ExperienceCreationPage = ({ addNewExperience }) => {
         )}
       </Box>
 
-      {/* 5. Descrição do evento */}
+      {/* 5. Descrição */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         5. Descrição do evento
       </Typography>
@@ -259,7 +297,7 @@ const ExperienceCreationPage = ({ addNewExperience }) => {
         label="Estou de acordo com os Termos de uso e as Diretrizes da Comunidade."
       />
 
-      {/* 8. Definir Preço do Ingresso */}
+      {/* 8. Definir preço do ingresso */}
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         8. Definir Preço do Ingresso
       </Typography>
@@ -288,7 +326,26 @@ const ExperienceCreationPage = ({ addNewExperience }) => {
         />
       </Box>
 
-      {/* Botões */}
+      {/* 9. Escolher tamanho do Card */}
+      <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
+        9. Tamanho do Card
+      </Typography>
+      <Select
+        fullWidth
+        name="cardSize"
+        value={eventData.cardSize}
+        onChange={handleChange}
+        margin="normal"
+        displayEmpty
+      >
+        <MenuItem value="">
+          <em>Selecione o tamanho</em>
+        </MenuItem>
+        <MenuItem value="NORMAL">Normal</MenuItem>
+        <MenuItem value="LARGE">Large</MenuItem>
+      </Select>
+
+      {/* Botões de ação */}
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
         <Button variant="outlined" onClick={() => setPreviewOpen(true)}>
           Pré-visualizar
@@ -303,7 +360,7 @@ const ExperienceCreationPage = ({ addNewExperience }) => {
         </Button>
       </Box>
 
-      {/* MODAL DE PRÉ-VISUALIZAÇÃO */}
+      {/* Modal de pré-visualização */}
       <Modal open={previewOpen} onClose={() => setPreviewOpen(false)}>
         <Box
           sx={{
@@ -355,14 +412,11 @@ const ExperienceCreationPage = ({ addNewExperience }) => {
               >
                 Categoria: {eventData.category}
               </Typography>
-              {/* Pré-visualizar Ingresso */}
               <Box sx={{ mt: 2 }}>
                 <Typography variant="h6" color="secondary" sx={{ mb: 1 }}>
                   Ingresso Disponível
                 </Typography>
-                <Typography variant="body1">
-                  Tipo: Ingresso
-                </Typography>
+                <Typography variant="body1">Tipo: Ingresso</Typography>
                 <Typography variant="body1">
                   Preço: R$ {parseFloat(eventData.ticketPrice).toFixed(2)}
                 </Typography>
@@ -370,9 +424,21 @@ const ExperienceCreationPage = ({ addNewExperience }) => {
                   Taxa: R$ {parseFloat(eventData.ticketTax).toFixed(2)}
                 </Typography>
                 <Typography variant="body1">
-                  Total: R$ {(parseFloat(eventData.ticketPrice) + parseFloat(eventData.ticketTax)).toFixed(2)}
+                  Total:{" "}
+                  {(
+                    parseFloat(eventData.ticketPrice) +
+                    parseFloat(eventData.ticketTax)
+                  ).toFixed(2)}
                 </Typography>
               </Box>
+              <Typography
+                variant="caption"
+                color="primary"
+                sx={{ mt: 2 }}
+                display="block"
+              >
+                Tamanho do Card: {eventData.cardSize || "N/A"}
+              </Typography>
             </CardContent>
           </Card>
           <Button

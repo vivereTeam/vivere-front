@@ -10,7 +10,6 @@ const PORT = globalThis.process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, '../dist')));
 
-// Rotas
 app.get('/api/data', (req, res) => {
     res.json({ message: 'Dados da API' });
 });

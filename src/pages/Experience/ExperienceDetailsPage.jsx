@@ -698,7 +698,6 @@ function ExperienceDetailsPage() {
           </Box>
         </Drawer>
 
-        {/* Snackbar de notificação de compartilhamento */}
         <Snackbar
           open={showNotification}
           autoHideDuration={6000}
