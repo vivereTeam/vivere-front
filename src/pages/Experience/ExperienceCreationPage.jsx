@@ -14,9 +14,9 @@ import {
   CardContent,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { createEvento } from "../../services/api";
 
-// Função para mapear o texto do select de categoria para o enum do Prisma
 function mapCategoria(frontCategory) {
   switch (frontCategory) {
     case "Shows e Entretenimento":
@@ -55,18 +55,16 @@ const ExperienceCreationPage = () => {
     imagePreview: null,
     ticketPrice: "",
     ticketTax: "",
-    cardSize: "", // Novo campo para armazenar o tamanho do card
+    cardSize: "",
   });
 
   const [previewOpen, setPreviewOpen] = useState(false);
 
-  // Lida com mudanças nos campos de texto e selects
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEventData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Lida com upload de imagem (apenas preview local, sem upload real)
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -78,7 +76,6 @@ const ExperienceCreationPage = () => {
     }
   };
 
-  // Verifica se todos os campos obrigatórios estão preenchidos
   const isFormValid = () => {
     return (
       eventData.category &&
@@ -89,32 +86,46 @@ const ExperienceCreationPage = () => {
       eventData.agreementChecked &&
       eventData.ticketPrice &&
       eventData.ticketTax &&
-      eventData.cardSize // Se quiser obrigar o usuário a escolher
+      eventData.cardSize
     );
   };
 
-  // Ao clicar em "Publicar Evento"
   const handleSubmit = async () => {
     if (!isFormValid()) return;
 
-    // Monta o objeto no formato que o backend espera (campos do Prisma)
+    let finalImageUrl = "";
+    if (eventData.image) {
+      try {
+        const formData = new FormData();
+        formData.append("file", eventData.image);
+        const uploadResp = await axios.post("http://localhost:3000/eventos/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        finalImageUrl = uploadResp.data.imageUrl;
+      } catch (uploadError) {
+        console.error("Erro ao fazer upload da imagem:", uploadError);
+        alert("Falha no upload da imagem.");
+        return;
+      }
+    }
+
     const newEventData = {
       titulo: eventData.title,
       descricao: eventData.description || "Sem descrição",
       endereco: eventData.address,
       dataInicio: eventData.startDate,
       dataTermino: eventData.endDate,
-      ticketType: "INGRESSO", // Pode mudar se quiser
-      imagemUrl: eventData.imagePreview || "",
+      ticketType: "INGRESSO",
+      imagemUrl: finalImageUrl || "",
       preco: eventData.ticketPrice,
       categoria: mapCategoria(eventData.category),
-      // Usamos o valor que o usuário escolheu (NORMAL ou LARGE)
       cardSize: eventData.cardSize || "NORMAL",
     };
 
     try {
       await createEvento(newEventData);
-
       alert("Evento criado com sucesso!");
       navigate("/");
     } catch (error) {

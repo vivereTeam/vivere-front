@@ -67,7 +67,7 @@ const LargeExperienceCard = ({ event, removeExperience }) => {
         component="img"
         sx={{ 
           width: "70%",
-          height: "100%",    // faz a imagem ocupar toda a altura do card
+          height: "100%",
           objectFit: "cover"
         }}
         image={event.imagemUrl}
