@@ -55,6 +55,8 @@ const ExperienceCreationPage = () => {
   const navigate = useNavigate();
   const { userRole, loggedIn } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [isCreating, setIsCreating] = useState(false);
+  const [creationSuccess, setCreationSuccess] = useState(false);
 
   const [eventData, setEventData] = useState({
     category: "",
@@ -153,6 +155,8 @@ const ExperienceCreationPage = () => {
   const handleSubmit = async () => {
     if (!isFormValid()) return;
 
+    setIsCreating(true);
+
     let finalImageUrl = "";
     if (eventData.image) {
       try {
@@ -167,6 +171,7 @@ const ExperienceCreationPage = () => {
       } catch (uploadError) {
         console.error("Erro ao fazer upload da imagem:", uploadError);
         alert("Falha no upload da imagem.");
+        setIsCreating(false);
         return;
       }
     }
@@ -186,10 +191,12 @@ const ExperienceCreationPage = () => {
 
     try {
       await createEvento(newEventData);
-      alert("Evento criado com sucesso!");
-      navigate("/");
+      setIsCreating(false);
+      setCreationSuccess(true);
+      setPreviewOpen(true);
     } catch (error) {
       console.error("Erro ao criar evento:", error);
+      setIsCreating(false);
       alert("Ocorreu um erro ao criar o evento.");
     }
   };
@@ -411,7 +418,18 @@ const ExperienceCreationPage = () => {
         </Button>
       </Box>
 
-      <Modal open={previewOpen} onClose={() => setPreviewOpen(false)}>
+      <Modal 
+        open={previewOpen} 
+        disableEscapeKeyDown
+        BackdropProps={{
+          onClick: (e) => {
+            if (!creationSuccess) {
+              setPreviewOpen(false);
+            }
+          },
+          style: { cursor: creationSuccess ? 'default' : 'pointer' }
+        }}
+      >
         <Box
           sx={{
             maxWidth: "500px",
@@ -425,82 +443,135 @@ const ExperienceCreationPage = () => {
             overflowY: "auto",
           }}
         >
-          <Card>
-            {eventData.imagePreview && (
-              <CardMedia
-                component="img"
-                height="200"
-                image={eventData.imagePreview}
-                alt="Imagem do Evento"
-              />
-            )}
-            <CardContent>
-              <Typography variant="h5">
-                {eventData.title || "Nome do Evento"}
+          {creationSuccess ? (
+            <>
+              <Typography variant="h5" gutterBottom align="center">
+                Evento criado com sucesso!
               </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {eventData.startDate
-                  ? `Data de Início: ${new Date(eventData.startDate).toLocaleString()}`
-                  : "Data de Início não informada"}
+              <Typography variant="body1" align="center" sx={{ mb: 3 }}>
+                "{eventData.title}" foi criado e está disponível na plataforma.
               </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                {eventData.endDate
-                  ? `Data de Término: ${new Date(eventData.endDate).toLocaleString()}`
-                  : "Data de Término não informada"}
-              </Typography>
-              <Typography variant="subtitle2" color="textSecondary">
-                Local: {eventData.address || "Local não informado"}
-              </Typography>
-              <Typography variant="body2" sx={{ mt: 1 }}>
-                {eventData.description || "Descrição do evento..."}
-              </Typography>
-              <Typography
-                variant="caption"
+              <Button
+                fullWidth
+                variant="contained"
                 color="primary"
-                sx={{ mt: 2 }}
-                display="block"
+                onClick={() => navigate("/")}
               >
-                Categoria: {eventData.category}
-              </Typography>
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="h6" color="secondary" sx={{ mb: 1 }}>
-                  Ingresso Disponível
+                Voltar para a página inicial
+              </Button>
+            </>
+          ) : (
+            <Card>
+              {eventData.imagePreview && (
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={eventData.imagePreview}
+                  alt="Imagem do Evento"
+                />
+              )}
+              <CardContent>
+                <Typography variant="h5">
+                  {eventData.title || "Nome do Evento"}
                 </Typography>
-                <Typography variant="body1">Tipo: Ingresso</Typography>
-                <Typography variant="body1">
-                  Preço: R$ {parseFloat(eventData.ticketPrice).toFixed(2)}
+                <Typography variant="subtitle1" color="textSecondary">
+                  {eventData.startDate
+                    ? `Data de Início: ${new Date(eventData.startDate).toLocaleString()}`
+                    : "Data de Início não informada"}
                 </Typography>
-                <Typography variant="body1">
-                  Taxa: R$ {parseFloat(eventData.ticketTax).toFixed(2)}
+                <Typography variant="subtitle1" color="textSecondary">
+                  {eventData.endDate
+                    ? `Data de Término: ${new Date(eventData.endDate).toLocaleString()}`
+                    : "Data de Término não informada"}
                 </Typography>
-                <Typography variant="body1">
-                  Total:{" "}
-                  {(
-                    parseFloat(eventData.ticketPrice) +
-                    parseFloat(eventData.ticketTax)
-                  ).toFixed(2)}
+                <Typography variant="subtitle2" color="textSecondary">
+                  Local: {eventData.address || "Local não informado"}
                 </Typography>
-              </Box>
-              <Typography
-                variant="caption"
-                color="primary"
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  {eventData.description || "Descrição do evento..."}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="primary"
+                  sx={{ mt: 2 }}
+                  display="block"
+                >
+                  Categoria: {eventData.category}
+                </Typography>
+                <Box sx={{ mt: 2 }}>
+                  <Typography variant="h6" color="secondary" sx={{ mb: 1 }}>
+                    Ingresso Disponível
+                  </Typography>
+                  <Typography variant="body1">Tipo: Ingresso</Typography>
+                  <Typography variant="body1">
+                    Preço: R$ {parseFloat(eventData.ticketPrice).toFixed(2)}
+                  </Typography>
+                  <Typography variant="body1">
+                    Taxa: R$ {parseFloat(eventData.ticketTax).toFixed(2)}
+                  </Typography>
+                  <Typography variant="body1">
+                    Total:{" "}
+                    {(
+                      parseFloat(eventData.ticketPrice) +
+                      parseFloat(eventData.ticketTax)
+                    ).toFixed(2)}
+                  </Typography>
+                </Box>
+                <Typography
+                  variant="caption"
+                  color="primary"
+                  sx={{ mt: 2 }}
+                  display="block"
+                >
+                  Tamanho do Card: {eventData.cardSize || "N/A"}
+                </Typography>
+              </CardContent>
+              <Button
+                fullWidth
+                variant="contained"
                 sx={{ mt: 2 }}
-                display="block"
+                onClick={() => setPreviewOpen(false)}
               >
-                Tamanho do Card: {eventData.cardSize || "N/A"}
-              </Typography>
-            </CardContent>
-          </Card>
-          <Button
-            fullWidth
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={() => setPreviewOpen(false)}
-          >
-            Fechar
-          </Button>
+                Fechar
+              </Button>
+            </Card>
+          )}
         </Box>
       </Modal>
+
+      {isCreating && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 9999,
+          }}
+        >
+          <Box
+            sx={{
+              backgroundColor: 'white',
+              padding: '20px',
+              borderRadius: '8px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '16px',
+            }}
+          >
+            <CircularProgress color="primary" size={40} />
+            <Typography variant="h6" color="textPrimary">
+              Criando evento...
+            </Typography>
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };
