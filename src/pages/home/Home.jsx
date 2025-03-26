@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CardSlider from "../../components/CardSlider";
@@ -20,7 +20,8 @@ const formattedCategories = {
 
 const Home = () => {
   const navigate = useNavigate();
-  const [allExperiences, setAllExperiences] = useState({});
+  const [allExperiences, setAllExperiences] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEventos = async () => {
@@ -35,6 +36,9 @@ const Home = () => {
         setAllExperiences(groupedByCategory);
       } catch (error) {
         console.error("Erro ao buscar eventos:", error);
+        setAllExperiences({});
+      } finally {
+        setLoading(false);
       }
     };
     fetchEventos();
@@ -43,33 +47,30 @@ const Home = () => {
   const removeExperience = async (category, id) => {
     try {
       await deleteEvento(id);
-
-      setAllExperiences((prev) => {
-        const updatedCategory = prev[category].filter((exp) => exp.id !== id);
-
+      setAllExperiences(prev => {
+        const updatedCategory = prev[category].filter(exp => exp.id !== id);
         if (updatedCategory.length === 0) {
           const { [category]: _, ...rest } = prev;
           return rest;
         }
-
-        return {
-          ...prev,
-          [category]: updatedCategory,
-        };
+        return { ...prev, [category]: updatedCategory };
       });
     } catch (error) {
       console.error("Erro ao remover evento:", error);
     }
   };
 
-  const featuredExperiences = Object.values(allExperiences)
-    .flat()
-    .filter((exp) => exp.cardSize === "LARGE");
+  const featuredExperiences = allExperiences
+    ? Object.values(allExperiences)
+        .flat()
+        .filter(exp => exp.cardSize === "LARGE")
+    : [];
 
-  const categoriesWithNormalCards = Object.keys(allExperiences).filter(
-    (category) =>
-      allExperiences[category].some((exp) => exp.cardSize === "NORMAL")
-  );
+  const categoriesWithNormalCards = allExperiences
+    ? Object.keys(allExperiences).filter(category =>
+        allExperiences[category].some(exp => exp.cardSize === "NORMAL")
+      )
+    : [];
 
   return (
     <Box
@@ -106,43 +107,73 @@ const Home = () => {
         </div>
       </div>
 
-      {featuredExperiences.length > 0 && (
-        <div>
-          <h1>Experiência em Destaque</h1>
-          {featuredExperiences.length === 1 ? (
-            <LargeExperienceCard
-              event={featuredExperiences[0]}
-              removeExperience={removeExperience}
-            />
-          ) : (
-            <CardSlider
-              key={featuredExperiences.length}
-              experiences={featuredExperiences}
-              removeExperience={removeExperience}
-              isLargeCard
-            />
+      {loading ? (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '200px',
+            width: '100%'
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : allExperiences && Object.keys(allExperiences).length === 0 ? (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '200px',
+            width: '100%'
+          }}
+        >
+          <Typography variant="h5">
+            Nenhuma experiência disponível no momento
+          </Typography>
+        </Box>
+      ) : (
+        <>
+          {featuredExperiences.length > 0 && (
+            <div>
+              <h1>Experiência em Destaque</h1>
+              {featuredExperiences.length === 1 ? (
+                <LargeExperienceCard
+                  event={featuredExperiences[0]}
+                  removeExperience={removeExperience}
+                />
+              ) : (
+                <CardSlider
+                  key={featuredExperiences.length}
+                  experiences={featuredExperiences}
+                  removeExperience={removeExperience}
+                  isLargeCard
+                />
+              )}
+            </div>
           )}
-        </div>
+
+          {categoriesWithNormalCards.map(category => {
+            const formattedCategory = formattedCategories[category] || category;
+            const experiences = allExperiences[category] || [];
+            const normalCards = experiences.filter(
+              exp => exp.cardSize === "NORMAL"
+            );
+
+            return (
+              <div key={category}>
+                <h1>{formattedCategory}</h1>
+                <CardSlider
+                  key={normalCards.length}
+                  experiences={normalCards}
+                  removeExperience={removeExperience}
+                />
+              </div>
+            );
+          })}
+        </>
       )}
-
-      {categoriesWithNormalCards.map((category) => {
-        const formattedCategory = formattedCategories[category] || category;
-        const experiences = allExperiences[category] || [];
-        const normalCards = experiences.filter(
-          (exp) => exp.cardSize === "NORMAL"
-        );
-
-        return (
-          <div key={category}>
-            <h1>{formattedCategory}</h1>
-            <CardSlider
-              key={normalCards.length}
-              experiences={normalCards}
-              removeExperience={removeExperience}
-            />
-          </div>
-        );
-      })}
     </Box>
   );
 };
