@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Typography, Grid, CircularProgress } from "@mui/material";
 import ExperienceCard from "../../components/ExperienceCard";
 import { getEventosByCategory } from "../../services/api";
 
@@ -20,6 +20,7 @@ function CategoryPage() {
   const navigate = useNavigate();
   const categoriaFrontend = CATEGORIAS_FRONTEND[category] || "Categoria Desconhecida";
   const [filteredExperiences, setFilteredExperiences] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCategoryResults = async () => {
@@ -29,11 +30,21 @@ function CategoryPage() {
       } catch (error) {
         console.error("Erro ao buscar eventos por categoria:", error);
         setFilteredExperiences([]);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchCategoryResults();
   }, [category]);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px', width: '100%' }}>
+        <CircularProgress size={40} />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ padding: "20px", maxWidth: "1400px", margin: "0 auto" }}>
