@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Typography, Grid2 } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 import ExperienceCard from "../../components/ExperienceCard";
 import { searchEventos } from "../../services/api";
 
@@ -44,9 +44,9 @@ const SearchResultsPage = () => {
           Nenhuma experiência encontrada para a sua busca.
         </Typography>
       ) : (
-        <Grid2 container spacing={3}>
+        <Grid container spacing={3}>
           {filteredExperiences.map((experience) => (
-            <Grid2
+            <Grid
               item
               xs={12}
               sm={6}
@@ -61,9 +61,9 @@ const SearchResultsPage = () => {
                   removeExperience={() => {}}
                 />
               </Box>
-            </Grid2>
+            </Grid>
           ))}
-        </Grid2>
+        </Grid>
       )}
 
       <Box sx={{ marginTop: "20px" }}>
