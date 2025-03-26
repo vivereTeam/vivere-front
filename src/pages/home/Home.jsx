@@ -1,4 +1,4 @@
-import { Box, Typography, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CardSlider from "../../components/CardSlider";
@@ -138,18 +138,24 @@ const Home = () => {
           {featuredExperiences.length > 0 && (
             <div>
               <h1>Experiência em Destaque</h1>
-              {featuredExperiences.length === 1 ? (
-                <LargeExperienceCard
-                  event={featuredExperiences[0]}
-                  removeExperience={removeExperience}
-                />
-              ) : (
+              {featuredExperiences.length >= 2 ? (
                 <CardSlider
                   key={featuredExperiences.length}
                   experiences={featuredExperiences}
                   removeExperience={removeExperience}
                   isLargeCard
                 />
+              ) : (
+                <Grid container spacing={2}>
+                  {featuredExperiences.map(exp => (
+                    <Grid item xs={12} key={exp.id}>
+                      <LargeExperienceCard
+                        event={exp}
+                        removeExperience={removeExperience}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
               )}
             </div>
           )}
@@ -157,18 +163,29 @@ const Home = () => {
           {categoriesWithNormalCards.map(category => {
             const formattedCategory = formattedCategories[category] || category;
             const experiences = allExperiences[category] || [];
-            const normalCards = experiences.filter(
-              exp => exp.cardSize === "NORMAL"
-            );
+            const normalCards = experiences.filter(exp => exp.cardSize === "NORMAL");
 
             return (
               <div key={category}>
                 <h1>{formattedCategory}</h1>
-                <CardSlider
-                  key={normalCards.length}
-                  experiences={normalCards}
-                  removeExperience={removeExperience}
-                />
+                {normalCards.length >= 4 ? (
+                  <CardSlider
+                    key={normalCards.length}
+                    experiences={normalCards}
+                    removeExperience={removeExperience}
+                  />
+                ) : (
+                  <Grid container spacing={2}>
+                    {normalCards.map(exp => (
+                      <Grid item xs={4} key={exp.id}>
+                        <ExperienceCard
+                          event={exp}
+                          removeExperience={removeExperience}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
               </div>
             );
           })}
