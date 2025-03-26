@@ -15,6 +15,7 @@ import {
   Drawer,
   Divider,
   Grid,
+  CircularProgress
 } from "@mui/material";
 
 import {
@@ -149,17 +150,14 @@ function ExperienceDetailsPage() {
     return (
       <Box
         sx={{
-          minHeight: "80vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          bgcolor: "#f8f9fa",
-          px: 2,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '200px',
+          width: '100%'
         }}
       >
-        <Typography variant="h5" align="center">
-          Carregando evento...
-        </Typography>
+        <CircularProgress size={40} />
       </Box>
     );
   }
@@ -168,15 +166,13 @@ function ExperienceDetailsPage() {
     return (
       <Box
         sx={{
-          minHeight: "80vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          bgcolor: "#f8f9fa",
-          px: 2,
+          minHeight: '50vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
       >
-        <Typography variant="h5" align="center">
+        <Typography variant="h5">
           O evento solicitado não foi encontrado.
         </Typography>
       </Box>
@@ -716,8 +712,5 @@ function ExperienceDetailsPage() {
     </Box>
   );
 }
-
-ExperienceDetailsPage.propTypes = {
-};
 
 export default ExperienceDetailsPage;

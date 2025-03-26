@@ -132,6 +132,18 @@ function Cadastro() {
               />
             </div>
 
+            {mensagem && (
+              <p style={{ 
+                margin: '0 0 20px 0',
+                padding: '10px',
+                color: mensagem === 'Cadastro realizado com sucesso!' ? 'green' : 'red',
+                textAlign: 'center',
+                borderRadius: '4px',
+              }}>
+                {mensagem}
+              </p>
+            )}
+
             <div>
               <button
                 type="submit"
@@ -150,16 +162,6 @@ function Cadastro() {
               </button>
             </div>
           </form>
-
-          {mensagem && (
-            <p style={{ 
-              marginTop: '20px', 
-              color: mensagem === 'Cadastro realizado com sucesso!' ? 'green' : 'red',
-              textAlign: 'center',
-            }}>
-              {mensagem}
-            </p>
-          )}
 
           <div style={{ marginTop: '20px' }}>
             <a href="/login" style={{ color: '#007BFF', textDecoration: 'none' }}>Já possui uma conta? Faça login</a>

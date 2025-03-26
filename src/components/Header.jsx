@@ -1,13 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { AppBar, Toolbar, TextField, Box, Button, Link, IconButton } from "@mui/material";
+import { AppBar, Toolbar, TextField, Box, Button, Link, IconButton, Badge } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const { loggedIn, userName, userRole, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!location.pathname.startsWith('/search')) {
+      setSearchQuery('');
+    }
+  }, [location.pathname]);
 
   const handleSearch = () => {
     if (searchQuery.trim() !== '') {
@@ -24,6 +32,10 @@ const Header = () => {
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleCartClick = () => {
+    console.log('Carrinho clicado');
   };
 
   return (
@@ -142,6 +154,31 @@ const Header = () => {
             </>
           )}
 
+          {userRole === 'USER' && (
+            <Button
+              onClick={handleCartClick}
+              startIcon={
+                <Badge badgeContent={0} color="error">
+                  <ShoppingCartIcon />
+                </Badge>
+              }
+              sx={{
+                color: '#fffa00',
+                border: '1px solid rgba(255, 250, 0, 0.3)',
+                borderRadius: '4px',
+                padding: '6px 12px',
+                textTransform: 'none',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 250, 0, 0.1)',
+                  borderColor: '#fffa00',
+                },
+              }}
+            >
+              Carrinho
+            </Button>
+          )}
+          
           {loggedIn ? (
             <Button
               component={RouterLink}
