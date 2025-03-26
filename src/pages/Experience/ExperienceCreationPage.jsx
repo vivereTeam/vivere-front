@@ -79,6 +79,32 @@ const ExperienceCreationPage = () => {
     setLoading(false);
   }, []);
 
+  const validateDates = () => {
+    if (eventData.startDate && eventData.endDate) {
+      const start = new Date(eventData.startDate);
+      const end = new Date(eventData.endDate);
+      
+      if (start >= end) {
+        alert("Erro: A data de término deve ser posterior à data de início");
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const isFormValid = () => {
+    return (
+      eventData.category &&
+      eventData.title &&
+      eventData.address &&
+      eventData.startDate &&
+      eventData.endDate &&
+      eventData.agreementChecked &&
+      eventData.ticketPrice &&
+      eventData.ticketTax
+    );
+  };
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
@@ -139,21 +165,15 @@ const ExperienceCreationPage = () => {
     }
   };
 
-  const isFormValid = () => {
-    return (
-      eventData.category &&
-      eventData.title &&
-      eventData.address &&
-      eventData.startDate &&
-      eventData.endDate &&
-      eventData.agreementChecked &&
-      eventData.ticketPrice &&
-      eventData.ticketTax
-    );
-  };
-
   const handleSubmit = async () => {
-    if (!isFormValid()) return;
+    if (!isFormValid()) {
+      alert("Preencha todos os campos obrigatórios");
+      return;
+    }
+
+    if (!validateDates()) {
+      return;
+    }
 
     setIsCreating(true);
 
