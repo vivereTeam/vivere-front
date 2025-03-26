@@ -137,8 +137,7 @@ const ExperienceCreationPage = () => {
       eventData.endDate &&
       eventData.agreementChecked &&
       eventData.ticketPrice &&
-      eventData.ticketTax &&
-      eventData.cardSize
+      eventData.ticketTax
     );
   };
 
@@ -173,7 +172,7 @@ const ExperienceCreationPage = () => {
       imagemUrl: finalImageUrl || "",
       preco: eventData.ticketPrice,
       categoria: mapCategoria(eventData.category),
-      cardSize: eventData.cardSize || "NORMAL",
+      cardSize: eventData.cardSize === "GRANDE" ? "LARGE" : "NORMAL",
     };
 
     try {
@@ -201,9 +200,20 @@ const ExperienceCreationPage = () => {
         Criar Evento Presencial
       </Typography>
 
-      <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        1. Categoria
+      <Typography variant="h6" color="primary">
+        1. Informações Básicas
       </Typography>
+      <TextField
+        fullWidth
+        label="Nome do Evento"
+        name="title"
+        value={eventData.title}
+        onChange={handleChange}
+        margin="normal"
+        required
+        sx={{ mt: 2 }}
+      />
+
       <Select
         fullWidth
         name="category"
@@ -211,8 +221,9 @@ const ExperienceCreationPage = () => {
         onChange={handleChange}
         margin="normal"
         displayEmpty
+        sx={{ mt: 2 }}
       >
-        <MenuItem value="">
+        <MenuItem value="" disabled>
           <em>Selecione uma categoria</em>
         </MenuItem>
         <MenuItem value="Workshops e Aulas">Workshops e Aulas</MenuItem>
@@ -225,8 +236,20 @@ const ExperienceCreationPage = () => {
         <MenuItem value="Experiências Personalizadas">Experiências Personalizadas</MenuItem>
       </Select>
 
+      <TextField
+        fullWidth
+        label="Descrição"
+        name="description"
+        value={eventData.description}
+        onChange={handleChange}
+        margin="normal"
+        multiline
+        rows={4}
+        sx={{ mt: 2 }}
+      />
+
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        2. Onde o seu evento vai acontecer?
+        2. Local e Data
       </Typography>
       <TextField
         fullWidth
@@ -236,29 +259,38 @@ const ExperienceCreationPage = () => {
         onChange={handleChange}
         margin="normal"
         required
+        sx={{ mt: 2 }}
       />
+
+      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mt: 2 }}>
+        <TextField
+          fullWidth
+          type="datetime-local"
+          label="Data e Hora de Início"
+          name="startDate"
+          value={eventData.startDate}
+          onChange={handleChange}
+          margin="normal"
+          required
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          fullWidth
+          type="datetime-local"
+          label="Data e Hora de Término"
+          name="endDate"
+          value={eventData.endDate}
+          onChange={handleChange}
+          margin="normal"
+          required
+          InputLabelProps={{ shrink: true }}
+        />
+      </Box>
 
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        3. Informações básicas
+        3. Imagem do Evento
       </Typography>
-      <TextField
-        fullWidth
-        label="Nome do Evento"
-        name="title"
-        value={eventData.title}
-        onChange={handleChange}
-        margin="normal"
-        required
-      />
-
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          mt: 2,
-        }}
-      >
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mt: 2 }}>
         <input
           type="file"
           accept="image/*"
@@ -286,66 +318,9 @@ const ExperienceCreationPage = () => {
       </Box>
 
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        5. Descrição do evento
+        4. Configuração de Ingressos
       </Typography>
-      <TextField
-        fullWidth
-        label="Descrição"
-        name="description"
-        value={eventData.description}
-        onChange={handleChange}
-        margin="normal"
-        multiline
-        rows={4}
-      />
-
-      <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        6. Data e horário
-      </Typography>
-      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-        <TextField
-          fullWidth
-          type="datetime-local"
-          label="Data e Hora de Início"
-          name="startDate"
-          value={eventData.startDate}
-          onChange={handleChange}
-          margin="normal"
-          required
-          InputLabelProps={{ shrink: true }}
-        />
-        <TextField
-          fullWidth
-          type="datetime-local"
-          label="Data e Hora de Término"
-          name="endDate"
-          value={eventData.endDate}
-          onChange={handleChange}
-          margin="normal"
-          required
-          InputLabelProps={{ shrink: true }}
-        />
-      </Box>
-
-      <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        7. Responsabilidades
-      </Typography>
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={eventData.agreementChecked}
-            onChange={(e) =>
-              setEventData({ ...eventData, agreementChecked: e.target.checked })
-            }
-          />
-        }
-        label="Estou de acordo com os Termos de uso e as Diretrizes da Comunidade."
-      />
-
-      <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        8. Definir Preço do Ingresso
-      </Typography>
-      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mt: 2 }}>
         <TextField
           fullWidth
           label="Preço do Ingresso (R$)"
@@ -371,7 +346,7 @@ const ExperienceCreationPage = () => {
       </Box>
 
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
-        9. Tamanho do Card
+        5. Configurações Adicionais
       </Typography>
       <Select
         fullWidth
@@ -379,14 +354,39 @@ const ExperienceCreationPage = () => {
         value={eventData.cardSize}
         onChange={handleChange}
         margin="normal"
+        required
         displayEmpty
+        sx={{ mt: 2 }}
       >
-        <MenuItem value="">
-          <em>Selecione o tamanho</em>
+        <MenuItem value="" disabled>
+          <em>Selecione o tamanho do Card</em>
         </MenuItem>
-        <MenuItem value="NORMAL">Normal</MenuItem>
-        <MenuItem value="LARGE">Large</MenuItem>
+        <MenuItem value="NORMAL">Padrão</MenuItem>
+        <MenuItem value="LARGE">Grande</MenuItem>
       </Select>
+
+      <Box sx={{ display: 'flex', alignItems: 'center', mt: 3 }}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={eventData.agreementChecked}
+              onChange={(e) => setEventData({...eventData, agreementChecked: e.target.checked})}
+              sx={{ 
+                padding: '3px',
+                '& .MuiSvgIcon-root': { fontSize: 24 }
+              }}
+            />
+          }
+          label="Estou de acordo com os Termos de uso e as Diretrizes da Comunidade."
+          sx={{ 
+            m: 0,
+            '& .MuiTypography-root': { 
+              fontSize: '1rem',
+              lineHeight: '1.5'
+            }
+          }}
+        />
+      </Box>
 
       <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
         <Button variant="outlined" onClick={() => setPreviewOpen(true)}>
