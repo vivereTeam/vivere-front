@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -12,10 +12,12 @@ import {
   Card,
   CardMedia,
   CardContent,
+  CircularProgress
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { createEvento } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 
 function mapCategoria(frontCategory) {
   switch (frontCategory) {
@@ -42,6 +44,8 @@ function mapCategoria(frontCategory) {
 
 const ExperienceCreationPage = () => {
   const navigate = useNavigate();
+  const { userRole, loggedIn } = useAuth();
+  const [loading, setLoading] = useState(true);
 
   const [eventData, setEventData] = useState({
     category: "",
@@ -59,6 +63,54 @@ const ExperienceCreationPage = () => {
   });
 
   const [previewOpen, setPreviewOpen] = useState(false);
+
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+        <CircularProgress color="secondary" size={40} />
+      </Box>
+    );
+  }
+
+  if (!loggedIn || userRole !== "ADMIN") {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '60vh',
+          textAlign: 'center',
+          p: 3
+        }}
+      >
+        <Typography variant="h4" color="error" sx={{ mb: 2 }}>
+          Acesso Negado
+        </Typography>
+        <Typography variant="h6" sx={{ mb: 3 }}>
+          Você precisa ser um administrador para acessar esta página
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/')}
+          sx={{
+            px: 4,
+            py: 1.5,
+            fontSize: '1rem',
+            fontWeight: 600
+          }}
+        >
+          Voltar para a página inicial
+        </Button>
+      </Box>
+    );
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -130,7 +182,7 @@ const ExperienceCreationPage = () => {
       navigate("/");
     } catch (error) {
       console.error("Erro ao criar evento:", error);
-      alert("Ocorreu um erro ao criar o evento. Verifique se você está logado como ADMIN.");
+      alert("Ocorreu um erro ao criar o evento.");
     }
   };
 
