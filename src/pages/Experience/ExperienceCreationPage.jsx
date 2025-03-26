@@ -200,8 +200,10 @@ const ExperienceCreationPage = () => {
       titulo: eventData.title,
       descricao: eventData.description || "Sem descrição",
       endereco: eventData.address,
-      dataInicio: eventData.startDate,
-      dataTermino: eventData.endDate,
+      dataInicio: eventData.startDate ? 
+                  new Date(eventData.startDate).toISOString().slice(0, 16) : null,
+      dataTermino: eventData.endDate ? 
+                  new Date(eventData.endDate).toISOString().slice(0, 16) : null,
       ticketType: "INGRESSO",
       imagemUrl: finalImageUrl || "",
       preco: eventData.ticketPrice,
