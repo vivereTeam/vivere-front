@@ -42,6 +42,15 @@ function mapCategoria(frontCategory) {
   }
 }
 
+function mapCardSize(frontSize) {
+  switch (frontSize) {
+    case "LARGE":
+      return "LARGE";
+    default:
+      return "NORMAL";
+  }
+}
+
 const ExperienceCreationPage = () => {
   const navigate = useNavigate();
   const { userRole, loggedIn } = useAuth();
@@ -172,7 +181,7 @@ const ExperienceCreationPage = () => {
       imagemUrl: finalImageUrl || "",
       preco: eventData.ticketPrice,
       categoria: mapCategoria(eventData.category),
-      cardSize: eventData.cardSize === "GRANDE" ? "LARGE" : "NORMAL",
+      cardSize: mapCardSize(eventData.cardSize),
     };
 
     try {
