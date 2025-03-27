@@ -8,9 +8,11 @@ import {
   IconButton, 
   InputAdornment,
   Alert,
-  Link
+  Link,
+  CircularProgress
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { resetPassword } from '../../services/api';
 
 function ResetPassword() {
   const [email, setEmail] = useState('');
@@ -19,33 +21,40 @@ function ResetPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setIsSubmitting(true);
     
-    // Validações
     if (!email.includes('@')) {
       setError('Por favor, insira um email válido');
+      setIsSubmitting(false);
       return;
     }
 
     if (password.length < 8) {
       setError('A senha deve ter pelo menos 8 caracteres');
+      setIsSubmitting(false);
       return;
     }
 
     if (password !== confirmPassword) {
       setError('As senhas não coincidem');
+      setIsSubmitting(false);
       return;
     }
 
     try {
+      await resetPassword(email, password);
       setSuccess(`Senha atualizada com sucesso para ${email}`);
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
-      setError('Erro ao atualizar senha. Verifique o email informado.');
+      setError(err.response?.data?.error || 'Erro ao atualizar senha. Verifique o email informado.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -154,6 +163,7 @@ function ResetPassword() {
           fullWidth
           variant="contained"
           size="large"
+          disabled={isSubmitting}
           sx={{ 
             mt: 3, 
             mb: 2,
@@ -165,7 +175,7 @@ function ResetPassword() {
             transition: 'all 0.2s'
           }}
         >
-          Atualizar Senha
+          {isSubmitting ? <CircularProgress size={24} color="inherit" /> : 'Atualizar Senha'}
         </Button>
 
         <Link 

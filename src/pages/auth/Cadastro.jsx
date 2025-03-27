@@ -48,8 +48,8 @@ function Cadastro() {
       setPasswordError('As senhas não coincidem');
       return false;
     }
-    if (password.length < 6) {
-      setPasswordError('A senha deve ter pelo menos 6 caracteres');
+    if (password.length < 8) {
+      setPasswordError('A senha deve ter pelo menos 8 caracteres');
       return false;
     }
     setPasswordError('');
