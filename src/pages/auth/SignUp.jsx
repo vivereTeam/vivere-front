@@ -15,7 +15,7 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-function Cadastro() {
+function SignUp() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -251,4 +251,4 @@ function Cadastro() {
   );
 }
 
-export default Cadastro;
+export default SignUp;
