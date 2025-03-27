@@ -8,6 +8,7 @@ import EditEventPage from "../pages/experience/ExperienceEditPage";
 import SearchResultsPage from "../pages/home/SearchResultsPage";
 import Login from "../pages/home/Login";
 import Cadastro from "../pages/home/Cadastro";
+import ResetPassword from "../pages/home/ResetPassword";
 
 function AppRoutes({ allExperiences, addNewExperience, updateExperience, removeExperience }) {
   return (
@@ -42,6 +43,7 @@ function AppRoutes({ allExperiences, addNewExperience, updateExperience, removeE
 
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Cadastro />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
     </Routes>
   );
 }
