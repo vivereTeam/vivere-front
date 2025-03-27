@@ -6,9 +6,9 @@ import ExperienceCreationPage from "../pages/experience/ExperienceCreationPage";
 import ExperienceDetailsPage from "../pages/experience/ExperienceDetailsPage";
 import EditEventPage from "../pages/experience/ExperienceEditPage";
 import SearchResultsPage from "../pages/home/SearchResultsPage";
-import Login from "../pages/home/Login";
-import Cadastro from "../pages/home/Cadastro";
-import ResetPassword from "../pages/home/ResetPassword";
+import Login from "../pages/auth/Login";
+import Cadastro from "../pages/auth/Cadastro";
+import ResetPassword from "../pages/auth/ResetPassword";
 
 function AppRoutes({ allExperiences, addNewExperience, updateExperience, removeExperience }) {
   return (
