@@ -102,6 +102,7 @@ function Cadastro() {
         alignItems: 'center',
         minHeight: '100vh',
         bgcolor: 'background.paper',
+        backgroundImage: 'linear-gradient(to bottom right, #f5f7fa, #e4e8f0)',
         p: 2
       }}
     >

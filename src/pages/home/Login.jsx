@@ -1,142 +1,232 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { userLogin } from '../../services/api';
-import { IconButton, InputAdornment, TextField } from '@mui/material';
+import { 
+  TextField, 
+  Button, 
+  Typography, 
+  Box, 
+  IconButton, 
+  InputAdornment,
+  Alert,
+  Link,
+  CircularProgress
+} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
-    const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
+  const validateEmail = useCallback(() => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError('Formato de email inválido. Use: exemplo@dominio.com');
+      return false;
+    }
+    setEmailError('');
+    return true;
+  }, [email]);
 
-        try {
-            const response = await userLogin(email, password);
-            if (response.token) {
-                login(response.token, response.user.nome, response.user.role);
-                navigate('/');
-            }
-        } catch (err) {
-            setError('Email ou senha incorretos. Tente novamente.');
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+    
+    setError('');
+    setSuccess('');
+    setIsSubmitting(true);
 
-    return (
-        <div>
-            <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                minHeight: '100vh',
-                backgroundColor: '#f4f4f4',
-                fontFamily: "'Poppins', sans-serif",
-            }}>
-                <div style={{
-                    maxWidth: '400px',
-                    width: '100%',
-                    backgroundColor: 'white',
-                    padding: '30px',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                    textAlign: 'center',
-                }}>
-                    <h2 style={{ marginBottom: '20px' }}>Login</h2>
+    const isEmailValid = validateEmail();
 
-                    <form onSubmit={handleSubmit}>
-                        <div style={{ marginBottom: '20px' }}>
-                            <label htmlFor="email" style={{ display: 'block', marginBottom: '8px' }}>Email</label>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                placeholder="Digite seu email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                style={{
-                                    width: '100%',
-                                    padding: '12px',
-                                    fontSize: '16px',
-                                    borderRadius: '4px',
-                                    border: '1px solid #ccc',
-                                    boxSizing: 'border-box',
-                                }}
-                                required
-                            />
-                        </div>
+    if (!isEmailValid) {
+      setIsSubmitting(false);
+      return;
+    }
 
-                        <div style={{ marginBottom: '20px' }}>
-                            <label htmlFor="senha" style={{ display: 'block', marginBottom: '8px' }}>Senha</label>
-                            <TextField
-                                type={showPassword ? 'text' : 'password'}
-                                id="senha"
-                                name="senha"
-                                placeholder="Digite sua senha"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                fullWidth
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                onClick={handleClickShowPassword}
-                                                edge="end"
-                                            >
-                                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                style={{
-                                    fontSize: '16px',
-                                    borderRadius: '4px',
-                                }}
-                                required
-                            />
-                        </div>
+    try {
+      const response = await userLogin(email, password);
+      if (response.token) {
+        setSuccess('Login realizado com sucesso!');
+        login(response.token, response.user.nome, response.user.role);
+        setTimeout(() => navigate('/'), 1500);
+      }
+    } catch (err) {
+      if (err.response?.status === 401) {
+        setError('Credenciais inválidas. Verifique seu email e senha.');
+      } else if (err.response?.status === 429) {
+        setError('Muitas tentativas. Tente novamente mais tarde.');
+      } else {
+        setError('Erro ao fazer login. Tente novamente.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-                        {error && (
-                            <p style={{ color: 'red', marginBottom: '20px', textAlign: 'center' }}>
-                                {error}
-                            </p>
-                        )}
+  return (
+    <Box
+      sx={{
+        fontFamily: "'Poppins', sans-serif",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        bgcolor: 'background.paper',
+        p: 2,
+        backgroundImage: 'linear-gradient(to bottom right, #f5f7fa, #e4e8f0)'
+      }}
+    >
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{
+          width: '100%',
+          maxWidth: 450,
+          bgcolor: 'background.paper',
+          p: 4,
+          borderRadius: 2,
+          boxShadow: 3,
+          border: '1px solid rgba(0, 0, 0, 0.12)'
+        }}
+      >
+        <Typography 
+          variant="h5" 
+          component="h1" 
+          gutterBottom 
+          align="center" 
+          sx={{ 
+            fontWeight: 600,
+            mb: 3,
+          }}
+        >
+          Acesse sua conta
+        </Typography>
 
-                        <div>
-                            <button
-                                type="submit"
-                                style={{
-                                    padding: '12px 20px',
-                                    fontSize: '16px',
-                                    width: '100%',
-                                    backgroundColor: 'hsl(258, 79.80%, 23.30%)',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                Entrar
-                            </button>
-                        </div>
-                    </form>
+        <TextField
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={validateEmail}
+          error={!!emailError}
+          helperText={emailError}
+          fullWidth
+          margin="normal"
+          required
+          autoComplete="username"
+          sx={{ mb: 2 }}
+        />
 
-                    <div style={{ marginTop: '20px' }}>
-                        <a href="/register" style={{ color: '#007BFF', textDecoration: 'none' }}>Não tem uma conta? Cadastre-se</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
+        <TextField
+          label="Senha"
+          type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          fullWidth
+          margin="normal"
+          required
+          autoComplete="current-password"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                  aria-label="toggle password visibility"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          sx={{ mb: 2 }}
+        />
+
+        {error && (
+          <Alert severity="error" sx={{ my: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        {success && (
+          <Alert severity="success" sx={{ my: 2 }}>
+            {success}
+          </Alert>
+        )}
+
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          size="large"
+          disabled={isSubmitting}
+          sx={{ 
+            mt: 3, 
+            mb: 2,
+            height: 48,
+            '&:hover': {
+              transform: 'translateY(-1px)',
+              boxShadow: 2
+            },
+            transition: 'all 0.2s'
+          }}
+        >
+          {isSubmitting ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            'Entrar'
+          )}
+        </Button>
+
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between',
+          mt: 2,
+          flexDirection: { xs: 'column', sm: 'row' },
+          gap: 1
+        }}>
+          <Link 
+            href="/register" 
+            underline="hover"
+            sx={{ 
+              textAlign: 'center',
+              color: 'primary.main',
+              '&:hover': {
+                fontWeight: 500
+              }
+            }}
+          >
+            Criar nova conta
+          </Link>
+          <Link 
+            href="/reset-password" 
+            underline="hover"
+            sx={{ 
+              textAlign: 'center',
+              color: 'primary.main',
+              '&:hover': {
+                fontWeight: 500
+              }
+            }}
+          >
+            Recuperar senha
+          </Link>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
 
 export default Login;
