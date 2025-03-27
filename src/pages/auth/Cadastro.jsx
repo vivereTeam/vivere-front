@@ -64,6 +64,12 @@ function Cadastro() {
     setSuccess('');
     setIsSubmitting(true);
 
+    if (nome.length > 50) {
+      setError('O nome deve ter no máximo 50 caracteres');
+      setIsSubmitting(false);
+      return;
+    }
+
     const isEmailValid = validateEmail();
     const isPasswordValid = validatePassword();
 
@@ -125,10 +131,15 @@ function Cadastro() {
         <TextField
           label="Nome completo"
           value={nome}
-          onChange={(e) => setNome(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value.length <= 50) {
+              setNome(e.target.value);
+            }
+          }}
           fullWidth
           margin="normal"
           required
+          helperText={`${nome.length}/50 caracteres`}
         />
 
         <TextField
