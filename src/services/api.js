@@ -71,4 +71,12 @@ export const createAdmin = async (email, senha, nome, secretKey) => {
     return response.data;
 };
 
+export const resetPassword = async (email, newPassword) => {
+    const response = await api.post('/usuario/reset-password', { 
+      email, 
+      newPassword 
+    });
+    return response.data;
+  };
+
 export default api;
