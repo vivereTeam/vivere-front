@@ -79,4 +79,43 @@ export const resetPassword = async (email, newPassword) => {
     return response.data;
   };
 
+  export const getCart = async (usuarioId) => {
+    const response = await api.get(`/carrinho/${usuarioId}`, getAuthHeader());
+    return response.data;
+  };
+  
+  export const addCartItem = async (usuarioId, eventoId, quantidade) => {
+    const response = await api.post(
+      `/carrinho/${usuarioId}/itens`,
+      { eventoId, quantidade },
+      getAuthHeader()
+    );
+    return response.data;
+  };
+  
+  export const updateCartItem = async (itemId, quantidade) => {
+    const response = await api.put(
+      `/carrinho/itens/${itemId}`,
+      { quantidade },
+      getAuthHeader()
+    );
+    return response.data;
+  };
+  
+  export const removeCartItem = async (itemId) => {
+    const response = await api.delete(
+      `/carrinho/itens/${itemId}`,
+      getAuthHeader()
+    );
+    return response.data;
+  };
+  
+  export const clearCart = async (usuarioId) => {
+    const response = await api.delete(
+      `/carrinho/${usuarioId}/limpar`,
+      getAuthHeader()
+    );
+    return response.data;
+  };
+
 export default api;
