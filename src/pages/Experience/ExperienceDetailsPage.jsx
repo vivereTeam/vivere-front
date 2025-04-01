@@ -5,15 +5,11 @@ import {
   Container,
   Typography,
   Box,
-  List,
-  ListItem,
   IconButton,
   Chip,
   Stack,
   Snackbar,
   Alert,
-  Drawer,
-  Divider,
   Grid,
   CircularProgress,
 } from "@mui/material";
@@ -25,15 +21,11 @@ import {
   Schedule,
   Info,
   Star,
-  Close,
-  Remove,
-  Add,
   Edit,
-  ShoppingCart,
   ArrowBack,
   ConfirmationNumber,
   LocalActivity,
-  Favorite
+  Favorite,
 } from "@mui/icons-material";
 
 import { useParams, useNavigate } from "react-router-dom";
@@ -345,7 +337,6 @@ function ExperienceDetailsPage() {
                   {event.descricao}
                 </Typography>
               </Box>
-
               <Box sx={{ 
                 mb: 4,
                 p: 3,
@@ -395,25 +386,49 @@ function ExperienceDetailsPage() {
                       </Typography>
                     </Box>
                   </Box>
-                  
+
                   <Button
                     variant="contained"
                     color={event.ticketType === 'VIP' ? 'secondary' : 'primary'}
                     size="small"
+                    disabled={!loggedIn || userRole !== 'USER'}
                     sx={{ 
                       minWidth: 120,
                       fontWeight: 600,
-                      borderRadius: 2
-                    }}
-                    onClick={() => {
-                      alert(event.ticketType === 'GRATUITO' 
-                        ? 'Ingresso reservado com sucesso!' 
-                        : 'Compra simulada com sucesso!');
+                      borderRadius: 2,
+                      '&.Mui-disabled': {
+                        backgroundColor: 'grey.300',
+                        color: 'text.disabled'
+                      }
                     }}
                   >
                     {event.ticketType === 'GRATUITO' ? 'Reservar' : 'Comprar'}
                   </Button>
                 </Box>
+
+                {(!loggedIn || userRole !== 'USER') && (
+                  <Typography 
+                    variant="body2"
+                    sx={{
+                      color: 'error.main',
+                      textAlign: 'center',
+                      mt: 2,
+                      px: 2,
+                      py: 1,
+                      borderRadius: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 1
+                    }}
+                  >
+                    {!loggedIn ? (
+                        'Faça login para realizar a compra'
+                    ) : (
+                      'Apenas usuários comuns podem realizar compras'
+                    )}
+                  </Typography>
+                )}
               </Box>
 
                 <Box
