@@ -12,7 +12,7 @@ import {
   Card,
   CardMedia,
   CardContent,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -69,8 +69,8 @@ const ExperienceCreationPage = () => {
     image: null,
     imagePreview: null,
     ticketPrice: "",
-    ticketTax: "",
     cardSize: "",
+    ticketType: "INGRESSO"
   });
 
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -358,29 +358,35 @@ const ExperienceCreationPage = () => {
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
         4. Configuração de Ingressos
       </Typography>
-      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mt: 2 }}>
-        <TextField
+      
+      <Box sx={{ mt: 2 }}>
+        <Select
           fullWidth
-          label="Preço do Ingresso (R$)"
-          name="ticketPrice"
-          type="number"
-          value={eventData.ticketPrice}
+          name="ticketType"
+          value={eventData.ticketType}
           onChange={handleChange}
           margin="normal"
           required
-          inputProps={{ min: 0, step: "0.01" }}
-        />
-        <TextField
-          fullWidth
-          label="Taxa do Ingresso (R$)"
-          name="ticketTax"
-          type="number"
-          value={eventData.ticketTax}
-          onChange={handleChange}
-          margin="normal"
-          required
-          inputProps={{ min: 0, step: "0.01" }}
-        />
+        >
+          <MenuItem value="INGRESSO">Ingresso Padrão</MenuItem>
+          <MenuItem value="VIP">Ingresso VIP</MenuItem>
+          <MenuItem value="GRATUITO">Gratuito</MenuItem>
+        </Select>
+
+        {eventData.ticketType !== "GRATUITO" && (
+            <TextField
+            fullWidth
+            label="Preço do Ingresso (R$)"
+            name="ticketPrice"
+            type="number"
+            value={eventData.ticketPrice}
+            onChange={handleChange}
+            margin="normal"
+            required
+            inputProps={{ min: 0, step: "0.01" }}
+          />
+        )}
+
       </Box>
 
       <Typography variant="h6" color="primary" sx={{ mt: 3 }}>
