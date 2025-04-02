@@ -58,7 +58,7 @@ function Login() {
     try {
       const response = await userLogin(email, password);
       if (response.token) {
-        login(response.token, response.user.nome, response.user.role);
+        login(response.token, response.user.nome, response.user.role, response.user.id);
         navigate('/')
       }
     } catch (err) {

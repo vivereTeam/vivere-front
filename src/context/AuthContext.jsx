@@ -7,10 +7,11 @@ export const AuthProvider = ({ children }) => {
   const [userName, setUserName] = useState("");
   const [userRole, setUserRole] = useState("");
 
-  const login = (token, name, role) => {
+  const login = (token, name, role, id) => {
     localStorage.setItem("token", token);
     localStorage.setItem("userName", name);
     localStorage.setItem("userRole", role);
+    localStorage.setItem("userId", id);
     setLoggedIn(true);
     setUserName(name);
     setUserRole(role);
