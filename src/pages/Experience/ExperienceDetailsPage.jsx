@@ -30,8 +30,9 @@ import {
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getEventoById } from "../../services/api";
+import { getEventoById,addCartItem } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
+import { jwtDecode } from 'jwt-decode';  
 
 const formattedCategories = {
   SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
@@ -53,6 +54,9 @@ function ExperienceDetailsPage() {
   const [loading, setLoading] = useState(true);
 
   const [showNotification, setShowNotification] = useState(false);
+
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [addToCartSuccess, setAddToCartSuccess] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -109,6 +113,30 @@ function ExperienceDetailsPage() {
       </Box>
     );
   }
+
+  const handleAddToCart = async () => {
+    if (!loggedIn || userRole !== 'USER') return;
+  
+    setIsAddingToCart(true);
+    setAddToCartSuccess(false);
+  
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('Token não encontrado');
+  
+      const decoded = jwtDecode(token);
+      if (!decoded.userId) throw new Error('ID do usuário não encontrado no token');
+  
+      const response = await addCartItem(decoded.userId, event.id, 1);
+      setAddToCartSuccess(true);
+      setTimeout(() => setAddToCartSuccess(false), 3000);
+  
+    } catch (error) {
+      console.error("Erro ao adicionar item no carrinho:", error);
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
 
   if (!event) {
     return (
@@ -389,9 +417,14 @@ function ExperienceDetailsPage() {
 
                   <Button
                     variant="contained"
-                    color={event.ticketType === 'VIP' ? 'secondary' : 'primary'}
+                    color={
+                      addToCartSuccess 
+                        ? 'success' 
+                        : (event.ticketType === 'VIP' ? 'secondary' : 'primary')
+                    }
                     size="small"
-                    disabled={!loggedIn || userRole !== 'USER'}
+                    disabled={!loggedIn || userRole !== 'USER' || isAddingToCart}
+                    onClick={handleAddToCart}
                     sx={{ 
                       minWidth: 120,
                       fontWeight: 600,
@@ -399,10 +432,22 @@ function ExperienceDetailsPage() {
                       '&.Mui-disabled': {
                         backgroundColor: 'grey.300',
                         color: 'text.disabled'
+                      },
+                      '&:hover': {
+                        transform: addToCartSuccess ? 'none' : 'scale(1.03)',
+                        transition: 'transform 0.2s'
                       }
                     }}
                   >
-                    {event.ticketType === 'GRATUITO' ? 'Reservar' : 'Comprar'}
+                    {isAddingToCart ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : addToCartSuccess ? (
+                      '✓ Adicionado!'
+                    ) : event.ticketType === 'GRATUITO' ? (
+                      'Reservar'
+                    ) : (
+                      'Comprar'
+                    )}
                   </Button>
                 </Box>
 
