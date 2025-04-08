@@ -35,7 +35,7 @@ const Header = () => {
   };
 
   const handleCartClick = () => {
-    console.log('Carrinho clicado');
+    navigate('/cart');
   };
 
   return (
