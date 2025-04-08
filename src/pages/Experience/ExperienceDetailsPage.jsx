@@ -128,11 +128,15 @@ function ExperienceDetailsPage() {
       if (!decoded.userId) throw new Error('ID do usuário não encontrado no token');
   
       const response = await addCartItem(decoded.userId, event.id, 1);
+      
       setAddToCartSuccess(true);
+      
       setTimeout(() => setAddToCartSuccess(false), 3000);
+      console.log('Item adicionado ao carrinho:', response);
   
     } catch (error) {
       console.error("Erro ao adicionar item no carrinho:", error);
+      setError('Erro ao adicionar ao carrinho');
     } finally {
       setIsAddingToCart(false);
     }
