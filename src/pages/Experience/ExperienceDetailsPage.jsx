@@ -5,17 +5,13 @@ import {
   Container,
   Typography,
   Box,
-  List,
-  ListItem,
   IconButton,
   Chip,
   Stack,
   Snackbar,
   Alert,
-  Drawer,
-  Divider,
   Grid,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 
 import {
@@ -25,18 +21,18 @@ import {
   Schedule,
   Info,
   Star,
-  Close,
-  Remove,
-  Add,
   Edit,
-  ShoppingCart,
   ArrowBack,
+  ConfirmationNumber,
+  LocalActivity,
+  Favorite,
 } from "@mui/icons-material";
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getEventoById } from "../../services/api";
+import { getEventoById,addCartItem } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
+import { jwtDecode } from 'jwt-decode';  
 
 const formattedCategories = {
   SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
@@ -57,9 +53,10 @@ function ExperienceDetailsPage() {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [addToCartSuccess, setAddToCartSuccess] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -75,7 +72,8 @@ function ExperienceDetailsPage() {
           endereco: data.endereco,
           descricao: data.descricao,
           isExclusive: false,
-          tickets: [],
+          ticketType: data.ticketType,
+          preco: data.preco,
         };
 
         setEvent(mappedEvent);
@@ -100,52 +98,6 @@ function ExperienceDetailsPage() {
     navigate(`/edit/${eventId}`);
   };
 
-  const handleAddToCart = (ticket) => {
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.type === ticket.type);
-      if (existing) {
-        return prev.map((item) =>
-          item.type === ticket.type
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [...prev, { ...ticket, quantity: 1 }];
-    });
-    setCartOpen(true);
-  };
-
-  const handleQuantityChange = (ticketType, operation) => {
-    setCartItems((prev) => {
-      const newItems = [...prev];
-      const index = newItems.findIndex((item) => item.type === ticketType);
-      if (index === -1) return newItems;
-
-      if (operation === "decrement") {
-        if (newItems[index].quantity === 1) {
-          newItems.splice(index, 1);
-        } else {
-          newItems[index] = {
-            ...newItems[index],
-            quantity: newItems[index].quantity - 1,
-          };
-        }
-      } else if (operation === "increment") {
-        newItems[index] = {
-          ...newItems[index],
-          quantity: newItems[index].quantity + 1,
-        };
-      }
-      return newItems;
-    });
-  };
-
-  const calculateTotal = () =>
-    cartItems.reduce(
-      (total, item) => total + (item.price + item.tax) * item.quantity,
-      0
-    );
-
   if (loading) {
     return (
       <Box
@@ -161,6 +113,34 @@ function ExperienceDetailsPage() {
       </Box>
     );
   }
+
+  const handleAddToCart = async () => {
+    if (!loggedIn || userRole !== 'USER') return;
+  
+    setIsAddingToCart(true);
+    setAddToCartSuccess(false);
+  
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('Token não encontrado');
+  
+      const decoded = jwtDecode(token);
+      if (!decoded.userId) throw new Error('ID do usuário não encontrado no token');
+  
+      const response = await addCartItem(decoded.userId, event.id, 1);
+      
+      setAddToCartSuccess(true);
+      
+      setTimeout(() => setAddToCartSuccess(false), 3000);
+      console.log('Item adicionado ao carrinho:', response);
+  
+    } catch (error) {
+      console.error("Erro ao adicionar item no carrinho:", error);
+      setError('Erro ao adicionar ao carrinho');
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
 
   if (!event) {
     return (
@@ -250,23 +230,6 @@ function ExperienceDetailsPage() {
               }}
             >
               <Share />
-            </IconButton>
-            <IconButton
-              onClick={() => setCartOpen(true)}
-              aria-label="Abrir carrinho"
-              color="success"
-              sx={{
-                border: "2px solid",
-                borderColor: "success.main",
-                "&:hover": {
-                  bgcolor: "success.main",
-                  color: "white",
-                  transform: "scale(1.1)",
-                },
-                transition: "all 0.3s",
-              }}
-            >
-              <ShoppingCart />
             </IconButton>
           </Box>
         </Box>
@@ -406,293 +369,158 @@ function ExperienceDetailsPage() {
                   {event.descricao}
                 </Typography>
               </Box>
-
-              <Box
-                sx={{
-                  mb: 4,
-                  p: 3,
-                  bgcolor: "white",
-                  borderRadius: 2,
-                  boxShadow: 1,
-                  border: "2px solid",
-                  borderColor: "secondary.light",
-                }}
-              >
-                <Typography
-                  variant="h5"
-                  sx={{
-                    mb: 3,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    color: "secondary.main",
-                  }}
-                >
-                  <Star fontSize="large" />
-                  Ingresso Disponível
+              <Box sx={{ 
+                mb: 4,
+                p: 3,
+                bgcolor: 'background.paper',
+                borderRadius: 2,
+                boxShadow: 1,
+                border: '1px solid',
+                borderColor: 'divider'
+              }}>
+                <Typography variant="h5" sx={{ 
+                  mb: 3,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  color: 'text.primary'
+                }}>
+                  <ConfirmationNumber fontSize="large" color="primary" />
+                  {event.ticketType === 'GRATUITO' ? 'Participação Gratuita' : 'Ingresso Disponível'}
                 </Typography>
 
-                <List>
-                  {event.tickets?.map((ticket) => (
-                    <ListItem
-                      key={`ticket-${ticket.id}`}
+                <Box sx={{
+                  p: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  bgcolor: 'background.default',
+                  borderRadius: 2,
+                  border: '1px solid',
+                  borderColor: event.ticketType === 'VIP' ? 'secondary.main' : 'divider',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    {event.ticketType === 'VIP' ? (
+                      <Star color="secondary" fontSize="large" />
+                    ) : event.ticketType === 'GRATUITO' ? (
+                      <Favorite color="error" fontSize="large" />
+                    ) : (
+                      <LocalActivity color="primary" fontSize="large" />
+                    )}
+                    <Box>
+                      <Typography variant="subtitle1" fontWeight={600}>
+                        {event.ticketType === 'VIP' ? 'Ingresso VIP' : 
+                        event.ticketType === 'GRATUITO' ? 'Ingresso Gratuito' : 'Ingresso Padrão'}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {event.ticketType === 'GRATUITO' ? 'Grátis' : `R$ ${event.preco?.toFixed(2) || '0,00'}`}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Button
+                    variant="contained"
+                    color={
+                      addToCartSuccess 
+                        ? 'success' 
+                        : (event.ticketType === 'VIP' ? 'secondary' : 'primary')
+                    }
+                    size="small"
+                    disabled={!loggedIn || userRole !== 'USER' || isAddingToCart}
+                    onClick={handleAddToCart}
+                    sx={{ 
+                      minWidth: 120,
+                      fontWeight: 600,
+                      borderRadius: 2,
+                      '&.Mui-disabled': {
+                        backgroundColor: 'grey.300',
+                        color: 'text.disabled'
+                      },
+                      '&:hover': {
+                        transform: addToCartSuccess ? 'none' : 'scale(1.03)',
+                        transition: 'transform 0.2s'
+                      }
+                    }}
+                  >
+                    {isAddingToCart ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : addToCartSuccess ? (
+                      '✓ Adicionado!'
+                    ) : event.ticketType === 'GRATUITO' ? (
+                      'Reservar'
+                    ) : (
+                      'Comprar'
+                    )}
+                  </Button>
+                </Box>
+
+                {(!loggedIn || userRole !== 'USER') && (
+                  <Typography 
+                    variant="body2"
+                    sx={{
+                      color: 'error.main',
+                      textAlign: 'center',
+                      mt: 2,
+                      px: 2,
+                      py: 1,
+                      borderRadius: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 1
+                    }}
+                  >
+                    {!loggedIn ? (
+                        'Faça login para realizar a compra'
+                    ) : (
+                      'Apenas usuários comuns podem realizar compras'
+                    )}
+                  </Typography>
+                )}
+              </Box>
+
+                <Box
+                  sx={{
+                    p: 3,
+                    bgcolor: "success.light",
+                    borderRadius: 2,
+                    textAlign: "center",
+                    boxShadow: 1,
+                    mb: 4
+                  }}
+                >
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={2}
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <Box
                       sx={{
-                        p: 0,
-                        mb: 2,
-                        bgcolor: "background.paper",
-                        borderRadius: 2,
-                        overflow: "hidden",
+                        bgcolor: "white",
+                        p: 2,
+                        borderRadius: "50%",
                         boxShadow: 1,
-                        transition: "box-shadow 0.2s",
-                        "&:hover": {
-                          boxShadow: 3,
-                        },
+                        fontSize: "1.5rem",
                       }}
                     >
-                      <Box
-                        sx={{
-                          width: "100%",
-                          p: 2,
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          bgcolor: ticket.soldOut ? "action.hover" : "transparent",
-                        }}
-                      >
-                        <Box>
-                          <Typography
-                            variant="body1"
-                            sx={{
-                              fontWeight: 600,
-                              color: ticket.soldOut
-                                ? "text.disabled"
-                                : "text.primary",
-                            }}
-                          >
-                            {ticket.type}
-                          </Typography>
-                          <Typography
-                            variant="h6"
-                            sx={{
-                              color: ticket.soldOut
-                                ? "text.disabled"
-                                : "primary.main",
-                              fontWeight: 700,
-                            }}
-                          >
-                            R$ {(ticket.price + ticket.tax).toFixed(2)}
-                          </Typography>
-                        </Box>
-                        {ticket.soldOut ? (
-                          <Chip
-                            label="ESGOTADO"
-                            color="error"
-                            sx={{
-                              fontWeight: 700,
-                              px: 2,
-                              borderRadius: 1,
-                            }}
-                          />
-                        ) : (
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={() => handleAddToCart(ticket)}
-                            sx={{
-                              px: 4,
-                              fontWeight: 700,
-                              borderRadius: 2,
-                              textTransform: "uppercase",
-                              letterSpacing: "0.5px",
-                            }}
-                          >
-                            Comprar
-                          </Button>
-                        )}
-                      </Box>
-                    </ListItem>
-                  ))}
-                </List>
-
-                <Typography
-                  variant="body2"
-                  sx={{
-                    textAlign: "center",
-                    color: "text.secondary",
-                    fontStyle: "italic",
-                  }}
-                >
-                  * Preços incluem taxas administrativas
-                </Typography>
-              </Box>
-
-              <Box
-                sx={{
-                  p: 3,
-                  bgcolor: "success.light",
-                  borderRadius: 2,
-                  textAlign: "center",
-                  boxShadow: 1,
-                }}
-              >
-                <Stack
-                  direction={{ xs: "column", sm: "row" }}
-                  spacing={2}
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Box
-                    sx={{
-                      bgcolor: "white",
-                      p: 2,
-                      borderRadius: "50%",
-                      boxShadow: 1,
-                      fontSize: "1.5rem",
-                    }}
-                  >
-                    🔒
-                  </Box>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontWeight: 600,
-                      color: "success.dark",
-                    }}
-                  >
-                    Compra 100% segura • Reembolso garantido
-                  </Typography>
-                </Stack>
-              </Box>
+                      🔒
+                    </Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: 600,
+                        color: "success.dark",
+                      }}
+                    >
+                      Compra 100% segura • Reembolso garantido
+                    </Typography>
+                  </Stack>
+                </Box>
             </Box>
           </Grid>
         </Grid>
-
-        <Drawer
-          anchor="right"
-          open={cartOpen}
-          onClose={() => setCartOpen(false)}
-          sx={{
-            "& .MuiDrawer-paper": {
-              width: { xs: "100%", sm: 400 },
-              padding: 3,
-            },
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 3,
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 700 }}>
-              Meu Carrinho ({cartItems.length})
-            </Typography>
-            <IconButton onClick={() => setCartOpen(false)} aria-label="Fechar carrinho">
-              <Close />
-            </IconButton>
-          </Box>
-
-          <Divider />
-
-          <List sx={{ flexGrow: 1, mt: 2 }}>
-            {cartItems.map((item) => (
-              <ListItem
-                key={`cart-item-${item.id}`}
-                sx={{
-                  py: 2,
-                  borderBottom: "1px solid",
-                  borderColor: "divider",
-                }}
-              >
-                <Box sx={{ width: "100%" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      mb: 1,
-                    }}
-                  >
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                      {item.type}
-                    </Typography>
-                    <IconButton
-                      onClick={() => handleQuantityChange(item.type, "decrement")}
-                      size="small"
-                      aria-label="Remover item"
-                    >
-                      <Close fontSize="small" />
-                    </IconButton>
-                  </Box>
-
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <IconButton
-                        onClick={() => handleQuantityChange(item.type, "decrement")}
-                        size="small"
-                        disabled={item.quantity === 1}
-                        aria-label="Diminuir quantidade"
-                      >
-                        <Remove fontSize="small" />
-                      </IconButton>
-                      <Typography variant="body1">{item.quantity}</Typography>
-                      <IconButton
-                        onClick={() => handleQuantityChange(item.type, "increment")}
-                        size="small"
-                        aria-label="Aumentar quantidade"
-                      >
-                        <Add fontSize="small" />
-                      </IconButton>
-                    </Box>
-
-                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                      R$ {((item.price + item.tax) * item.quantity).toFixed(2)}
-                    </Typography>
-                  </Box>
-                </Box>
-              </ListItem>
-            ))}
-          </List>
-
-          <Divider sx={{ mt: 2 }} />
-
-          <Box sx={{ mt: 3 }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                Total:
-              </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                R$ {calculateTotal().toFixed(2)}
-              </Typography>
-            </Box>
-
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              size="large"
-              disabled={cartItems.length === 0}
-              sx={{
-                borderRadius: 2,
-                py: 1.5,
-                textTransform: "uppercase",
-                fontWeight: 700,
-                letterSpacing: "0.5px",
-                fontSize: "1rem",
-              }}
-            >
-              Finalizar Compra
-            </Button>
-          </Box>
-        </Drawer>
 
         <Snackbar
           open={showNotification}

@@ -58,9 +58,8 @@ function Login() {
     try {
       const response = await userLogin(email, password);
       if (response.token) {
-        setSuccess('Login realizado com sucesso!');
-        login(response.token, response.user.nome, response.user.role);
-        setTimeout(() => navigate('/'), 1500);
+        login(response.token, response.user.nome, response.user.role, response.user.id);
+        navigate('/')
       }
     } catch (err) {
       if (err.response?.status === 401) {

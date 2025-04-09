@@ -9,6 +9,7 @@ import SearchResultsPage from "../pages/home/SearchResultsPage";
 import Login from "../pages/auth/Login";
 import SignUp from "../pages/auth/SignUp";
 import ResetPassword from "../pages/auth/ResetPassword";
+import CartPage from "../pages/cart/CartPage"
 
 function AppRoutes({ allExperiences, addNewExperience, updateExperience, removeExperience }) {
   return (
@@ -44,6 +45,8 @@ function AppRoutes({ allExperiences, addNewExperience, updateExperience, removeE
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<SignUp />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+
+      <Route path="/cart" element={<CartPage />} />
     </Routes>
   );
 }
