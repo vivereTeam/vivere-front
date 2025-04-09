@@ -170,8 +170,6 @@ Siga os passos abaixo para configurar o projeto localmente:
 
 ## 🌐 Equipe de Desenvolvimento
 <!-- readme: collaborators,contributors -start -->
-<div align="center">
-
 <table>
 	<tbody>
 		<tr>
@@ -211,8 +209,6 @@ Siga os passos abaixo para configurar o projeto localmente:
                 </a>
             </td>
 		</tr>
-	</tbody>
+	<tbody>
 </table>
-
-</div>
 <!-- readme: collaborators,contributors -end -->
