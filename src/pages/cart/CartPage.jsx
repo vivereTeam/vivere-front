@@ -9,7 +9,8 @@ import {
   CircularProgress,
   Alert,
   Divider,
-  useTheme
+  useTheme,
+  Snackbar
 } from '@mui/material';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +25,8 @@ const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const fetchCart = async () => {
     try {
@@ -61,9 +64,24 @@ const CartPage = () => {
     }, 0);
   };
 
-  const handleCheckout = () => {
-    console.log("Finalizar compra clicado - Placeholder");
-    alert("Checkout ainda não implementado!");
+  const handleCheckout = async () => {
+    try {
+      setCheckoutLoading(true);
+      // Limpa o carrinho no backend
+      await clearCart(userId);
+      // Atualiza o estado local
+      setCartItems([]);
+      // Mostra mensagem de sucesso
+      setSuccessMessage('Compra realizada com sucesso!');
+    } catch (err) {
+      setError('Erro ao finalizar compra');
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSuccessMessage(null);
   };
 
   if (!loggedIn || userRole !== 'USER') {
@@ -161,10 +179,12 @@ const CartPage = () => {
             mb: 3,
             color: theme.palette.primary.main
           }}>
-            Seu carrinho está vazio
+            {successMessage ? 'Compra realizada com sucesso!' : 'Seu carrinho está vazio'}
           </Typography>
           <Typography variant="body1" sx={{ mb: 3, color: 'text.secondary' }}>
-            Adicione experiências incríveis ao seu carrinho e comece sua aventura!
+            {successMessage 
+              ? 'Obrigado por sua compra! Volte sempre para novas experiências.' 
+              : 'Adicione experiências incríveis ao seu carrinho e comece sua aventura!'}
           </Typography>
           <Button 
             variant="contained"
@@ -221,7 +241,7 @@ const CartPage = () => {
                 size="large"
                 fullWidth
                 onClick={handleCheckout}
-                disabled={loading}
+                disabled={checkoutLoading}
                 sx={{
                   py: 2,
                   backgroundColor: '#fffa00',
@@ -238,9 +258,9 @@ const CartPage = () => {
                   },
                   transition: 'all 0.3s ease'
                 }}
-                startIcon={loading ? null : <ShoppingCartCheckoutIcon />}
+                startIcon={checkoutLoading ? null : <ShoppingCartCheckoutIcon />}
               >
-                {loading ? (
+                {checkoutLoading ? (
                   <CircularProgress size={24} sx={{ color: theme.palette.primary.main }} />
                 ) : (
                   'Finalizar Compra'
@@ -250,6 +270,21 @@ const CartPage = () => {
           </Paper>
         </>
       )}
+
+      <Snackbar
+        open={!!successMessage}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
