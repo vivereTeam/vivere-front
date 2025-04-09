@@ -80,7 +80,7 @@
 
 O sistema possui uma API completa desenvolvida em Node.js com Express e PostgreSQL. Consulte o repositório do backend para documentação técnica completa:
 
-🔗 [Repositório do Backend Vivere+](https://github.com/J0aoPaulo/vivere-backend)
+🔗 [Repositório do Backend Vivere+](https://github.com/vivereTeam/vivere-back)
 
 **Principais recursos:**
 - API RESTful com endpoints documentados (Swagger)
