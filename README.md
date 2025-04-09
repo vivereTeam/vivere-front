@@ -118,6 +118,13 @@ Siga os passos abaixo para configurar o projeto localmente:
                     <sub><b>David Ericson</b></sub>
                 </a>
             </td>
+            <td align="center">
+                <a href="https://github.com/GuilhermeMCarneiro">
+                    <img src="https://avatars.githubusercontent.com/u/146294977?v=4" width="100;" alt="GuilhermeMCarneiro"/>
+                    <br />
+                    <sub><b>GuilhermeMCarneiro</b></sub>
+                </a>
+            </td>
 		</tr>
 	<tbody>
 </table>
