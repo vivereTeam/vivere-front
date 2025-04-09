@@ -1,4 +1,3 @@
-// src/pages/Experience/ExperienceDetailsPage.jsx
 import {
   Button,
   Card,
@@ -6,16 +5,13 @@ import {
   Container,
   Typography,
   Box,
-  List,
-  ListItem,
   IconButton,
   Chip,
   Stack,
   Snackbar,
   Alert,
-  Drawer,
-  Divider,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 
 import {
@@ -25,53 +21,71 @@ import {
   Schedule,
   Info,
   Star,
-  Close,
-  Remove,
-  Add,
   Edit,
-  ShoppingCart,
   ArrowBack,
+  ConfirmationNumber,
+  LocalActivity,
+  Favorite,
 } from "@mui/icons-material";
 
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import PropTypes from 'prop-types';
+import { getEventoById,addCartItem } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
+import { jwtDecode } from 'jwt-decode';  
 
-function ExperienceDetailsPage({ allExperiences, updateExperience }) {
-  const { eventId } = useParams(); // Pega o ID da rota (/event/:eventId)
+const formattedCategories = {
+  SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
+  WORKSHOPS_AULAS: "Workshops e Aulas",
+  VIAGENS_TURISMO: "Viagens e Turismo",
+  AVENTURA_ADRENALINA: "Aventura e Adrenalina",
+  RELAXAMENTO_BEM_ESTAR: "Relaxamento e Bem-Estar",
+  GASTRONOMIA_DEGUSTACOES: "Gastronomia e Degustações",
+  INFANTIL_FAMILIAR: "Infantil e Familiar",
+  EXPERIENCIAS_PERSONALIZADAS: "Experiências Personalizadas",
+};
+
+function ExperienceDetailsPage() {
+  const { eventId } = useParams();
   const navigate = useNavigate();
+  const { loggedIn, userRole } = useAuth();
 
-  // Carrinho de compras (tickets)
-  const [cartOpen, setCartOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Notificação (ao copiar link)
   const [showNotification, setShowNotification] = useState(false);
 
-  // Buscar evento no objeto allExperiences
-  const event = findEventById(allExperiences, eventId);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [addToCartSuccess, setAddToCartSuccess] = useState(false);
 
-  // Se não encontra o evento, poderíamos exibir mensagem ou redirecionar
   useEffect(() => {
-    if (!event) {
-      console.warn("Evento não encontrado para ID:", eventId);
-    }
-  }, [event, eventId]);
+    const fetchEvent = async () => {
+      try {
+        const data = await getEventoById(eventId);
+        const mappedEvent = {
+          id: data.id,
+          categoria: formattedCategories[data.categoria] || data.categoria,
+          titulo: data.titulo,
+          imagemUrl: data.imagemUrl,
+          dataInicio: data.dataInicio,
+          dataTermino: data.dataTermino,
+          endereco: data.endereco,
+          descricao: data.descricao,
+          isExclusive: false,
+          ticketType: data.ticketType,
+          preco: data.preco,
+        };
 
-  // Função auxiliar: percorre todas as categorias e procura o ID
-  function findEventById(all, id) {
-    for (const category of Object.keys(all)) {
-      // all[category] é um array de eventos
-      const found = all[category].find((e) => e.id.toString() === id.toString());
-      if (found) {
-        // Podemos devolver o evento com a categoria embutida
-        return { ...found, category };
+        setEvent(mappedEvent);
+      } catch (error) {
+        console.error("Erro ao buscar evento por ID:", error);
+      } finally {
+        setLoading(false);
       }
-    }
-    return null;
-  }
+    };
+    fetchEvent();
+  }, [eventId]);
 
-  // Compartilhar (copia a URL atual)
   const handleShare = () => {
     const url = window.location.href;
     navigator.clipboard
@@ -80,86 +94,74 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
       .catch((err) => console.error("Falha ao copiar:", err));
   };
 
-  // Editar evento
   const handleEdit = () => {
-    navigate(`/edit/${eventId}`); // Removido o estado
+    navigate(`/edit/${eventId}`);
   };
 
-  // Adicionar ingresso ao carrinho
-  const handleAddToCart = (ticket) => {
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.type === ticket.type);
-      if (existing) {
-        return prev.map((item) =>
-          item.type === ticket.type
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      // Se não existe, adiciona um novo item ao carrinho
-      return [...prev, { ...ticket, quantity: 1 }];
-    });
-    setCartOpen(true);
-  };
-
-  // Ajustar quantidade no carrinho
-  const handleQuantityChange = (ticketType, operation) => {
-    setCartItems((prev) => {
-      const newItems = [...prev];
-      const index = newItems.findIndex((item) => item.type === ticketType);
-      if (index === -1) return newItems;
-
-      if (operation === "decrement") {
-        if (newItems[index].quantity === 1) {
-          newItems.splice(index, 1);
-        } else {
-          newItems[index] = {
-            ...newItems[index],
-            quantity: newItems[index].quantity - 1,
-          };
-        }
-      } else if (operation === "increment") {
-        newItems[index] = {
-          ...newItems[index],
-          quantity: newItems[index].quantity + 1,
-        };
-      }
-      return newItems;
-    });
-  };
-
-  // Calcula total do carrinho
-  const calculateTotal = () =>
-    cartItems.reduce(
-      (total, item) => total + (item.price + item.tax) * item.quantity,
-      0
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '200px',
+          width: '100%'
+        }}
+      >
+        <CircularProgress size={40} />
+      </Box>
     );
+  }
 
-  // Caso o evento não tenha sido encontrado
+  const handleAddToCart = async () => {
+    if (!loggedIn || userRole !== 'USER') return;
+  
+    setIsAddingToCart(true);
+    setAddToCartSuccess(false);
+  
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('Token não encontrado');
+  
+      const decoded = jwtDecode(token);
+      if (!decoded.userId) throw new Error('ID do usuário não encontrado no token');
+  
+      const response = await addCartItem(decoded.userId, event.id, 1);
+      
+      setAddToCartSuccess(true);
+      
+      setTimeout(() => setAddToCartSuccess(false), 3000);
+      console.log('Item adicionado ao carrinho:', response);
+  
+    } catch (error) {
+      console.error("Erro ao adicionar item no carrinho:", error);
+      setError('Erro ao adicionar ao carrinho');
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
+
   if (!event) {
     return (
       <Box
         sx={{
-          minHeight: "80vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          bgcolor: "#f8f9fa",
-          px: 2,
+          minHeight: '50vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}
       >
-        <Typography variant="h5" align="center">
+        <Typography variant="h5">
           O evento solicitado não foi encontrado.
         </Typography>
       </Box>
     );
   }
 
-  // Se o evento foi encontrado, renderiza os detalhes
   return (
     <Box sx={{ bgcolor: "#f8f9fa", minHeight: "100vh", py: 4 }}>
       <Container maxWidth="lg">
-        {/* Cabeçalho (botão de voltar, categoria, botões de editar, compartilhar e carrinho) */}
         <Box
           sx={{
             display: "flex",
@@ -169,7 +171,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
             gap: 2,
           }}
         >
-          {/* Botão Voltar */}
           <Button
             variant="text"
             startIcon={<ArrowBack />}
@@ -182,9 +183,8 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
             Voltar
           </Button>
 
-          {/* Chip de Categoria */}
           <Chip
-            label={event.category}
+            label={event.categoria}
             color="secondary"
             sx={{
               fontWeight: 700,
@@ -194,25 +194,26 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
             }}
           />
 
-          {/* Botões de Editar, Compartilhar e Carrinho */}
           <Box sx={{ display: "flex", gap: 2, marginLeft: "auto" }}>
-            <IconButton
-              onClick={handleEdit}
-              aria-label="Editar evento"
-              color="secondary"
-              sx={{
-                border: "2px solid",
-                borderColor: "secondary.main",
-                "&:hover": {
-                  bgcolor: "secondary.main",
-                  color: "white",
-                  transform: "scale(1.1)",
-                },
-                transition: "all 0.3s",
-              }}
-            >
-              <Edit />
-            </IconButton>
+            {loggedIn && userRole === "ADMIN" && (
+              <IconButton
+                onClick={handleEdit}
+                aria-label="Editar evento"
+                color="secondary"
+                sx={{
+                  border: "2px solid",
+                  borderColor: "secondary.main",
+                  "&:hover": {
+                    bgcolor: "secondary.main",
+                    color: "white",
+                    transform: "scale(1.1)",
+                  },
+                  transition: "all 0.3s",
+                }}
+              >
+                <Edit />
+              </IconButton>
+            )}
             <IconButton
               onClick={handleShare}
               aria-label="Compartilhar"
@@ -230,29 +231,10 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
             >
               <Share />
             </IconButton>
-            <IconButton
-              onClick={() => setCartOpen(true)}
-              aria-label="Abrir carrinho"
-              color="success"
-              sx={{
-                border: "2px solid",
-                borderColor: "success.main",
-                "&:hover": {
-                  bgcolor: "success.main",
-                  color: "white",
-                  transform: "scale(1.1)",
-                },
-                transition: "all 0.3s",
-              }}
-            >
-              <ShoppingCart />
-            </IconButton>
           </Box>
         </Box>
 
-        {/* Layout principal (imagem + detalhes) */}
         <Grid container spacing={4}>
-          {/* IMAGEM PRINCIPAL */}
           <Grid item xs={12} md={6}>
             <Card
               sx={{
@@ -266,8 +248,8 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
               <CardMedia
                 component="img"
                 height="600"
-                image={event.imageUrl}
-                alt={event.title}
+                image={event.imagemUrl}
+                alt={event.titulo}
                 sx={{ objectFit: "cover" }}
               />
 
@@ -293,7 +275,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
             </Card>
           </Grid>
 
-          {/* DETALHES DO EVENTO */}
           <Grid item xs={12} md={6}>
             <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
               <Typography
@@ -308,30 +289,29 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
                   letterSpacing: "-0.5px",
                 }}
               >
-                {event.title}
+                {event.titulo}
               </Typography>
 
-              {/* INFORMAÇÕES CHAVE (data, horário, local) */}
               <Stack spacing={3} sx={{ mb: 4 }}>
                 {[
                   {
                     icon: <CalendarToday color="primary" sx={{ fontSize: 30 }} />,
                     label: "Data de Início",
-                    value: event.startDate
-                      ? new Date(event.startDate).toLocaleString()
+                    value: event.dataInicio
+                      ? new Date(event.dataInicio).toLocaleString()
                       : "Data de Início não informada",
                   },
                   {
                     icon: <Schedule color="primary" sx={{ fontSize: 30 }} />,
                     label: "Data de Término",
-                    value: event.endDate
-                      ? new Date(event.endDate).toLocaleString()
+                    value: event.dataTermino
+                      ? new Date(event.dataTermino).toLocaleString()
                       : "Data de Término não informada",
                   },
                   {
                     icon: <LocationOn color="primary" sx={{ fontSize: 30 }} />,
                     label: "Localização",
-                    value: event.location || "Local não informado",
+                    value: event.endereco || "Local não informado",
                   },
                 ].map((item, index) => (
                   <Box
@@ -358,7 +338,6 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
                 ))}
               </Stack>
 
-              {/* DESCRIÇÃO DETALHADA */}
               <Box
                 sx={{
                   mb: 4,
@@ -387,305 +366,162 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
                   variant="body1"
                   sx={{ color: "text.secondary", lineHeight: 1.6 }}
                 >
-                  {event.details}
+                  {event.descricao}
                 </Typography>
               </Box>
-
-              {/* SEÇÃO DE INGRESSOS */}
-              <Box
-                sx={{
-                  mb: 4,
-                  p: 3,
-                  bgcolor: "white",
-                  borderRadius: 2,
-                  boxShadow: 1,
-                  border: "2px solid",
-                  borderColor: "secondary.light",
-                }}
-              >
-                <Typography
-                  variant="h5"
-                  sx={{
-                    mb: 3,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    color: "secondary.main",
-                  }}
-                >
-                  <Star fontSize="large" />
-                  Ingresso Disponível
+              <Box sx={{ 
+                mb: 4,
+                p: 3,
+                bgcolor: 'background.paper',
+                borderRadius: 2,
+                boxShadow: 1,
+                border: '1px solid',
+                borderColor: 'divider'
+              }}>
+                <Typography variant="h5" sx={{ 
+                  mb: 3,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  color: 'text.primary'
+                }}>
+                  <ConfirmationNumber fontSize="large" color="primary" />
+                  {event.ticketType === 'GRATUITO' ? 'Participação Gratuita' : 'Ingresso Disponível'}
                 </Typography>
 
-                <List>
-                  {event.tickets?.map((ticket) => (
-                    <ListItem
-                      key={`ticket-${ticket.id}`}
+                <Box sx={{
+                  p: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  bgcolor: 'background.default',
+                  borderRadius: 2,
+                  border: '1px solid',
+                  borderColor: event.ticketType === 'VIP' ? 'secondary.main' : 'divider',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    {event.ticketType === 'VIP' ? (
+                      <Star color="secondary" fontSize="large" />
+                    ) : event.ticketType === 'GRATUITO' ? (
+                      <Favorite color="error" fontSize="large" />
+                    ) : (
+                      <LocalActivity color="primary" fontSize="large" />
+                    )}
+                    <Box>
+                      <Typography variant="subtitle1" fontWeight={600}>
+                        {event.ticketType === 'VIP' ? 'Ingresso VIP' : 
+                        event.ticketType === 'GRATUITO' ? 'Ingresso Gratuito' : 'Ingresso Padrão'}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {event.ticketType === 'GRATUITO' ? 'Grátis' : `R$ ${event.preco?.toFixed(2) || '0,00'}`}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Button
+                    variant="contained"
+                    color={
+                      addToCartSuccess 
+                        ? 'success' 
+                        : (event.ticketType === 'VIP' ? 'secondary' : 'primary')
+                    }
+                    size="small"
+                    disabled={!loggedIn || userRole !== 'USER' || isAddingToCart}
+                    onClick={handleAddToCart}
+                    sx={{ 
+                      minWidth: 120,
+                      fontWeight: 600,
+                      borderRadius: 2,
+                      '&.Mui-disabled': {
+                        backgroundColor: 'grey.300',
+                        color: 'text.disabled'
+                      },
+                      '&:hover': {
+                        transform: addToCartSuccess ? 'none' : 'scale(1.03)',
+                        transition: 'transform 0.2s'
+                      }
+                    }}
+                  >
+                    {isAddingToCart ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : addToCartSuccess ? (
+                      '✓ Adicionado!'
+                    ) : event.ticketType === 'GRATUITO' ? (
+                      'Reservar'
+                    ) : (
+                      'Comprar'
+                    )}
+                  </Button>
+                </Box>
+
+                {(!loggedIn || userRole !== 'USER') && (
+                  <Typography 
+                    variant="body2"
+                    sx={{
+                      color: 'error.main',
+                      textAlign: 'center',
+                      mt: 2,
+                      px: 2,
+                      py: 1,
+                      borderRadius: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 1
+                    }}
+                  >
+                    {!loggedIn ? (
+                        'Faça login para realizar a compra'
+                    ) : (
+                      'Apenas usuários comuns podem realizar compras'
+                    )}
+                  </Typography>
+                )}
+              </Box>
+
+                <Box
+                  sx={{
+                    p: 3,
+                    bgcolor: "success.light",
+                    borderRadius: 2,
+                    textAlign: "center",
+                    boxShadow: 1,
+                    mb: 4
+                  }}
+                >
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={2}
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <Box
                       sx={{
-                        p: 0,
-                        mb: 2,
-                        bgcolor: "background.paper",
-                        borderRadius: 2,
-                        overflow: "hidden",
+                        bgcolor: "white",
+                        p: 2,
+                        borderRadius: "50%",
                         boxShadow: 1,
-                        transition: "box-shadow 0.2s",
-                        "&:hover": {
-                          boxShadow: 3,
-                        },
+                        fontSize: "1.5rem",
                       }}
                     >
-                      <Box
-                        sx={{
-                          width: "100%",
-                          p: 2,
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          bgcolor: ticket.soldOut ? "action.hover" : "transparent",
-                        }}
-                      >
-                        <Box>
-                          <Typography
-                            variant="body1"
-                            sx={{
-                              fontWeight: 600,
-                              color: ticket.soldOut
-                                ? "text.disabled"
-                                : "text.primary",
-                            }}
-                          >
-                            {ticket.type}
-                          </Typography>
-                          <Typography
-                            variant="h6"
-                            sx={{
-                              color: ticket.soldOut
-                                ? "text.disabled"
-                                : "primary.main",
-                              fontWeight: 700,
-                            }}
-                          >
-                            R$ {(ticket.price + ticket.tax).toFixed(2)}
-                          </Typography>
-                        </Box>
-                        {ticket.soldOut ? (
-                          <Chip
-                            label="ESGOTADO"
-                            color="error"
-                            sx={{
-                              fontWeight: 700,
-                              px: 2,
-                              borderRadius: 1,
-                            }}
-                          />
-                        ) : (
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={() => handleAddToCart(ticket)}
-                            sx={{
-                              px: 4,
-                              fontWeight: 700,
-                              borderRadius: 2,
-                              textTransform: "uppercase",
-                              letterSpacing: "0.5px",
-                            }}
-                          >
-                            Comprar
-                          </Button>
-                        )}
-                      </Box>
-                    </ListItem>
-                  ))}
-                </List>
-
-                <Typography
-                  variant="body2"
-                  sx={{
-                    textAlign: "center",
-                    color: "text.secondary",
-                    fontStyle: "italic",
-                  }}
-                >
-                  * Preços incluem taxas administrativas
-                </Typography>
-              </Box>
-
-              {/* Garantia de Segurança */}
-              <Box
-                sx={{
-                  p: 3,
-                  bgcolor: "success.light",
-                  borderRadius: 2,
-                  textAlign: "center",
-                  boxShadow: 1,
-                }}
-              >
-                <Stack
-                  direction={{ xs: "column", sm: "row" }}
-                  spacing={2}
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Box
-                    sx={{
-                      bgcolor: "white",
-                      p: 2,
-                      borderRadius: "50%",
-                      boxShadow: 1,
-                      fontSize: "1.5rem",
-                    }}
-                  >
-                    🔒
-                  </Box>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontWeight: 600,
-                      color: "success.dark",
-                    }}
-                  >
-                    Compra 100% segura • Reembolso garantido
-                  </Typography>
-                </Stack>
-              </Box>
+                      🔒
+                    </Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: 600,
+                        color: "success.dark",
+                      }}
+                    >
+                      Compra 100% segura • Reembolso garantido
+                    </Typography>
+                  </Stack>
+                </Box>
             </Box>
           </Grid>
         </Grid>
 
-        {/* Carrinho de Compras */}
-        <Drawer
-          anchor="right"
-          open={cartOpen}
-          onClose={() => setCartOpen(false)}
-          sx={{
-            "& .MuiDrawer-paper": {
-              width: { xs: "100%", sm: 400 },
-              padding: 3,
-            },
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 3,
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 700 }}>
-              Meu Carrinho ({cartItems.length})
-            </Typography>
-            <IconButton onClick={() => setCartOpen(false)} aria-label="Fechar carrinho">
-              <Close />
-            </IconButton>
-          </Box>
-
-          <Divider />
-
-          <List sx={{ flexGrow: 1, mt: 2 }}>
-            {cartItems.map((item) => (
-              <ListItem
-                key={`cart-item-${item.id}`}
-                sx={{
-                  py: 2,
-                  borderBottom: "1px solid",
-                  borderColor: "divider",
-                }}
-              >
-                <Box sx={{ width: "100%" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      mb: 1,
-                    }}
-                  >
-                    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                      {item.type}
-                    </Typography>
-                    {/* Botão para remover totalmente */}
-                    <IconButton
-                      onClick={() => handleQuantityChange(item.type, "decrement")}
-                      size="small"
-                      aria-label="Remover item"
-                    >
-                      <Close fontSize="small" />
-                    </IconButton>
-                  </Box>
-
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    {/* Botões + e - para alterar quantidade */}
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <IconButton
-                        onClick={() => handleQuantityChange(item.type, "decrement")}
-                        size="small"
-                        disabled={item.quantity === 1}
-                        aria-label="Diminuir quantidade"
-                      >
-                        <Remove fontSize="small" />
-                      </IconButton>
-                      <Typography variant="body1">{item.quantity}</Typography>
-                      <IconButton
-                        onClick={() => handleQuantityChange(item.type, "increment")}
-                        size="small"
-                        aria-label="Aumentar quantidade"
-                      >
-                        <Add fontSize="small" />
-                      </IconButton>
-                    </Box>
-
-                    {/* Valor subtotal */}
-                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                      R$ {((item.price + item.tax) * item.quantity).toFixed(2)}
-                    </Typography>
-                  </Box>
-                </Box>
-              </ListItem>
-            ))}
-          </List>
-
-          <Divider sx={{ mt: 2 }} />
-
-          {/* Footer do carrinho */}
-          <Box sx={{ mt: 3 }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                Total:
-              </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                R$ {calculateTotal().toFixed(2)}
-              </Typography>
-            </Box>
-
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              size="large"
-              disabled={cartItems.length === 0}
-              sx={{
-                borderRadius: 2,
-                py: 1.5,
-                textTransform: "uppercase",
-                fontWeight: 700,
-                letterSpacing: "0.5px",
-                fontSize: "1rem",
-              }}
-            >
-              Finalizar Compra
-            </Button>
-          </Box>
-        </Drawer>
-
-        {/* Notificação (link copiado) */}
         <Snackbar
           open={showNotification}
           autoHideDuration={6000}
@@ -704,10 +540,5 @@ function ExperienceDetailsPage({ allExperiences, updateExperience }) {
     </Box>
   );
 }
-
-ExperienceDetailsPage.propTypes = {
-  allExperiences: PropTypes.object.isRequired,
-  updateExperience: PropTypes.func.isRequired,
-};
 
 export default ExperienceDetailsPage;

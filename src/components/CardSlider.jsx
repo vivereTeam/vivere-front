@@ -1,11 +1,10 @@
-// src/components/CardSlider.jsx
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Grid } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
-import ExperienceCard from "./ExperienceCard"; 
+import ExperienceCard from "./ExperienceCard";
+import LargeExperienceCard from "./LargeExperienceCard";
 
 const NextArrow = ({ onClick }) => (
   <IconButton
@@ -13,7 +12,7 @@ const NextArrow = ({ onClick }) => (
     sx={{
       position: "absolute",
       top: "50%",
-      right: "-25px",
+      right: "-40px",
       transform: "translateY(-50%)",
       backgroundColor: "rgba(0, 0, 0, 0.5)",
       color: "white",
@@ -31,7 +30,7 @@ const PrevArrow = ({ onClick }) => (
     sx={{
       position: "absolute",
       top: "50%",
-      left: "-25px",
+      left: "-40px",
       transform: "translateY(-50%)",
       backgroundColor: "rgba(0, 0, 0, 0.5)",
       color: "white",
@@ -43,37 +42,58 @@ const PrevArrow = ({ onClick }) => (
   </IconButton>
 );
 
-function CardSlider({ experiences }) {
+function CardSlider({ experiences, removeExperience, isLargeCard }) {
+  const minCardsForSlider = isLargeCard ? 2 : 4;
+  const hasEnoughForSlider = experiences.length >= minCardsForSlider;
+
   const settings = {
-    dots: true,
-    infinite: true,
+    dots: hasEnoughForSlider,
+    infinite: hasEnoughForSlider,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: isLargeCard ? 1 : 3,
     slidesToScroll: 1,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 600,
-        settings: { slidesToShow: 1 },
-      },
-    ],
+    nextArrow: hasEnoughForSlider ? <NextArrow /> : null,
+    prevArrow: hasEnoughForSlider ? <PrevArrow /> : null,
   };
+
+  if (!hasEnoughForSlider) {
+    return (
+      <Grid container spacing={2}>
+        {experiences.map((exp) => (
+          <Grid item xs={isLargeCard ? 12 : 4} key={exp.id}>
+            {isLargeCard ? (
+              <LargeExperienceCard
+                event={exp}
+                removeExperience={removeExperience}
+              />
+            ) : (
+              <ExperienceCard
+                event={exp}
+                removeExperience={removeExperience}
+              />
+            )}
+          </Grid>
+        ))}
+      </Grid>
+    );
+  }
 
   return (
     <Box sx={{ position: "relative", width: "100%" }}>
       <Slider {...settings}>
         {experiences.map((exp) => (
-          <div
-            key={exp.id}
-            style={{ padding: "10px", cursor: "pointer" }}
-            onClick={() => console.log("Clicou em", exp.title)}
-          >
-            <ExperienceCard {...exp} />
+          <div key={exp.id} style={{ padding: "10px" }}>
+            {isLargeCard ? (
+              <LargeExperienceCard
+                event={exp}
+                removeExperience={removeExperience}
+              />
+            ) : (
+              <ExperienceCard
+                event={exp}
+                removeExperience={removeExperience}
+              />
+            )}
           </div>
         ))}
       </Slider>

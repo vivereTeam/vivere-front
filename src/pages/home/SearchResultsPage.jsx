@@ -1,47 +1,54 @@
-// src/pages/home/SearchResultsPage.jsx
-import React from "react";
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Typography, Grid2 } from "@mui/material";
+import { Box, Typography, Grid, CircularProgress } from "@mui/material";
 import ExperienceCard from "../../components/ExperienceCard";
+import { searchEventos } from "../../services/api";
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
 };
 
-const SearchResultsPage = ({ allExperiences }) => {
+const SearchResultsPage = () => {
+  const [filteredExperiences, setFilteredExperiences] = useState([]);
+  const [loading, setLoading] = useState(true);
   const query = useQuery();
   const searchQuery = query.get("query") || "";
   const navigate = useNavigate();
 
-  // Função para filtrar as experiências com base na consulta
-  const getFilteredExperiences = () => {
-    if (!searchQuery.trim()) return [];
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      if (!searchQuery.trim()) {
+        setFilteredExperiences([]);
+        setLoading(false);
+        return;
+      }
 
-    const lowerCaseQuery = searchQuery.toLowerCase();
-    const filtered = [];
+      try {
+        const data = await searchEventos(searchQuery);
+        setFilteredExperiences(data || []);
+      } catch (error) {
+        console.error("Erro ao buscar eventos:", error);
+        setFilteredExperiences([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    Object.entries(allExperiences).forEach(([category, experiences]) => {
-      experiences.forEach((experience) => {
-        const { title, details, location } = experience;
-        if (
-          title.toLowerCase().includes(lowerCaseQuery) ||
-          details.toLowerCase().includes(lowerCaseQuery) ||
-          location.toLowerCase().includes(lowerCaseQuery)
-        ) {
-          filtered.push({ ...experience, category });
-        }
-      });
-    });
+    fetchSearchResults();
+  }, [searchQuery]);
 
-    return filtered;
-  };
-
-  const filteredExperiences = getFilteredExperiences();
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px', width: '100%' }}>
+        <CircularProgress size={40} />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ padding: "20px", maxWidth: "1400px", margin: "0 auto" }}>
       <Typography variant="h4" gutterBottom>
-        Resultados da Busca para: "{searchQuery}"
+        Resultados da Busca para: &quot;{searchQuery}&quot;
       </Typography>
 
       {filteredExperiences.length === 0 ? (
@@ -49,25 +56,37 @@ const SearchResultsPage = ({ allExperiences }) => {
           Nenhuma experiência encontrada para a sua busca.
         </Typography>
       ) : (
-        <Grid2 container spacing={3}>
+        <Grid container spacing={3}>
           {filteredExperiences.map((experience) => (
-            <Grid2 item xs={12} sm={6} md={4} key={`${experience.category}-${experience.id}`}>
-              <ExperienceCard
-                {...experience}
-                category={experience.category}
-                removeExperience={() => {}} // Passar uma função vazia ou implementar conforme necessário
-              />
-            </Grid2>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              key={experience.id}
+              display="flex"
+              justifyContent="center"
+            >
+              <Box sx={{ width: 345 }}>
+                <ExperienceCard
+                  event={experience}
+                  removeExperience={() => {}}
+                />
+              </Box>
+            </Grid>
           ))}
-        </Grid2>
+        </Grid>
       )}
 
-      {/* Botão para voltar */}
       <Box sx={{ marginTop: "20px" }}>
         <Typography
           variant="button"
           onClick={() => navigate(-1)}
-          sx={{ cursor: "pointer", color: "#270c6b", textDecoration: "underline" }}
+          sx={{
+            cursor: "pointer",
+            color: "#270c6b",
+            textDecoration: "underline",
+          }}
         >
           Voltar
         </Typography>

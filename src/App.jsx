@@ -1,73 +1,41 @@
-// src/App.jsx
-import {useEffect, useState} from "react";
-import AppRoutes from "./pages/home/AppRoutes";
+import { useEffect, useState } from "react";
+import { AuthProvider } from "./context/AuthContext";
+import AppRoutes from "./routes/routes";
+import { getAllEventos } from "./services/api";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
-  const [allExperiences, setAllExperiences] = useState(() => {
-    const saved = localStorage.getItem("allExperiences");
-    if (saved) return JSON.parse(saved);
-
-    return {
-      "Shows e Entretenimento": [
-        {
-          id: 1,
-          title: "Show do Coldplay",
-          location: "São Paulo",
-          date: "2025-06-10",
-          imageUrl: "https://picsum.photos/id/500/450/450",
-          details: "Um show inesquecível!",
-        },
-      ],
-      "Viagens e Turismo": [
-        {
-          id: 2,
-          title: "Pacote para Florianópolis",
-          location: "Santa Catarina",
-          date: "2025-01-10",
-          imageUrl: "https://picsum.photos/id/501/450/450",
-          details: "Praias incríveis!",
-        },
-      ],
-    };
-  });
+  const [allExperiences, setAllExperiences] = useState({});
 
   useEffect(() => {
-    localStorage.setItem("allExperiences", JSON.stringify(allExperiences));
-  }, [allExperiences]);
-
-  const addNewExperience = (category, newEvent) => {
-    setAllExperiences((prev) => {
-      const existingEvents = prev[category] || [];
-      return {
-        ...prev,
-        [category]: [...existingEvents, newEvent],
-      };
-    });
-  };
-
-  const updateExperience = (category, updatedExperience) => {
-    setAllExperiences((prev) => ({
-      ...prev,
-      [category]: prev[category].map((exp) =>
-        exp.id === updatedExperience.id ? updatedExperience : exp
-      ),
-    }));
-  };
-
-  const removeExperience = (category, id) => {
-    setAllExperiences((prev) => ({
-      ...prev,
-      [category]: prev[category].filter((exp) => exp.id !== id),
-    }));
-  };
+    const fetchExperiences = async () => {
+      try {
+        const eventos = await getAllEventos();
+        const groupedByCategory = eventos.reduce((acc, evento) => {
+          const { categoria } = evento;
+          if (!acc[categoria]) acc[categoria] = [];
+          acc[categoria].push(evento);
+          return acc;
+        }, {});
+        setAllExperiences(groupedByCategory);
+      } catch (error) {
+        console.error("Erro ao buscar eventos:", error);
+      }
+    };
+    fetchExperiences();
+  }, []);
 
   return (
-    <AppRoutes
-      allExperiences={allExperiences}
-      addNewExperience={addNewExperience}
-      updateExperience={updateExperience}
-      removeExperience={removeExperience}
-    />
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <AuthProvider>
+        <Header />
+        <div style={{ flex: 1 }}>
+          <AppRoutes allExperiences={allExperiences} />
+        </div>
+        <Footer />
+      </AuthProvider>
+    </div>
   );
 }
 
