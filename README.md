@@ -6,35 +6,91 @@
 
 ## 🚀 Funcionalidades Principais
 
-### **Gerenciamento de Produtos**
-- **Listagem de Produtos**: Exibe produtos com detalhes como nome, descrição, preço, categoria e estoque.
-- **Cadastro de Produtos**: Permite adicionar novos produtos com atributos obrigatórios e opcionais.
-- **Edição de Produtos**: Oferece a capacidade de atualizar informações de produtos existentes.
-- **Remoção de Produtos**: Permite excluir produtos diretamente da lista.
+### **Sistema Completo de Marketplace**
+- **Perfil Admin**:
+  - Gerenciamento completo de eventos
+- **Perfil Cliente**:
+  - Compra de tickets para eventos
+
+### **Interface Principal**
+- Renderização dinâmica de eventos
+- Sistema de busca
+- Filtros por categorias
+
+### **Sistema de Login**
+- Autenticação segura com JWT
+- Criação de conta com validação
+- Recuperação de senha
+- Controle de acesso por níveis (admin/cliente)
+
+### **CRUD de Eventos (Admin)**
+- **Criação**: Formulário completo com upload de imagens
+- **Leitura**: Visualização detalhada com todas as informações
+- **Atualização**: Edição dos campos do evento
+- **Exclusão**: Remoção segura com confirmação
+- Validação de dados em tempo real
+
+### **Carrinho de Compras (Cliente)**
+- Adição/remoção de tickets
+- Cálculo automático de valores
+- Processo de checkout
 
 ### **Sistema de Navegação**
-- **Rotas Dinâmicas**: Utiliza `react-router-dom` para criar rotas, incluindo parâmetros dinâmicos (ex.: `produtos/:id`).
-- **Navegação Intuitiva**: Interface amigável com navegação fluida entre páginas.
-
-### **Responsividade**
-- **Design Adaptável**: Interface responsiva que se ajusta a smartphones, tablets e desktops.
-- **Testes de Responsividade**: Realizados com o DevTools do Google Chrome para garantir compatibilidade.
-
-### **Gerenciamento de Equipe**
-- **Quadro Kanban**: Utilizado para organizar tarefas e monitorar o progresso do projeto.
-- **Divisão de Tarefas**: Atividades distribuídas igualmente entre os membros da equipe, com commits documentados no GitHub.
+- Rotas dinâmicas com react-router-dom
+- Navegação intuitiva entre seções por meio do header
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
 ### **Frontend**
-- **React.js**: Biblioteca JavaScript para construção da interface do usuário.
-- **Material UI**: Framework de design para estilização e componentes prontos.
-- **React Router DOM**: Gerenciamento de rotas e navegação.
+- **React.js 18** - Biblioteca principal para construção da UI
+- **Material UI 6** - Componentes estilizados e sistema de design
+- **React Router DOM 7** - Gerenciamento de rotas avançado
+- **React Hook Form 7** - Manipulação de formulários com validação
+- **Axios 1.8** - Cliente HTTP para integração com API
+- **Yup 1.6** - Validação de schemas para formulários
+- **React Slick 0.30** - Componente de carrossel responsivo
+
+### **Autenticação**
+- **JWT Decode 4.0** - Decodificação de tokens JWT
+- **React Hook Form 7.54** - Integração com validação Yup
+
+### **Build & Dev Tools**
+- **Vite 6** - Bundler ultra-rápido
+- **ESLint 9** - Linter com configuração padrão
+- **Prettier 3** - Formatação de código automática
+- **TypeScript** - Tipagem opcional via @types
 
 ### **Controle de Versão**
-- **Git e GitHub**: Versionamento e colaboração no desenvolvimento.
+- **Git** - Versionamento do código
+- **GitHub** - Hospedagem e colaboração
+- **Conventional Commits** - Padronização de mensagens
+- **Git Flow** - Estratégia de branches
+
+### **Gestão de Equipe**
+- **Quadro Kanban** - Organização visual de tarefas
+- **Pair Programming** - Colaboração em features críticas
+- **Code Reviews** - Revisões obrigatórias antes de merge
+- **CI/CD** - Pipeline automatizado via GitHub Actions
+
+---
+
+## ⚙️ Backend do Projeto
+
+O sistema possui uma API completa desenvolvida em Node.js com Express e PostgreSQL. Consulte o repositório do backend para documentação técnica completa:
+
+🔗 [Repositório do Backend Vivere+](https://github.com/J0aoPaulo/vivere-backend)
+
+**Principais recursos:**
+- API RESTful com endpoints documentados (Swagger)
+- Autenticação JWT segura com bcrypt
+- Integração com banco de dados PostgreSQL via Prisma ORM
+- Upload de imagens com Multer
+- Sistema completo de pedidos e pagamentos
+- Containerização com Docker
+- Ambiente de desenvolvimento com Nodemon
+- Suporte a testes com Jest e Supertest
 
 ---
 
@@ -42,16 +98,43 @@
 
 
 ```plaintext
-├── App.jsx
-├── components
-├── context
-├── main.jsx
-├── pages
-│   ├── Experience
-│   └── home
-└── styles
-    ├── index.css
-    └── theme.js
+└── vivereteam-vivere-front/
+    ├── src/
+        ├── App.jsx
+        ├── main.jsx
+        ├── components/
+        │   ├── CardSlider.jsx
+        │   ├── CartTicketItem.jsx
+        │   ├── CategoryIcon.jsx
+        │   ├── ExperienceCard.jsx
+        │   ├── Footer.jsx
+        │   ├── Header.jsx
+        │   └── LargeExperienceCard.jsx
+        ├── context/
+        │   └── AuthContext.jsx
+        ├── pages/
+        │   ├── auth/
+        │   │   ├── Login.jsx
+        │   │   ├── ResetPassword.jsx
+        │   │   └── SignUp.jsx
+        │   ├── cart/
+        │   │   └── CartPage.jsx
+        │   ├── Experience/
+        │   │   ├── ExperienceCreationPage.jsx
+        │   │   ├── ExperienceDetailsPage.jsx
+        │   │   └── ExperienceEditPage.jsx
+        │   └── home/
+        │       ├── CategoryListPage.jsx
+        │       ├── CategoryPage.jsx
+        │       ├── Home.jsx
+        │       └── SearchResultsPage.jsx
+        ├── routes/
+        │   └── routes.jsx
+        ├── services/
+        │   └── api.js
+        └── styles/
+            ├── index.css
+            └── theme.js
 ``` 
 
 ## 🔧 Instalação e Configuração
@@ -87,6 +170,8 @@ Siga os passos abaixo para configurar o projeto localmente:
 
 ## 🌐 Equipe de Desenvolvimento
 <!-- readme: collaborators,contributors -start -->
+<div align="center">
+
 <table>
 	<tbody>
 		<tr>
@@ -126,6 +211,8 @@ Siga os passos abaixo para configurar o projeto localmente:
                 </a>
             </td>
 		</tr>
-	<tbody>
+	</tbody>
 </table>
+
+</div>
 <!-- readme: collaborators,contributors -end -->
