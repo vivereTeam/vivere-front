@@ -1,47 +1,12 @@
 import PropTypes from "prop-types";
 import { Avatar, Stack } from "@mui/material";
-import {
-    Restaurant as RestaurantIcon,
-    TheaterComedy as TheaterComedyIcon,
-    TravelExplore as TravelExploreIcon,
-    FitnessCenter as FitnessCenterIcon,
-    Spa as SpaIcon,
-    ChildCare as ChildCareIcon,
-    Star as StarIcon,
-    School as SchoolIcon,
-    HelpOutline as HelpOutlineIcon,
-    ArrowForward as ArrowForwardIcon,
-} from "@mui/icons-material";
 import { Link } from "react-router-dom";
-
-const ICONS = {
-    "Workshops e Aulas": SchoolIcon,
-    "Shows e Entretenimento": TheaterComedyIcon,
-    "Viagens e Turismo": TravelExploreIcon,
-    "Aventura e Adrenalina": FitnessCenterIcon,
-    "Relaxamento e Bem-Estar": SpaIcon,
-    "Gastronomia e Degustações": RestaurantIcon,
-    "Infantil e Familiar": ChildCareIcon,
-    "Experiências Personalizadas": StarIcon,
-    "Lista de Categorias": ArrowForwardIcon,
-    Default: HelpOutlineIcon,
-};
-
-const CATEGORIAS_BACKEND = {
-  "Shows e Entretenimento": "SHOWS_ENTRETENIMENTO",
-  "Workshops e Aulas": "WORKSHOPS_AULAS",
-  "Viagens e Turismo": "VIAGENS_TURISMO",
-  "Aventura e Adrenalina": "AVENTURA_ADRENALINA",
-  "Relaxamento e Bem-Estar": "RELAXAMENTO_BEM_ESTAR",
-  "Gastronomia e Degustações": "GASTRONOMIA_DEGUSTACOES",
-  "Infantil e Familiar": "INFANTIL_FAMILIAR",
-  "Experiências Personalizadas": "EXPERIENCIAS_PERSONALIZADAS",
-};
+import { getCategoryBackendValue, getCategoryIcon } from "../services/constants";
 
 function ExperienceCategory({ category }) {
     const isCategoryList = category === "Lista de Categorias";
-    const IconComponent = ICONS[category] || ICONS.Default;
-    const categoriaBackend = CATEGORIAS_BACKEND[category] || "";
+    const IconComponent = getCategoryIcon(category);
+    const categoriaBackend = isCategoryList ? "" : getCategoryBackendValue(category);
 
     return (
         <Link to={isCategoryList ? "/category-list" : `/category/${encodeURIComponent(categoriaBackend)}`} style={{ textDecoration: "none" }}>

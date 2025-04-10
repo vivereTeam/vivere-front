@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import {
   Box,
@@ -14,14 +13,13 @@ import {
 import { Add, Remove, DeleteOutline } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { updateCartItem, removeCartItem } from '../services/api';
+import { getCategoryFrontendLabel } from '../services/constants';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
   marginBottom: theme.spacing(2),
   transition: 'all 0.2s ease-out',
-  '&:hover': {
-    boxShadow: theme.shadows[4]
-  }
+  '&:hover': { boxShadow: theme.shadows[4] }
 }));
 
 const CartTicketItem = ({ item, onCartUpdate }) => {
@@ -76,7 +74,7 @@ const CartTicketItem = ({ item, onCartUpdate }) => {
             {item.evento.titulo}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {item.evento.categoria}
+            {getCategoryFrontendLabel(item.evento.categoria) || item.evento.categoria}
           </Typography>
         </Grid>
 

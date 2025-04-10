@@ -1,24 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { Box, Typography, CircularProgress, Grid } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
-import { Box, Typography, Grid, CircularProgress } from "@mui/material";
+import { useEffect, useState } from "react";
 import ExperienceCard from "../../components/ExperienceCard";
 import { getEventosByCategory } from "../../services/api";
-
-const CATEGORIAS_FRONTEND = {
-  SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
-  WORKSHOPS_AULAS: "Workshops e Aulas",
-  VIAGENS_TURISMO: "Viagens e Turismo",
-  AVENTURA_ADRENALINA: "Aventura e Adrenalina",
-  RELAXAMENTO_BEM_ESTAR: "Relaxamento e Bem-Estar",
-  GASTRONOMIA_DEGUSTACOES: "Gastronomia e Degustações",
-  INFANTIL_FAMILIAR: "Infantil e Familiar",
-  EXPERIENCIAS_PERSONALIZADAS: "Experiências Personalizadas",
-};
+import { getCategoryFrontendLabel } from "../../services/constants";
 
 function CategoryPage() {
   const { category } = useParams();
   const navigate = useNavigate();
-  const categoriaFrontend = CATEGORIAS_FRONTEND[category] || "Categoria Desconhecida";
+  const categoriaFrontend = getCategoryFrontendLabel(category) || "Categoria Desconhecida";
   const [filteredExperiences, setFilteredExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
 

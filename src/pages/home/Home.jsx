@@ -6,17 +6,7 @@ import ExperienceCard from "../../components/ExperienceCard";
 import LargeExperienceCard from "../../components/LargeExperienceCard";
 import ExperienceCategory from "../../components/CategoryIcon";
 import { getAllEventos, deleteEvento } from "../../services/api";
-
-const formattedCategories = {
-  SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
-  WORKSHOPS_AULAS: "Workshops e Aulas",
-  VIAGENS_TURISMO: "Viagens e Turismo",
-  AVENTURA_ADRENALINA: "Aventura e Adrenalina",
-  RELAXAMENTO_BEM_ESTAR: "Relaxamento e Bem-Estar",
-  GASTRONOMIA_DEGUSTACOES: "Gastronomia e Degustações",
-  INFANTIL_FAMILIAR: "Infantil e Familiar",
-  EXPERIENCIAS_PERSONALIZADAS: "Experiências Personalizadas",
-};
+import { CATEGORIES } from "../../services/constants";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -73,8 +63,7 @@ const Home = () => {
     : [];
 
   return (
-    <Box
-      sx={{
+    <Box sx={{
         fontFamily: "'Poppins', sans-serif",
         fontSize: "14px",
         display: "flex",
@@ -85,50 +74,41 @@ const Home = () => {
         gap: "30px",
         marginTop: "30px",
         marginBottom: "60px",
-        "& h1": {
-          marginBottom: "16px",
-        },
-      }}
-    >
+        "& h1": { marginBottom: "16px" }
+      }}>
       <div>
         <h1>Categorias</h1>
-        <div
-          style={{
+        <div style={{
             display: "flex",
             flexWrap: "wrap",
             alignItems: "center",
             justifyContent: "space-around",
-          }}
-        >
-          {Object.entries(formattedCategories).map(([key, value]) => (
-            <ExperienceCategory key={key} category={value} />
+          }}>
+          {Object.keys(CATEGORIES.frontendToBackend).map((category) => (
+            <ExperienceCategory key={category} category={category} />
           ))}
           <ExperienceCategory category="Lista de Categorias" />
         </div>
       </div>
 
       {loading ? (
-        <Box
-          sx={{
+        <Box sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             height: '200px',
             width: '100%'
-          }}
-        >
+          }}>
           <CircularProgress />
         </Box>
       ) : allExperiences && Object.keys(allExperiences).length === 0 ? (
-        <Box
-          sx={{
+        <Box sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             height: '200px',
             width: '100%'
-          }}
-        >
+          }}>
           <Typography variant="h5">
             Nenhuma experiência disponível no momento
           </Typography>
@@ -161,7 +141,7 @@ const Home = () => {
           )}
 
           {categoriesWithNormalCards.map(category => {
-            const formattedCategory = formattedCategories[category] || category;
+            const formattedCategory = CATEGORIES.backendToFrontend[category] || category;
             const experiences = allExperiences[category] || [];
             const normalCards = experiences.filter(exp => exp.cardSize === "NORMAL");
 

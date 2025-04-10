@@ -33,17 +33,7 @@ import { useState, useEffect } from "react";
 import { getEventoById,addCartItem } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 import { jwtDecode } from 'jwt-decode';  
-
-const formattedCategories = {
-  SHOWS_ENTRETENIMENTO: "Shows e Entretenimento",
-  WORKSHOPS_AULAS: "Workshops e Aulas",
-  VIAGENS_TURISMO: "Viagens e Turismo",
-  AVENTURA_ADRENALINA: "Aventura e Adrenalina",
-  RELAXAMENTO_BEM_ESTAR: "Relaxamento e Bem-Estar",
-  GASTRONOMIA_DEGUSTACOES: "Gastronomia e Degustações",
-  INFANTIL_FAMILIAR: "Infantil e Familiar",
-  EXPERIENCIAS_PERSONALIZADAS: "Experiências Personalizadas",
-};
+import { getCategoryFrontendLabel } from "../../services/constants";
 
 function ExperienceDetailsPage() {
   const { eventId } = useParams();
@@ -64,7 +54,7 @@ function ExperienceDetailsPage() {
         const data = await getEventoById(eventId);
         const mappedEvent = {
           id: data.id,
-          categoria: formattedCategories[data.categoria] || data.categoria,
+          categoria: getCategoryFrontendLabel(data.categoria) || data.categoria,
           titulo: data.titulo,
           imagemUrl: data.imagemUrl,
           dataInicio: data.dataInicio,
