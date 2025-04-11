@@ -100,8 +100,8 @@ const ExperienceCreationPage = () => {
       eventData.startDate &&
       eventData.endDate &&
       eventData.agreementChecked &&
-      eventData.ticketPrice &&
-      eventData.ticketTax
+      (eventData.ticketType === "GRATUITO" || eventData.ticketPrice) &&
+      eventData.cardSize
     );
   };
 
@@ -151,7 +151,11 @@ const ExperienceCreationPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEventData((prevData) => ({ ...prevData, [name]: value }));
+    if (name === "ticketType" && value === "GRATUITO") {
+      setEventData(prevData => ({ ...prevData, [name]: value, ticketPrice: "0" }));
+    } else {
+      setEventData(prevData => ({ ...prevData, [name]: value }));
+    }
   };
 
   const handleImageUpload = (e) => {
@@ -204,7 +208,7 @@ const ExperienceCreationPage = () => {
                   new Date(eventData.startDate).toISOString().slice(0, 16) : null,
       dataTermino: eventData.endDate ? 
                   new Date(eventData.endDate).toISOString().slice(0, 16) : null,
-      ticketType: "INGRESSO",
+      ticketType: eventData.ticketType,
       imagemUrl: finalImageUrl || "",
       preco: eventData.ticketPrice,
       categoria: mapCategoria(eventData.category),
@@ -530,20 +534,14 @@ const ExperienceCreationPage = () => {
                   <Typography variant="h6" color="secondary" sx={{ mb: 1 }}>
                     Ingresso Disponível
                   </Typography>
-                  <Typography variant="body1">Tipo: Ingresso</Typography>
-                  <Typography variant="body1">
-                    Preço: R$ {parseFloat(eventData.ticketPrice).toFixed(2)}
-                  </Typography>
-                  <Typography variant="body1">
-                    Taxa: R$ {parseFloat(eventData.ticketTax).toFixed(2)}
-                  </Typography>
-                  <Typography variant="body1">
-                    Total:{" "}
-                    {(
-                      parseFloat(eventData.ticketPrice) +
-                      parseFloat(eventData.ticketTax)
-                    ).toFixed(2)}
-                  </Typography>
+                  <Typography variant="body1">Tipo: {eventData.ticketType}</Typography>
+                  {eventData.ticketType === "GRATUITO" ? (
+                    <Typography variant="body1">Preço: Gratuito</Typography>
+                  ) : (
+                    <Typography variant="body1">
+                      Preço: R$ {parseFloat(eventData.ticketPrice).toFixed(2)}
+                    </Typography>
+                  )}
                 </Box>
                 <Typography
                   variant="caption"
@@ -551,7 +549,7 @@ const ExperienceCreationPage = () => {
                   sx={{ mt: 2 }}
                   display="block"
                 >
-                  Tamanho do Card: {eventData.cardSize || "N/A"}
+                  Tamanho do Card: {eventData.cardSize === "LARGE" ? "Grande" : "Padrão"}
                 </Typography>
               </CardContent>
               <Button
